@@ -1,0 +1,13 @@
+# Configuración de Apache para el backend de BookIt
+# Este archivo asegura que las URLs funcionen correctamente
+
+# Permitir headers de CORS
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "http://localhost:3000"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+    Header set Access-Control-Allow-Credentials "true"
+</IfModule>
+
+# Desactivar listado de directorios
+Options -Indexes
