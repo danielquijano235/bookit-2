@@ -227,5 +227,7 @@ Si ves errores de CORS en la consola del navegador:
 ### El dashboard muestra datos de ejemplo
 Si el backend no está conectado, el dashboard muestra datos estáticos de ejemplo. Esto es normal para poder ver la interfaz sin backend. Los datos reales se cargarán cuando el backend esté configurado correctamente.
 
+Si el backend no está conectado, el dashboard muestra datos estáticos de ejemplo. Esto es normal para poder ver la interfaz sin backend. Los datos reales se cargarán cuando el backend esté configurado correctamente.
+
 
 
