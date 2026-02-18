@@ -1,0 +1,43 @@
+
+
+:root {
+  /* ====== COLORES PRINCIPALES ====== */
+  --color-amarillo: #FDB022;          /* Color principal de la marca */
+  --color-amarillo-claro: #FFD580;    /* Amarillo suave para fondos */
+  --color-amarillo-hover: #E9A020;    /* Amarillo oscuro para hover */
+  --color-azul-oscuro: #1e3a5f;       /* Azul oscuro para fondos (sidebar, footer) */
+  --color-azul-claro: #4A90E2;        /* Azul claro para iconos y acentos */
+  --color-verde: #10B981;             /* Verde para badges positivos */
+  --color-morado: #8B5CF6;            /* Morado para variedad visual */
+  --color-rosa: #EC4899;              /* Rosa para variedad visual */
+  --color-naranja: #F97316;           /* Naranja para iconos */
+  --color-rojo: #EF4444;              /* Rojo para errores y alertas */
+
+  /* ====== COLORES NEUTROS ====== */
+  --color-fondo: #f5f6fa;             /* Fondo general de la app */
+  --color-blanco: #ffffff;            /* Blanco puro */
+  --color-texto: #2d3748;             /* Color principal del texto */
+  --color-texto-claro: #718096;       /* Texto secundario/gris */
+  --color-borde: #e2e8f0;             /* Color de bordes */
+  --color-fondo-gris: #f7fafc;        /* Fondo gris muy claro */
+
+  /* ====== SOMBRAS ====== */
+  --sombra-pequena: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --sombra-mediana: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --sombra-grande: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --sombra-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+
+  /* ====== TRANSICIONES ====== */
+  --transicion-rapida: 0.2s ease;     /* Para hover rápidos */
+  --transicion-normal: 0.3s ease;     /* Transición estándar */
+  --transicion-lenta: 0.5s ease;      /* Para animaciones suaves */
+
+  /* ====== BORDES REDONDEADOS ====== */
+  --radio-pequeno: 6px;
+  --radio-normal: 10px;
+  --radio-grande: 16px;
+  --radio-completo: 50px;             /* Para botones pill */
+
+  /* ====== TIPOGRAFÍA ====== */
+  --fuente-principal: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}

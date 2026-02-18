@@ -1,0 +1,127 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth; /* Scroll suave al hacer click en anclas */
+}
+
+body {
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+  background-color: var(--color-blanco);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: var(--fuente-principal);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: var(--fuente-principal);
+  outline: none;
+}
+
+/* ====== CLASES DE UTILIDAD ====== */
+
+/* Texto amarillo (para destacar palabras) */
+.texto-amarillo {
+  color: var(--color-amarillo);
+}
+
+/* Contenedor centrado con ancho máximo */
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Badge/etiqueta pequeña */
+.badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: var(--radio-completo);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.badge-amarillo {
+  background-color: rgba(253, 176, 34, 0.15);
+  color: var(--color-amarillo);
+}
+
+.badge-verde {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--color-verde);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+}
+
+.badge-rojo {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--color-rojo);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+}
+
+.badge-pendiente {
+  background-color: rgba(253, 176, 34, 0.15);
+  color: var(--color-amarillo);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+}
+
+/* Estado de carga */
+.cargando {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2rem;
+  color: var(--color-texto-claro);
+}
+
+.cargando::after {
+  content: '';
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--color-borde);
+  border-top-color: var(--color-amarillo);
+  border-radius: 50%;
+  margin-left: 12px;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .contenedor {
+    padding: 0 15px;
+  }
+}
