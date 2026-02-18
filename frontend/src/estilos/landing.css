@@ -5,6 +5,17 @@
   transform: scale(1.05);
   z-index: 2;
 }
+.caracteristicas-imagen img {
+  width: 100%;
+  max-width: 350px;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  border-radius: var(--radio-grande);
+  box-shadow: var(--sombra-grande);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
 
 .navbar {
   position: fixed;

@@ -1,66 +1,65 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 /**
  * ============================================
  * BOOKIT - Componente SeccionCaracteristicas
  * Archivo: componentes/LandingPage/SeccionCaracteristicas.js
  * ============================================
- *
+ * 
  * Propósito: Sección con sistema de pestañas (tabs) que muestra
  * las diferentes características de BookIt.
- *
+ * 
  * Estados:
  *   - tabActiva: Índice de la pestaña seleccionada (0 por defecto)
  */
 
 const tabs = [
   {
-    nombre: "Gestión de Reservas",
-    titulo: "Gestión de Reservas",
-    subtitulo:
-      "Sistema inteligente que gestiona todas tus reservas en tiempo real",
+    nombre: 'Gestión de Reservas',
+    titulo: 'Gestión de Reservas',
+    subtitulo: 'Sistema inteligente que gestiona todas tus reservas en tiempo real',
     items: [
-      "Calendario visual intuitivo",
-      "Gestión de disponibilidad en tiempo real",
-      "Confirmaciones automáticas por email/SMS",
-      "Historial completo de reservas",
+      'Calendario visual intuitivo',
+      'Gestión de disponibilidad en tiempo real',
+      'Confirmaciones automáticas por email/SMS',
+      'Historial completo de reservas',
     ],
-    imagen: "/assets/images/caracteristica-reservas.png",
+    imagen: '/assets/images/caracteristica-reservas.png',
   },
   {
-    nombre: "Base de Datos de Clientes",
-    titulo: "Base de Datos de Clientes",
-    subtitulo: "Conoce a tus clientes y personaliza su experiencia",
+    nombre: 'Base de Datos de Clientes',
+    titulo: 'Base de Datos de Clientes',
+    subtitulo: 'Conoce a tus clientes y personaliza su experiencia',
     items: [
-      "Perfiles completos de cada cliente",
-      "Historial de visitas y preferencias",
-      "Segmentación inteligente de clientes",
-      "Programa de fidelización integrado",
+      'Perfiles completos de cada cliente',
+      'Historial de visitas y preferencias',
+      'Segmentación inteligente de clientes',
+      'Programa de fidelización integrado',
     ],
-    imagen: "/assets/images/caracteristica-clientes.png",
+    imagen: '/assets/images/caracteristica-clientes.png',
   },
   {
-    nombre: "Notificaciones Inteligentes",
-    titulo: "Notificaciones Inteligentes",
-    subtitulo: "Mantén a tus clientes informados automáticamente",
+    nombre: 'Notificaciones Inteligentes',
+    titulo: 'Notificaciones Inteligentes',
+    subtitulo: 'Mantén a tus clientes informados automáticamente',
     items: [
-      "Recordatorios automáticos de reserva",
-      "Confirmaciones por email y SMS",
-      "Alertas de capacidad del restaurante",
-      "Notificaciones de cancelación instantáneas",
+      'Recordatorios automáticos de reserva',
+      'Confirmaciones por email y SMS',
+      'Alertas de capacidad del restaurante',
+      'Notificaciones de cancelación instantáneas',
     ],
-    imagen: "/assets/images/caracteristica-notificaciones.png",
+    imagen: '/assets/images/caracteristica-notificaciones.png',
   },
   {
-    nombre: "Análisis y Reportes",
-    titulo: "Análisis y Reportes",
-    subtitulo: "Datos claros para tomar mejores decisiones",
+    nombre: 'Análisis y Reportes',
+    titulo: 'Análisis y Reportes',
+    subtitulo: 'Datos claros para tomar mejores decisiones',
     items: [
-      "Dashboard con métricas en tiempo real",
-      "Reportes de ocupación y tendencias",
-      "Análisis de horas pico y demanda",
-      "Exportación de datos a Excel/PDF",
+      'Dashboard con métricas en tiempo real',
+      'Reportes de ocupación y tendencias',
+      'Análisis de horas pico y demanda',
+      'Exportación de datos a Excel/PDF',
     ],
-    imagen: "/assets/images/caracteristica-analitica.png",
+    imagen: '/assets/images/caracteristica-analitica.png',
   },
 ];
 
@@ -73,9 +72,7 @@ const SeccionCaracteristicas = () => {
       {/* Header de la sección */}
       <div className="seccion-header">
         <span className="seccion-badge">CARACTERÍSTICAS</span>
-        <h2 className="seccion-titulo">
-          Todo lo que necesitas en un solo lugar
-        </h2>
+        <h2 className="seccion-titulo">Todo lo que necesitas en un solo lugar</h2>
         <p className="seccion-subtitulo">
           Potentes herramientas diseñadas específicamente para restaurantes
         </p>
@@ -86,7 +83,7 @@ const SeccionCaracteristicas = () => {
         {tabs.map((tab, indice) => (
           <button
             key={indice}
-            className={`tab-boton ${tabActiva === indice ? "activo" : ""}`}
+            className={`tab-boton ${tabActiva === indice ? 'activo' : ''}`}
             onClick={() => setTabActiva(indice)}
           >
             {tab.nombre}
@@ -105,14 +102,7 @@ const SeccionCaracteristicas = () => {
           <div className="caracteristicas-lista">
             {tabs[tabActiva].items.map((item, indice) => (
               <div className="caracteristica-item" key={indice}>
-                <span className="check-icono">
-                  <img
-                    src="https://img.icons8.com/ios-filled/16/10B981/checkmark--v1.png"
-                    alt="check"
-                    width="16"
-                    height="16"
-                  />
-                </span>
+                <span className="check-icono"><img src="https://img.icons8.com/ios-filled/16/10B981/checkmark--v1.png" alt="check" width="16" height="16" /></span>
                 <span>{item}</span>
               </div>
             ))}
