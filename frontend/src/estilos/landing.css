@@ -1,5 +1,7 @@
 .caracteristicas-imagen img.activa {
-  box-shadow: 0 8px 32px 0 rgba(16,185,129,0.25), var(--sombra-grande);
+  box-shadow:
+    0 8px 32px 0 rgba(16, 185, 129, 0.25),
+    var(--sombra-grande);
   transform: scale(1.05);
   z-index: 2;
 }
@@ -106,7 +108,11 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, var(--color-azul-oscuro) 0%, #2c5282 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-azul-oscuro) 0%,
+    #2c5282 100%
+  );
   padding: 100px 40px 60px;
   overflow: hidden;
 }
@@ -239,8 +245,13 @@
 }
 
 @keyframes flotar {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .hero-tarjeta-info h4 {
@@ -320,7 +331,9 @@
   background-position: center;
   background-repeat: no-repeat;
   cursor: pointer;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
   border: none;
   box-shadow: var(--sombra-pequena);
 }
@@ -394,12 +407,24 @@
 /* Las imágenes se aplican inline desde el componente React */
 
 /* Color de respaldo mientras no haya imagen */
-.ventaja-optimizacion { background-color: #1a365d; }
-.ventaja-control { background-color: #2d2056; }
-.ventaja-experiencia { background-color: #4a1942; }
-.ventaja-ingresos { background-color: #1a3a2a; }
-.ventaja-seguridad { background-color: #3d1f0a; }
-.ventaja-implementacion { background-color: #3d350a; }
+.ventaja-optimizacion {
+  background-color: #1a365d;
+}
+.ventaja-control {
+  background-color: #2d2056;
+}
+.ventaja-experiencia {
+  background-color: #4a1942;
+}
+.ventaja-ingresos {
+  background-color: #1a3a2a;
+}
+.ventaja-seguridad {
+  background-color: #3d1f0a;
+}
+.ventaja-implementacion {
+  background-color: #3d350a;
+}
 
 /* ====== SECCIÓN CARACTERÍSTICAS ====== */
 .caracteristicas {
@@ -505,7 +530,9 @@
   margin: 0 auto;
   border-radius: var(--radio-grande);
   box-shadow: var(--sombra-grande);
-  transition: box-shadow 0.3s, transform 0.3s;
+  transition:
+    box-shadow 0.3s,
+    transform 0.3s;
 }
 
 /* ====== SECCIÓN TESTIMONIOS ====== */
@@ -611,7 +638,7 @@
 
 /* Círculos decorativos de fondo */
 .contacto-info::before {
-  content: '';
+  content: "";
   position: absolute;
   width: 220px;
   height: 220px;
@@ -622,7 +649,7 @@
 }
 
 .contacto-info::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 140px;
   height: 140px;
@@ -750,8 +777,14 @@
 }
 
 @keyframes contactoFadeIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .contacto-formulario {
@@ -885,7 +918,9 @@
 }
 
 @keyframes contactoSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ====== PIE DE PÁGINA (FOOTER) ====== */
@@ -1155,8 +1190,12 @@
 }
 
 @keyframes demoFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Contenedor principal */
@@ -1224,7 +1263,11 @@
 .demo-header {
   text-align: center;
   padding: 32px 28px 16px;
-  background: linear-gradient(135deg, var(--color-azul-oscuro) 0%, #2a4a6b 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-azul-oscuro) 0%,
+    #2a4a6b 100%
+  );
   border-radius: 24px 24px 0 0;
   color: white;
 }
@@ -1312,7 +1355,9 @@
 /* ====== CONTENIDO ====== */
 .demo-contenido {
   padding: 20px 28px;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 .demo-contenido.demo-animando {
@@ -1556,7 +1601,7 @@
   border-radius: 10px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #10B981;
+  color: #10b981;
   margin-bottom: 18px;
 }
 
@@ -1627,7 +1672,7 @@
   display: block;
   font-size: 0.65rem;
   font-weight: 600;
-  color: #EF4444;
+  color: #ef4444;
   text-decoration: none;
 }
 
@@ -1727,7 +1772,7 @@
 }
 
 .demo-btn-confirmar {
-  background: #10B981;
+  background: #10b981;
   color: white;
 }
 
@@ -1749,7 +1794,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #10B981, #059669);
+  background: linear-gradient(135deg, #10b981, #059669);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1759,9 +1804,17 @@
 }
 
 @keyframes demoCheckPop {
-  0% { transform: scale(0); opacity: 0; }
-  60% { transform: scale(1.15); }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .demo-confirmacion-tarjeta {
