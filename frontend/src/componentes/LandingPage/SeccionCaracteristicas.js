@@ -18,7 +18,7 @@ const tabs = [
     titulo: 'Gestión de Reservas',
     subtitulo: 'Sistema inteligente que gestiona todas tus reservas en tiempo real',
     items: [
-      'Calendario visual intuitivo',
+      'Calendario visual intuitivos',
       'Gestión de disponibilidad en tiempo real',
       'Confirmaciones automáticas por email/SMS',
       'Historial completo de reservas',
