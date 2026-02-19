@@ -9,7 +9,7 @@ import SeccionCaracteristicas from '../componentes/LandingPage/SeccionCaracteris
 import SeccionTestimonios from '../componentes/LandingPage/SeccionTestimonios';
 import SeccionContacto from '../componentes/LandingPage/SeccionContacto';
 import PiePagina from '../componentes/LandingPage/PiePagina';
-import SobreNosotros from '../componentes/LandingPage/SobreNosotros';
+
 import '../estilos/landing.css';
 
 const PaginaLanding = () => {
@@ -37,8 +37,7 @@ const PaginaLanding = () => {
       {/* Pie de página */}
       <PiePagina />
 
-      {/* Sección Sobre Nosotros (al final, discreto) */}
-      <SobreNosotros />
+      {/* Sección Sobre Nosotros eliminada */}
     </div>
   );
 };
