@@ -22,6 +22,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PaginaLanding from './paginas/PaginaLanding';
 import PaginaLogin from './paginas/PaginaLogin';
 import PaginaDashboard from './paginas/PaginaDashboard';
+import PaginaDemoLanding from './paginas/PaginaDemoLanding';
 import './estilos/variables.css';
 import './estilos/compartidos.css';
 
@@ -75,6 +76,9 @@ function App() {
 
         {/* Ruta pública: Login */}
         <Route path="/login" element={<PaginaLogin />} />
+
+        {/* Ruta pública: Demo Landing */}
+        <Route path="/demo-landing" element={<PaginaDemoLanding />} />
 
         {/* Ruta protegida: Dashboard (solo usuarios logueados) */}
         <Route

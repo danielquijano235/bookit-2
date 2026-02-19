@@ -1,0 +1,118 @@
+/* Estilos básicos para la demo landing */
+.demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #222;
+  color: #fff;
+}
+.demo-header nav a {
+  color: #fff;
+  margin: 0 1rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+.demo-header nav a:hover {
+  text-decoration: underline;
+}
+.demo-hero {
+  position: relative;
+  text-align: center;
+  color: #fff;
+}
+.demo-hero-img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+.demo-hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.demo-hero-btn {
+  background: #e67e22;
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+.demo-info, .demo-menu, .demo-reservar, .demo-eventos, .demo-contacto {
+  padding: 2rem 1rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.demo-menu-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.demo-menu-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  width: 290px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.15s;
+}
+.demo-menu-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+}
+.demo-menu-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.demo-menu-info {
+  padding: 1.2rem 1rem 1.5rem 1rem;
+  text-align: center;
+}
+.demo-menu-info h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: #1e3a5f;
+}
+.demo-menu-desc {
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 0.7rem;
+}
+.demo-menu-precio {
+  font-weight: bold;
+  color: #e67e22;
+  font-size: 1.1rem;
+}
+.demo-reservar-btn {
+  background: #27ae60;
+  color: #fff;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  .demo-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .demo-hero-content {
+    position: static;
+    transform: none;
+    padding: 1rem 0;
+  }
+}

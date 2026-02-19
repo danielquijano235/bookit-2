@@ -56,6 +56,17 @@ const SeccionHero = () => {
             </button>
           </div>
 
+          {/* Botón destacado para la demo de restaurante */}
+          <div style={{marginTop:'1.5rem', textAlign:'left', marginBottom:'2.5rem'}}>
+            <button 
+              className="btn-empezar"
+              style={{marginTop:0, marginBottom:'0.5rem'}}
+              onClick={() => navigate('/demo-landing')}
+            >
+              Cómo se vería tu restaurante
+            </button>
+          </div>
+
           {/* Estadísticas en fila */}
           <div className="hero-estadisticas">
             <div className="hero-estadistica">
