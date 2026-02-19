@@ -3,11 +3,13 @@
 import React from 'react';
 import BarraNavegacion from '../componentes/LandingPage/BarraNavegacion';
 import SeccionHero from '../componentes/LandingPage/SeccionHero';
+
 import SeccionVentajas from '../componentes/LandingPage/SeccionVentajas';
 import SeccionCaracteristicas from '../componentes/LandingPage/SeccionCaracteristicas';
 import SeccionTestimonios from '../componentes/LandingPage/SeccionTestimonios';
 import SeccionContacto from '../componentes/LandingPage/SeccionContacto';
 import PiePagina from '../componentes/LandingPage/PiePagina';
+import SobreNosotros from '../componentes/LandingPage/SobreNosotros';
 import '../estilos/landing.css';
 
 const PaginaLanding = () => {
@@ -18,6 +20,7 @@ const PaginaLanding = () => {
 
       {/* Sección principal con título y CTA */}
       <SeccionHero />
+
 
       {/* Sección de ventajas (6 tarjetas) */}
       <SeccionVentajas />
@@ -33,6 +36,9 @@ const PaginaLanding = () => {
 
       {/* Pie de página */}
       <PiePagina />
+
+      {/* Sección Sobre Nosotros (al final, discreto) */}
+      <SobreNosotros />
     </div>
   );
 };

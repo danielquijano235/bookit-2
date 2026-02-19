@@ -1,3 +1,54 @@
+/* ====== SOBRE NOSOTROS DISCRETO ====== */
+.sobre-nosotros-discreto {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+.historia-discreta {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+}
+/* ====== SECCIÓN SOBRE NOSOTROS ====== */
+.sobre-nosotros-section {
+  background: var(--color-fondo);
+  color: var(--color-azul-oscuro);
+  padding: 4rem 0;
+}
+
+.sobre-nosotros-section .container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.sobre-nosotros-section h2 {
+  color: var(--color-azul-oscuro);
+  font-weight: 700;
+  margin-bottom: 24px;
+  font-size: 2.4rem;
+}
+
+.sobre-nosotros-section .historia-box {
+  background: var(--color-blanco);
+  border-radius: var(--radio-grande);
+  box-shadow: var(--sombra-xl);
+  padding: 32px;
+  margin-bottom: 0;
+}
+
+.sobre-nosotros-section p {
+  font-size: 1.15rem;
+  margin-bottom: 24px;
+  color: var(--color-texto);
+}
+
+.sobre-nosotros-section b {
+  color: var(--color-azul-claro);
+}
 .caracteristicas-imagen img.activa {
   box-shadow:
     0 8px 32px 0 rgba(16, 185, 129, 0.25),

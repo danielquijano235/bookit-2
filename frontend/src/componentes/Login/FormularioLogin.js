@@ -69,7 +69,7 @@ const FormularioLogin = () => {
   return (
     <div className="login-tarjeta">
       {/* Logo */}
-      <div className="login-logo">
+      <div className="login-logo" style={{cursor: 'pointer'}} onClick={() => navigate('/')}> 
         <img src="/assets/images/logo-bookit.png" alt="BookIt" className="login-logo-img" />
       </div>
 

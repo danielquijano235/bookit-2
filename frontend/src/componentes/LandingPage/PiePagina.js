@@ -39,7 +39,7 @@ const PiePagina = () => {
         <div>
           <h4 className="footer-titulo">Empresa</h4>
           <div className="footer-links">
-            <a href="#contacto">Sobre Nosotros</a>
+            <a href="#sobre-nosotros">Sobre Nosotros</a>
             <a href="#contacto">Blog</a>
             <a href="#contacto">Contacto</a>
           </div>
