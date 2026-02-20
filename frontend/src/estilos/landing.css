@@ -261,6 +261,25 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
+/* Botón azul con hover amarillo (para "Cómo se vería tu restaurante") */
+.btn-azul {
+  padding: 12px 28px;
+  background: rgba(255,255,255,0.06);
+  color: white;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  border-radius: var(--radio-completo);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: var(--transicion-rapida);
+}
+
+.btn-azul:hover {
+  background-color: var(--color-amarillo);
+  color: var(--color-azul-oscuro);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(253, 176, 34, 0.35);
+}
+
 .hero-estadisticas {
   display: flex;
   gap: 40px;
@@ -336,6 +355,7 @@
   font-size: 0.75rem;
   font-weight: 700;
 }
+
 
 /* ====== SECCIÓN VENTAJAS ====== */
 .ventajas {

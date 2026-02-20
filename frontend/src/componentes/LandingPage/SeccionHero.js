@@ -51,7 +51,17 @@ const SeccionHero = () => {
               Empezar Ahora →
             </button>
             <button className="btn-demo" onClick={() => setMostrarDemo(true)}>
-              <img src="https://img.icons8.com/ios-filled/14/1e3a5f/play--v1.png" alt="play" width="14" height="14" style={{verticalAlign: 'middle', marginRight: '6px'}} />
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ verticalAlign: 'middle', marginRight: '6px', fill: 'var(--color-amarillo)' }}
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
               Ver Demo
             </button>
           </div>
@@ -59,7 +69,7 @@ const SeccionHero = () => {
           {/* Botón destacado para la demo de restaurante */}
           <div style={{marginTop:'1.5rem', textAlign:'left', marginBottom:'2.5rem'}}>
             <button 
-              className="btn-empezar"
+              className="btn-azul"
               style={{marginTop:0, marginBottom:'0.5rem'}}
               onClick={() => navigate('/demo-landing')}
             >

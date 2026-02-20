@@ -32,7 +32,6 @@ const DemoMenu = () => (
           <div className="demo-menu-info">
             <h3>{plato.nombre}</h3>
             <p className="demo-menu-desc">{plato.descripcion}</p>
-            <div className="demo-menu-precio">{plato.precio}</div>
           </div>
         </div>
       ))}
