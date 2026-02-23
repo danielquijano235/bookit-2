@@ -157,8 +157,8 @@ const DemoReserva = ({ visible, onCerrar }) => {
           <img src="https://img.icons8.com/ios-filled/22/ffffff/delete-sign.png" alt="cerrar" width="22" height="22" />
         </button>
 
-        {/* ====== HEADER ====== */}
-        <div className="demo-header">
+        {/* ====== HEADER (modal específico) ====== */}
+        <div className="demo-modal-header">
           <div className="demo-header-icono">
             <img src="https://img.icons8.com/ios-filled/28/FDB022/restaurant.png" alt="" width="28" height="28" />
           </div>

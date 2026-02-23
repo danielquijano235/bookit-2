@@ -1313,6 +1313,27 @@
 .demo-contenedor::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* Header específico del modal: opaco para evitar 'ghosting' del fondo */
+.demo-modal-header {
+  background: #ffffff; /* fondo sólido para tapar el contenido detrás */
+  color: #1f2937; /* texto oscuro para contraste */
+  padding: 20px 22px;
+  text-align: center;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  position: relative;
+}
+.demo-modal-header .demo-header-icono {
+  background: rgba(253,176,34,0.06);
+  border: 1px solid rgba(253,176,34,0.12);
+}
+.demo-modal-header .demo-header-titulo {
+  color: #111827;
+}
+.demo-modal-header .demo-header-subtitulo {
+  color: #6b7280;
+}
 .demo-contenedor::-webkit-scrollbar-thumb {
   background: #ddd;
   border-radius: 10px;
