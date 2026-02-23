@@ -8,6 +8,7 @@ import DemoReservar from './DemoReservar';
 import DemoEventos from './DemoEventos';
 import DemoContacto from './DemoContacto';
 import DemoReserva from '../componentes/LandingPage/DemoReserva';
+import DemoGallery from './DemoGallery';
 
 const DemoLanding = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,6 +21,13 @@ const DemoLanding = () => {
       <DemoHeader onOpenReserva={abrirModal} />
       <DemoHero onOpenReserva={abrirModal} />
       <DemoInfo />
+
+      {/* Galería a pantalla completa: muestra varios platos grandes juntos */}
+      <section className="demo-gallery-section" id="galeria">
+        <h2 className="demo-section-title">Sabores que cuentan historias</h2>
+        <DemoGallery />
+      </section>
+
       <DemoMenu />
       <DemoReservar onOpenReserva={abrirModal} />
       <DemoEventos />

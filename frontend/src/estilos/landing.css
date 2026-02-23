@@ -1014,7 +1014,8 @@
 
 .footer-contenido {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  /* dar más espacio a la columna de contacto (3ª columna) */
+  grid-template-columns: 2fr 1fr 1.4fr 1fr;
   gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
@@ -1060,6 +1061,18 @@
 .footer-links a:hover {
   color: var(--color-amarillo);
 }
+
+/* Contact column styles */
+.footer-contact p {
+  margin: 0 0 8px 0;
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.85);
+}
+.footer-contact a {
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+}
+.footer-contact a:hover { text-decoration: underline; color: var(--color-amarillo); }
 
 .footer-copyright {
   text-align: center;

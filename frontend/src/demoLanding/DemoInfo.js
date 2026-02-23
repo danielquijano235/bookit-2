@@ -18,7 +18,8 @@ const DemoInfo = () => (
       </div>
 
       <div className="demo-info-gallery">
-        <DemoGallery />
+        {/* Imagen representativa para 'Sobre Nosotros' - pon el archivo en public/assets/images/ */}
+        <img src="/assets/images/sobre-nosotros.jpg" alt="Restaurante Demo" className="demo-info-img" />
       </div>
     </div>
   </section>
