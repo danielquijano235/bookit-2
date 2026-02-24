@@ -23,6 +23,7 @@ import PaginaLanding from './paginas/PaginaLanding';
 import PaginaLogin from './paginas/PaginaLogin';
 import PaginaDashboard from './paginas/PaginaDashboard';
 import PaginaDemoLanding from './paginas/PaginaDemoLanding';
+import PaginaMenu from './paginas/PaginaMenu';
 import './estilos/variables.css';
 import './estilos/compartidos.css';
 
@@ -79,6 +80,9 @@ function App() {
 
         {/* Ruta pública: Demo Landing */}
         <Route path="/demo-landing" element={<PaginaDemoLanding />} />
+
+        {/* Página del menú (placeholder) */}
+        <Route path="/menu" element={<PaginaMenu />} />
 
         {/* Ruta protegida: Dashboard (solo usuarios logueados) */}
         <Route

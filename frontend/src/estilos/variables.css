@@ -14,12 +14,13 @@
   --color-rojo: #EF4444;              /* Rojo para errores y alertas */
 
   /* ====== COLORES NEUTROS ====== */
-  --color-fondo: #f5f6fa;             /* Fondo general de la app */
-  --color-blanco: #ffffff;            /* Blanco puro */
+  /* Fondo general más cálido y suave para descansar la vista */
+  --color-fondo: #fbf7f2;             /* Fondo general de la app (suave, cálido) */
+  --color-blanco: #fffaf0;            /* Blanco cálido (no puro) */
   --color-texto: #2d3748;             /* Color principal del texto */
   --color-texto-claro: #718096;       /* Texto secundario/gris */
   --color-borde: #e2e8f0;             /* Color de bordes */
-  --color-fondo-gris: #f7fafc;        /* Fondo gris muy claro */
+  --color-fondo-gris: #fbf8f5;        /* Fondo gris muy claro con matiz cálido */
 
   /* ====== SOMBRAS ====== */
   --sombra-pequena: 0 1px 3px rgba(0, 0, 0, 0.1);

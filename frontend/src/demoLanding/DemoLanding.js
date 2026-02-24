@@ -34,6 +34,7 @@ const DemoLanding = () => {
       <DemoContacto />
 
       <DemoReserva visible={modalVisible} onCerrar={cerrarModal} />
+      
     </div>
   );
 };

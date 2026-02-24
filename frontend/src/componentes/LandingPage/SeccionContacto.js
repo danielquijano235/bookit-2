@@ -238,6 +238,6 @@ const SeccionContacto = () => {
       </div>
     </section>
   );
-};
+}
 
 export default SeccionContacto;

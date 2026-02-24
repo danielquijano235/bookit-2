@@ -1097,6 +1097,9 @@
     flex-direction: column;
   }
 
+  .footer-contenido { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .footer-descripcion { max-width: none; }
+
   .caracteristicas-info,
   .caracteristicas-imagen {
     flex: auto;
@@ -2010,16 +2013,7 @@
 }
 
 /* ====== FOOTER ====== */
-.demo-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 14px 28px;
-  border-top: 1px solid #edf2f7;
-  font-size: 0.75rem;
-  color: #a0aec0;
-}
+.demo-footer { display: none; }
 
 /* ====== RESPONSIVE DEMO ====== */
 @media (max-width: 520px) {

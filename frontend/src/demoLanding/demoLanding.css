@@ -368,6 +368,24 @@
   font-size: 1.25rem;
   color: var(--color-azul-oscuro);
 }
+
+/* Single-button menu block */
+.demo-menu-single { text-align: center; padding: 2.4rem 1rem; }
+.demo-menu-single .demo-menu-inner { max-width: 980px; margin: 0 auto; }
+.demo-menu-single h2 { font-size: 1.6rem; margin: 0 0 6px 0; }
+.demo-menu-single p { color: #415a6a; margin: 0 0 12px 0; }
+.demo-menu-btn {
+  display: inline-block;
+  background: var(--color-amarillo);
+  color: var(--color-azul-oscuro);
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}
+.demo-menu-btn:hover { background: var(--color-amarillo-hover); }
+
+/* Demo footer removed per user request */
 .demo-menu-desc {
   color: #555;
   font-size: 1rem;
@@ -377,6 +395,108 @@
   font-weight: bold;
   color: var(--color-amarillo);
   font-size: 1.1rem;
+}
+/* ===== Demo Contacto (demo landing only) ===== */
+.demo-contacto {
+  padding: 3rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(251,247,242,0.6), rgba(251,247,242,0.9));
+}
+.demo-contacto.with-image {
+  /* Use 100% instead of 100vw to avoid horizontal overflow (scrollbar width).
+     Keep it full-bleed within the page flow and use box-sizing for predictable sizing. */
+  color: #fff;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+}
+
+/* ensure the full-bleed section ignores the shared max-width/margin rules */
+.demo-contacto.with-image {
+  max-width: none;
+  margin: 0;
+  padding-top: 3rem; /* keep vertical spacing */
+  padding-bottom: 3rem;
+}
+.demo-contacto.with-image::before {
+  /* dark overlay for legibility */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6,10,13,0.6), rgba(6,10,13,0.6));
+  mix-blend-mode: normal;
+  z-index: 0;
+}
+.demo-contacto-inner { max-width: 1100px; margin: 0 auto; display:flex; gap:32px; align-items:flex-start; position: relative; z-index: 2; }
+.contacto-info { flex: 0 0 50%; max-width: 50%; min-width: 200px; }
+.contacto-info h2 { margin: 0 0 8px 0; font-family: 'Georgia', serif; color: var(--color-azul-oscuro); }
+
+/* semi-transparent panel on the left to match input backgrounds */
+.demo-contacto.with-image .contacto-info {
+  /* darker semi-transparent panel using the dark blue from variables */
+  background: rgba(30,58,95,0.72); /* var(--color-azul-oscuro) @ 72% */
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 18px;
+  border-radius: 10px;
+}
+
+.demo-contacto.with-image .contacto-info h2 { color: #fff; }
+.demo-contacto.with-image .contacto-info .contacto-line,
+.demo-contacto.with-image .contacto-info .contacto-horarios { color: rgba(255,255,255,0.9); }
+.contacto-line a { color: var(--color-azul-oscuro); text-decoration:none; }
+.contacto-horarios { list-style:none; padding:0; margin:8px 0 0 0; color: #334e57; }
+.contacto-horarios li { margin-bottom:6px; }
+
+.demo-contacto.with-image .demo-contacto-inner { align-items: center; min-height: 420px; }
+.demo-contacto.with-image .contacto-info h2 { color: #fff; }
+.demo-contacto.with-image .contacto-line a { color: rgba(255,255,255,0.95); }
+.demo-contacto.with-image .contacto-horarios { color: rgba(255,255,255,0.9); }
+
+/* make the form column narrower so the left blue/info area is less dominant */
+/* make left and right columns each take ~50% so they appear mitad y mitad */
+.contacto-form { flex: 0 0 50%; max-width: 50%; background: transparent; padding:12px; border-radius:10px; box-shadow: none; border: none; }
+.contacto-form h3 { margin-top:0; color: var(--color-azul-oscuro); }
+.contacto-form form { display:flex; flex-direction:column; gap:12px; }
+.contacto-form label { display:flex; flex-direction:column; font-size:0.95rem; color:#334e57; }
+/* make inputs fill the available width and give placeholders more left spacing */
+.contacto-form input, .contacto-form textarea, .contacto-form select { width:100%; padding:10px 16px; border:1px solid #e6eef0; border-radius:8px; font-size:0.95rem; background: #fff; }
+.form-row { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+.contacto-form-actions { display:flex; justify-content:flex-end; margin-top:6px; }
+.contacto-submit { background: var(--color-amarillo); color: var(--color-azul-oscuro); border-radius: 28px; padding: 10px 18px; font-weight:700; border:none; cursor:pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+.contacto-submit:hover { background: var(--color-amarillo-hover); }
+
+/* When the contacto section uses the background image, make the form bluish */
+.demo-contacto.with-image .contacto-form {
+  background: transparent; /* keep the form transparent over the image */
+  border: 1px solid rgba(255,255,255,0.06); /* subtle border for separation */
+  box-shadow: 0 8px 20px rgba(3,12,22,0.16);
+}
+.demo-contacto.with-image .contacto-form h3 { color: #fff; }
+.demo-contacto.with-image .contacto-form label { color: rgba(255,255,255,0.95); }
+.demo-contacto.with-image .contacto-form input,
+.demo-contacto.with-image .contacto-form textarea,
+.demo-contacto.with-image .contacto-form select {
+  /* semi-transparent white so the background image shows through */
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #ffffff;
+}
+.demo-contacto.with-image .contacto-form input::placeholder,
+.demo-contacto.with-image .contacto-form textarea::placeholder {
+  color: rgba(255,255,255,0.75);
+}
+
+@media (max-width: 900px) {
+  .demo-contacto-inner { flex-direction: column; }
+  .contacto-form { width: 100%; }
+}
+
+@media (max-width: 520px) {
+  .form-row { grid-template-columns: 1fr; }
 }
 .demo-reservar-btn {
   background: var(--color-amarillo);
@@ -388,6 +508,66 @@
   margin-top: 1rem;
   cursor: pointer;
   font-weight: 700;
+}
+
+/* Styles for the full RESERVAS hero-like block in the demo landing */
+.demo-reservar {
+  background: var(--color-azul-oscuro); /* usar color azul oscuro de la paleta */
+  padding: 3.5rem 1.5rem;
+  margin: 0 auto 12px auto;
+  text-align: center;
+  color: #fff;
+}
+.demo-reservar-inner { max-width: 1200px; margin: 0 auto; }
+.reservas-title {
+  font-family: 'Georgia', serif;
+  font-size: 2.4rem;
+  margin: 0 0 6px 0;
+  color: #fff;
+}
+.reservas-sub {
+  font-style: italic;
+  margin: 0 0 18px 0;
+  color: rgba(255,255,255,0.9);
+  font-size: 1.15rem;
+}
+.reservas-desc {
+  max-width: 960px;
+  margin: 0 auto 18px auto;
+  color: rgba(255,255,255,0.95);
+  line-height: 1.6;
+}
+.reservar-cta-wrap { display:flex; justify-content:center; }
+.demo-reservar-cta {
+  background: var(--color-amarillo);
+  color: var(--color-azul-oscuro);
+  padding: 0.75rem 1.4rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+.demo-reservar-cta:hover { background: var(--color-amarillo-hover); }
+
+.reservas-horarios { display:flex; justify-content:center; margin-top:22px; }
+.horarios-box {
+  background: rgba(255,255,255,0.06); /* caja sutil sobre fondo azul */
+  padding: 22px 28px;
+  border-radius: 8px;
+  max-width: 880px;
+  width: 100%;
+  color: #fff;
+}
+.horarios-title { margin: 0 0 6px 0; font-size: 1.35rem; }
+.horarios-sub { margin: 0 0 12px 0; font-style: italic; color: rgba(255,255,255,0.85); }
+.horario-list { list-style: none; padding: 0; margin: 0; display:flex; flex-direction:column; gap:8px; color: rgba(255,255,255,0.95); }
+.horario-list li { font-size: 0.98rem; }
+
+@media (max-width: 900px) {
+  .reservas-title { font-size: 1.6rem; }
+  .reservas-sub { font-size: 1rem; }
+  .reservas-desc { padding: 0 12px; }
+  .horarios-box { padding: 16px; }
 }
 @media (max-width: 900px) {
   .demo-hero-img {
@@ -458,6 +638,7 @@
   flex-direction: column;
   gap: 8px;
   flex: 1 1 auto; /* permitir que el contenido ocupe el espacio disponible */
+  justify-content: space-between; /* mantener las acciones (botones) alineadas abajo */
 }
 .event-title { margin: 0; font-size: 1.1rem; color: var(--color-azul-oscuro); }
 .event-date { display: none; }
