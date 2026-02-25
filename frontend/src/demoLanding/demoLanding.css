@@ -770,3 +770,23 @@
   .col-right { justify-content: center; margin-top: 10px; }
   .col-left { justify-content: center; }
 }
+
+/* PaginaMenu styles: highlight links and title colors */
+.pagina-menu-title { color: var(--color-amarillo); }
+.pagina-menu-subtitle { color: var(--color-amarillo); opacity: 0.95; }
+
+.pagina-menu-link-vertical {
+  transition: box-shadow .18s ease, background .18s ease;
+  outline: none;
+}
+.pagina-menu-link-vertical:hover,
+.pagina-menu-link-vertical:focus {
+  /* remove vertical translate 'brinquito' — keep a subtle outline + shadow */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.20);
+  background: rgba(255,255,255,0.06);
+  border: 2px solid var(--color-amarillo);
+}
+.pagina-menu-link-vertical:focus {
+  /* focus ring + subtle outer shadow */
+  box-shadow: 0 0 0 6px rgba(253,176,34,0.12), 0 8px 20px rgba(0,0,0,0.20);
+}
