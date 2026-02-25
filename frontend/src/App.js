@@ -24,6 +24,10 @@ import PaginaLogin from './paginas/PaginaLogin';
 import PaginaDashboard from './paginas/PaginaDashboard';
 import PaginaDemoLanding from './paginas/PaginaDemoLanding';
 import PaginaMenu from './paginas/PaginaMenu';
+import MenuBebidas from './paginas/MenuBebidas';
+import MenuDesayunos from './paginas/MenuDesayunos';
+import MenuCenas from './paginas/MenuCenas';
+import MenuCarnes from './paginas/MenuCarnes';
 import './estilos/variables.css';
 import './estilos/compartidos.css';
 
@@ -83,6 +87,10 @@ function App() {
 
         {/* Página del menú (placeholder) */}
         <Route path="/menu" element={<PaginaMenu />} />
+        <Route path="/menu/bebidas" element={<MenuBebidas />} />
+        <Route path="/menu/desayunos" element={<MenuDesayunos />} />
+        <Route path="/menu/cenas" element={<MenuCenas />} />
+        <Route path="/menu/carnes" element={<MenuCarnes />} />
 
         {/* Ruta protegida: Dashboard (solo usuarios logueados) */}
         <Route

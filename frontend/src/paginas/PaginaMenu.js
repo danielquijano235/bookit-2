@@ -1,4 +1,6 @@
+
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const sections = [
   { id: 'bebidas', title: 'Bebidas' },
@@ -41,9 +43,9 @@ const PaginaMenu = () => {
           }}
         >
           {sections.map((s) => (
-            <a
+            <Link
               key={s.id}
-              href={`#${s.id}`}
+              to={`/menu/${s.id}`}
               className="pagina-menu-link-vertical"
               style={{
                 display: 'block',
@@ -60,7 +62,7 @@ const PaginaMenu = () => {
               }}
             >
               {s.title}
-            </a>
+            </Link>
           ))}
         </div>
 

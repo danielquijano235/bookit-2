@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const DemoMenu = () => (
   <section className="demo-menu demo-menu-single" id="menu">
@@ -6,7 +7,7 @@ const DemoMenu = () => (
       <h2>Menú</h2>
       <p>Descubre nuestro menú completo</p>
       <div className="demo-menu-cta">
-        <a className="demo-menu-btn" href="/menu" target="_blank" rel="noopener noreferrer">Ver menú</a>
+        <Link className="demo-menu-btn" to="/menu">Ver menú</Link>
       </div>
     </div>
   </section>
