@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './demoLanding.css';
 import DemoHeader from './DemoHeader';
 import DemoHero from './DemoHero';
@@ -16,6 +16,19 @@ const DemoLanding = () => {
 
   const abrirModal = () => setModalVisible(true);
   const cerrarModal = () => setModalVisible(false);
+
+  // Cuando el modal está visible, además de bloquear el body,
+  // aseguramos que el contenedor `.demo-landing` también no haga scroll.
+  useEffect(() => {
+    const demoRoot = document.querySelector('.demo-landing');
+    const originalOverflow = demoRoot ? demoRoot.style.overflow : null;
+    if (modalVisible && demoRoot) {
+      demoRoot.style.overflow = 'hidden';
+    }
+    return () => {
+      if (demoRoot) demoRoot.style.overflow = originalOverflow || '';
+    };
+  }, [modalVisible]);
 
   return (
     <div className="demo-landing">

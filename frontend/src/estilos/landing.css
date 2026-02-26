@@ -401,7 +401,7 @@
 
 /* Ajustes específicos para la sección VENTAJAS */
 .ventajas .seccion-badge {
-  font-size: 1.15rem;
+  font-size: 1.45rem;
   font-weight: 900;
 }
 
@@ -411,7 +411,7 @@
 
 /* Ajustes específicos para la sección CARACTERÍSTICAS */
 .caracteristicas .seccion-badge {
-  font-size: 1.15rem;
+  font-size: 1.45rem;
   font-weight: 900;
 }
 
@@ -425,7 +425,7 @@
 
 /* Ajustes específicos para la sección TESTIMONIOS */
 .testimonios .seccion-badge {
-  font-size: 1.15rem;
+  font-size: 1.45rem;
   font-weight: 900;
 }
 
@@ -449,9 +449,10 @@
   background: transparent;
   color: var(--color-amarillo);
   border-radius: var(--radio-completo);
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: 1.2px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
   margin-bottom: 16px;
 }
 
@@ -1352,10 +1353,7 @@
 /* Overlay oscuro */
 .demo-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0; /* shorthand for top/right/bottom/left */
   background: rgba(10, 15, 30, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -1364,7 +1362,7 @@
   justify-content: center;
   z-index: 9999;
   animation: demoFadeIn 0.3s ease;
-  padding: 20px;
+  padding: 12px; /* reduce padding to avoid accidental overflow */
 }
 
 @keyframes demoFadeIn {
@@ -1382,7 +1380,8 @@
   border-radius: 24px;
   width: 100%;
   max-width: 520px;
-  max-height: 92vh;
+  /* ensure the modal fits within viewport minus overlay padding */
+  max-height: calc(100vh - 24px);
   overflow-y: auto;
   position: relative;
   box-shadow:

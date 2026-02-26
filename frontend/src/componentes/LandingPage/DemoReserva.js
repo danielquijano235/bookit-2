@@ -73,12 +73,13 @@ const DemoReserva = ({ visible, onCerrar }) => {
 
   // Bloquear scroll del body cuando el modal está abierto
   useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
     if (visible) {
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
   }, [visible]);
 
   if (!visible) return null;
