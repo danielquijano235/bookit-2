@@ -646,10 +646,16 @@
 }
 
 .testimonio-estrellas {
-  color: var(--color-amarillo);
-  font-size: 1rem;
+  display: flex;
+  gap: 6px;
+  align-items: center;
   margin-bottom: 16px;
-  letter-spacing: 2px;
+}
+
+.testimonio-estrellas img {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .testimonio-texto {
