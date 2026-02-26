@@ -377,18 +377,26 @@ const VistaReservas = () => {
             <p>Cargando reservas...</p>
           </div>
         ) : reservasFiltradas.length === 0 ? (
-          <div className="reservas-vacio">
-            <div
-              style={{ textAlign: "center", padding: "24px", color: "#718096" }}
-            >
-              <img
-                src="https://img.icons8.com/ios-filled/48/1a1a2e/calendar--v1.png"
-                alt="sin reservas"
-                width="48"
-                height="48"
-              />
-              <p style={{ marginTop: 12 }}>No se encontraron reservas</p>
-            </div>
+          <div
+            className="reservas-vacio"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: 140,
+            }}
+          >
+            <img
+              src="https://img.icons8.com/ios-filled/48/1a1a2e/calendar--v1.png"
+              alt="sin reservas"
+              width="48"
+              height="48"
+              style={{ display: "block", margin: "0 auto 12px" }}
+            />
+            <p style={{ textAlign: "center", marginTop: 12 }}>
+              No se encontraron reservas
+            </p>
           </div>
         ) : (
           <table className="reservas-tabla">
@@ -517,16 +525,21 @@ const VistaReservas = () => {
                           background:
                             reserva.estado !== "confirmada" &&
                             reserva.estado !== "cancelada"
-                              ? undefined
-                              : undefined,
+                              ? "#10B981"
+                              : "transparent",
                           borderRadius: "8px",
+                          boxShadow:
+                            reserva.estado !== "confirmada" &&
+                            reserva.estado !== "cancelada"
+                              ? "0 6px 12px rgba(16,185,129,0.18)"
+                              : "none",
                         }}
                       >
                         <img
                           src={
                             reserva.estado !== "confirmada" &&
                             reserva.estado !== "cancelada"
-                              ? "https://img.icons8.com/ios-filled/50/00D600/checkmark--v1.png"
+                              ? "https://img.icons8.com/?size=100&id=7690&format=png&color=000000"
                               : "https://img.icons8.com/ios-filled/20/10B981/checkmark.png"
                           }
                           alt="confirmar"

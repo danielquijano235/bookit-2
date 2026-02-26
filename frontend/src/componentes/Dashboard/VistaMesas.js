@@ -3,12 +3,12 @@
  * BOOKIT - Componente VistaMesas
  * Archivo: componentes/Dashboard/VistaMesas.js
  * ============================================
- * 
+ *
  * Propósito: Módulo de gestión de mesas del restaurante.
  * Muestra las mesas como tarjetas visuales en grid,
  * permite agregar nuevas mesas, cambiar su estado
  * y filtrar/buscar.
- * 
+ *
  * Estados:
  *   - mesas: Array de mesas del restaurante
  *   - filtroEstado: Filtro por estado (todas, disponible, ocupada, reservada)
@@ -19,69 +19,112 @@
  *   - formulario: Datos del formulario de nueva mesa
  */
 
-import React, { useState } from 'react';
-import { useNotificaciones } from '../../contextos/NotificacionesContext';
-import Boton from '../Compartidos/Boton';
-import ConfirmDialog from '../Compartidos/ConfirmDialog';
+import React, { useState } from "react";
+import { useNotificaciones } from "../../contextos/NotificacionesContext";
+import Boton from "../Compartidos/Boton";
+import ConfirmDialog from "../Compartidos/ConfirmDialog";
 
 // Datos de ejemplo
 const mesasIniciales = [
-  { id: 1, numero: 1, capacidad: 2, ubicacion: 'Interior', estado: 'disponible' },
-  { id: 2, numero: 2, capacidad: 2, ubicacion: 'Interior', estado: 'ocupada' },
-  { id: 3, numero: 3, capacidad: 4, ubicacion: 'Interior', estado: 'disponible' },
-  { id: 4, numero: 4, capacidad: 4, ubicacion: 'Ventana', estado: 'reservada' },
-  { id: 5, numero: 5, capacidad: 4, ubicacion: 'Ventana', estado: 'ocupada' },
-  { id: 6, numero: 6, capacidad: 6, ubicacion: 'Interior', estado: 'disponible' },
-  { id: 7, numero: 7, capacidad: 6, ubicacion: 'Terraza', estado: 'disponible' },
-  { id: 8, numero: 8, capacidad: 8, ubicacion: 'Terraza', estado: 'reservada' },
-  { id: 9, numero: 9, capacidad: 2, ubicacion: 'Barra', estado: 'ocupada' },
-  { id: 10, numero: 10, capacidad: 4, ubicacion: 'Terraza', estado: 'disponible' },
-  { id: 11, numero: 11, capacidad: 10, ubicacion: 'Privado', estado: 'reservada' },
-  { id: 12, numero: 12, capacidad: 8, ubicacion: 'Privado', estado: 'disponible' },
+  {
+    id: 1,
+    numero: 1,
+    capacidad: 2,
+    ubicacion: "Interior",
+    estado: "disponible",
+  },
+  { id: 2, numero: 2, capacidad: 2, ubicacion: "Interior", estado: "ocupada" },
+  {
+    id: 3,
+    numero: 3,
+    capacidad: 4,
+    ubicacion: "Interior",
+    estado: "disponible",
+  },
+  { id: 4, numero: 4, capacidad: 4, ubicacion: "Ventana", estado: "reservada" },
+  { id: 5, numero: 5, capacidad: 4, ubicacion: "Ventana", estado: "ocupada" },
+  {
+    id: 6,
+    numero: 6,
+    capacidad: 6,
+    ubicacion: "Interior",
+    estado: "disponible",
+  },
+  {
+    id: 7,
+    numero: 7,
+    capacidad: 6,
+    ubicacion: "Terraza",
+    estado: "disponible",
+  },
+  { id: 8, numero: 8, capacidad: 8, ubicacion: "Terraza", estado: "reservada" },
+  { id: 9, numero: 9, capacidad: 2, ubicacion: "Barra", estado: "ocupada" },
+  {
+    id: 10,
+    numero: 10,
+    capacidad: 4,
+    ubicacion: "Terraza",
+    estado: "disponible",
+  },
+  {
+    id: 11,
+    numero: 11,
+    capacidad: 10,
+    ubicacion: "Privado",
+    estado: "reservada",
+  },
+  {
+    id: 12,
+    numero: 12,
+    capacidad: 8,
+    ubicacion: "Privado",
+    estado: "disponible",
+  },
 ];
 
 // Configuración de colores e iconos por estado
 const configEstado = {
   disponible: {
-    color: '#10B981',
-    fondo: 'rgba(16, 185, 129, 0.10)',
-    icono: 'https://img.icons8.com/ios-filled/20/10B981/checkmark--v1.png',
-    texto: 'Disponible',
+    color: "#10B981",
+    fondo: "rgba(16, 185, 129, 0.10)",
+    icono: "https://img.icons8.com/ios-filled/20/10B981/checkmark--v1.png",
+    texto: "Disponible",
   },
   ocupada: {
-    color: '#EF4444',
-    fondo: 'rgba(239, 68, 68, 0.10)',
-    icono: 'https://img.icons8.com/ios-filled/20/EF4444/close-window.png',
-    texto: 'Ocupada',
+    color: "#EF4444",
+    fondo: "rgba(239, 68, 68, 0.10)",
+    icono: "https://img.icons8.com/ios-filled/20/EF4444/close-window.png",
+    texto: "Ocupada",
   },
   reservada: {
-    color: '#F59E0B',
-    fondo: 'rgba(245, 158, 11, 0.10)',
-    icono: 'https://img.icons8.com/ios-filled/20/F59E0B/clock--v1.png',
-    texto: 'Reservada',
+    color: "#F59E0B",
+    fondo: "rgba(245, 158, 11, 0.10)",
+    icono: "https://img.icons8.com/ios-filled/20/F59E0B/clock--v1.png",
+    texto: "Reservada",
   },
 };
 
 // Iconos de ubicación
 const iconoUbicacion = {
-  Interior: 'https://img.icons8.com/ios-filled/16/1a1a2e/home.png',
-  Ventana: 'https://img.icons8.com/ios-filled/16/1a1a2e/sun--v1.png',
-  Terraza: 'https://img.icons8.com/ios-filled/16/1a1a2e/outdoor-swimming-pool.png',
-  Barra: 'https://img.icons8.com/ios-filled/16/1a1a2e/bar-table.png',
-  Privado: 'https://img.icons8.com/ios-filled/16/1a1a2e/lock--v1.png',
+  Interior: "https://img.icons8.com/ios-filled/16/1a1a2e/home.png",
+  Ventana: "https://img.icons8.com/ios-filled/16/1a1a2e/sun--v1.png",
+  Terraza:
+    "https://img.icons8.com/ios-filled/16/1a1a2e/outdoor-swimming-pool.png",
+  Barra: "https://img.icons8.com/ios-filled/16/1a1a2e/bar-table.png",
+  Privado: "https://img.icons8.com/ios-filled/16/1a1a2e/lock--v1.png",
 };
 
 const VistaMesas = () => {
   const [mesas, setMesas] = useState(mesasIniciales);
-  const [filtroEstado, setFiltroEstado] = useState('todas');
-  const [busqueda, setBusqueda] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState("todas");
+  const [busqueda, setBusqueda] = useState("");
   const [modalAgregar, setModalAgregar] = useState(false);
   const [modalEstado, setModalEstado] = useState(false);
   const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
   const [formulario, setFormulario] = useState({
-    numero: '',
-    capacidad: '2',
-    ubicacion: 'Interior',
+    numero: "",
+    capacidad: "2",
+    ubicacion: "Interior",
   });
 
   const { agregarNotificacion } = useNotificaciones();
@@ -89,29 +132,41 @@ const VistaMesas = () => {
   const [confirmPayload, setConfirmPayload] = useState(null);
 
   // Filtrar mesas
-  const mesasFiltradas = mesas.filter(m => {
-    const coincideEstado = filtroEstado === 'todas' || m.estado === filtroEstado;
-    const coincideBusqueda = !busqueda ||
+  const mesasFiltradas = mesas.filter((m) => {
+    const coincideEstado =
+      filtroEstado === "todas" || m.estado === filtroEstado;
+    const coincideBusqueda =
+      !busqueda ||
       m.ubicacion.toLowerCase().includes(busqueda.toLowerCase()) ||
       m.numero.toString().includes(busqueda);
     return coincideEstado && coincideBusqueda;
   });
 
   // Contadores
-  const totalDisponibles = mesas.filter(m => m.estado === 'disponible').length;
-  const totalOcupadas = mesas.filter(m => m.estado === 'ocupada').length;
-  const totalReservadas = mesas.filter(m => m.estado === 'reservada').length;
+  const totalDisponibles = mesas.filter(
+    (m) => m.estado === "disponible",
+  ).length;
+  const totalOcupadas = mesas.filter((m) => m.estado === "ocupada").length;
+  const totalReservadas = mesas.filter((m) => m.estado === "reservada").length;
 
   // Agregar nueva mesa
   const manejarAgregarMesa = (e) => {
     e.preventDefault();
     if (!formulario.numero) {
-      agregarNotificacion('info', 'Validación', 'El número de mesa es obligatorio');
+      agregarNotificacion(
+        "info",
+        "Validación",
+        "El número de mesa es obligatorio",
+      );
       return;
     }
     // Verificar que no exista una mesa con ese número
-    if (mesas.some(m => m.numero === parseInt(formulario.numero))) {
-      agregarNotificacion('info', 'Validación', 'Ya existe una mesa con ese número');
+    if (mesas.some((m) => m.numero === parseInt(formulario.numero))) {
+      agregarNotificacion(
+        "info",
+        "Validación",
+        "Ya existe una mesa con ese número",
+      );
       return;
     }
     const nuevaMesa = {
@@ -119,24 +174,32 @@ const VistaMesas = () => {
       numero: parseInt(formulario.numero),
       capacidad: parseInt(formulario.capacidad),
       ubicacion: formulario.ubicacion,
-      estado: 'disponible',
+      estado: "disponible",
     };
-    setMesas(prev => [...prev, nuevaMesa].sort((a, b) => a.numero - b.numero));
-    agregarNotificacion('sistema', 'Nueva mesa agregada', `Mesa #${nuevaMesa.numero} (${nuevaMesa.capacidad} personas) en ${nuevaMesa.ubicacion}`);
-    setFormulario({ numero: '', capacidad: '2', ubicacion: 'Interior' });
+    setMesas((prev) =>
+      [...prev, nuevaMesa].sort((a, b) => a.numero - b.numero),
+    );
+    agregarNotificacion(
+      "sistema",
+      "Nueva mesa agregada",
+      `Mesa #${nuevaMesa.numero} (${nuevaMesa.capacidad} personas) en ${nuevaMesa.ubicacion}`,
+    );
+    setFormulario({ numero: "", capacidad: "2", ubicacion: "Interior" });
     setModalAgregar(false);
   };
 
   // Cambiar estado de una mesa
   const manejarCambiarEstado = (nuevoEstado) => {
     if (!mesaSeleccionada) return;
-    setMesas(prev =>
-      prev.map(m => m.id === mesaSeleccionada.id ? { ...m, estado: nuevoEstado } : m)
+    setMesas((prev) =>
+      prev.map((m) =>
+        m.id === mesaSeleccionada.id ? { ...m, estado: nuevoEstado } : m,
+      ),
     );
     agregarNotificacion(
-      'sistema',
+      "sistema",
       `Mesa #${mesaSeleccionada.numero} actualizada`,
-      `Estado cambiado a ${configEstado[nuevoEstado].texto.toLowerCase()}`
+      `Estado cambiado a ${configEstado[nuevoEstado].texto.toLowerCase()}`,
     );
     setModalEstado(false);
     setMesaSeleccionada(null);
@@ -144,18 +207,22 @@ const VistaMesas = () => {
 
   // Solicitar confirmación para eliminar mesa (usa modal en vez de window.confirm)
   const manejarEliminarMesa = (id) => {
-    const mesa = mesas.find(m => m.id === id);
-    setConfirmPayload({ tipo: 'mesa', id, texto: `Mesa #${mesa.numero}` });
+    const mesa = mesas.find((m) => m.id === id);
+    setConfirmPayload({ tipo: "mesa", id, texto: `Mesa #${mesa.numero}` });
     setConfirmOpen(true);
   };
 
   const ejecutarEliminar = () => {
     if (!confirmPayload) return;
     const { tipo, id } = confirmPayload;
-    if (tipo === 'mesa') {
-      const mesa = mesas.find(m => m.id === id);
-      setMesas(prev => prev.filter(m => m.id !== id));
-      agregarNotificacion('sistema', 'Mesa eliminada', `Mesa ${mesa ? `#${mesa.numero}` : id} ha sido eliminada del sistema`);
+    if (tipo === "mesa") {
+      const mesa = mesas.find((m) => m.id === id);
+      setMesas((prev) => prev.filter((m) => m.id !== id));
+      agregarNotificacion(
+        "sistema",
+        "Mesa eliminada",
+        `Mesa ${mesa ? `#${mesa.numero}` : id} ha sido eliminada del sistema`,
+      );
     }
     setConfirmOpen(false);
     setConfirmPayload(null);
@@ -167,52 +234,97 @@ const VistaMesas = () => {
       <div className="modulo-header">
         <div>
           <h1 className="modulo-titulo">Gestión de Mesas</h1>
-          <p className="modulo-subtitulo">{mesas.length} mesas en total · {totalDisponibles} disponibles ahora</p>
+          <p className="modulo-subtitulo">
+            {mesas.length} mesas en total · {totalDisponibles} disponibles ahora
+          </p>
         </div>
-        <Boton variante="primario" className="btn btn--primario mesas-btn-agregar" onClick={() => setModalAgregar(true)}>
-            <img src="https://img.icons8.com/ios-filled/18/1a1a2e/plus-math.png" alt="+" width="18" height="18" />
-          Nueva Mesa
+        <Boton
+          variante="primario"
+          className="btn btn--primario mesas-btn-agregar"
+          onClick={() => setModalAgregar(true)}
+        >
+          + Nueva Mesa
         </Boton>
       </div>
 
       {/* ====== TARJETAS RESUMEN ====== */}
       <div className="mesas-resumen">
         <div
-          className={`mesa-resumen-tarjeta ${filtroEstado === 'disponible' ? 'mesa-resumen-activa' : ''}`}
-          onClick={() => setFiltroEstado(filtroEstado === 'disponible' ? 'todas' : 'disponible')}
-          style={{ cursor: 'pointer' }}
+          className={`mesa-resumen-tarjeta ${filtroEstado === "disponible" ? "mesa-resumen-activa" : ""}`}
+          onClick={() =>
+            setFiltroEstado(
+              filtroEstado === "disponible" ? "todas" : "disponible",
+            )
+          }
+          style={{ cursor: "pointer" }}
         >
-          <div className="mesa-resumen-icono" style={{ background: 'rgba(16, 185, 129, 0.12)' }}>
-            <img src="https://img.icons8.com/ios-filled/22/10B981/checkmark--v1.png" alt="" width="22" height="22" />
+          <div
+            className="mesa-resumen-icono"
+            style={{ background: "rgba(16, 185, 129, 0.12)" }}
+          >
+            <img
+              src="https://img.icons8.com/ios-filled/22/10B981/checkmark--v1.png"
+              alt=""
+              width="22"
+              height="22"
+            />
           </div>
           <div className="mesa-resumen-info">
-            <span className="mesa-resumen-numero" style={{ color: '#10B981' }}>{totalDisponibles}</span>
+            <span className="mesa-resumen-numero" style={{ color: "#10B981" }}>
+              {totalDisponibles}
+            </span>
             <span className="mesa-resumen-texto">Disponibles</span>
           </div>
         </div>
         <div
-          className={`mesa-resumen-tarjeta ${filtroEstado === 'ocupada' ? 'mesa-resumen-activa' : ''}`}
-          onClick={() => setFiltroEstado(filtroEstado === 'ocupada' ? 'todas' : 'ocupada')}
-          style={{ cursor: 'pointer' }}
+          className={`mesa-resumen-tarjeta ${filtroEstado === "ocupada" ? "mesa-resumen-activa" : ""}`}
+          onClick={() =>
+            setFiltroEstado(filtroEstado === "ocupada" ? "todas" : "ocupada")
+          }
+          style={{ cursor: "pointer" }}
         >
-          <div className="mesa-resumen-icono" style={{ background: 'rgba(239, 68, 68, 0.12)' }}>
-            <img src="https://img.icons8.com/ios-filled/22/EF4444/close-window.png" alt="" width="22" height="22" />
+          <div
+            className="mesa-resumen-icono"
+            style={{ background: "rgba(239, 68, 68, 0.12)" }}
+          >
+            <img
+              src="https://img.icons8.com/ios-filled/22/EF4444/close-window.png"
+              alt=""
+              width="22"
+              height="22"
+            />
           </div>
           <div className="mesa-resumen-info">
-            <span className="mesa-resumen-numero" style={{ color: '#EF4444' }}>{totalOcupadas}</span>
+            <span className="mesa-resumen-numero" style={{ color: "#EF4444" }}>
+              {totalOcupadas}
+            </span>
             <span className="mesa-resumen-texto">Ocupadas</span>
           </div>
         </div>
         <div
-          className={`mesa-resumen-tarjeta ${filtroEstado === 'reservada' ? 'mesa-resumen-activa' : ''}`}
-          onClick={() => setFiltroEstado(filtroEstado === 'reservada' ? 'todas' : 'reservada')}
-          style={{ cursor: 'pointer' }}
+          className={`mesa-resumen-tarjeta ${filtroEstado === "reservada" ? "mesa-resumen-activa" : ""}`}
+          onClick={() =>
+            setFiltroEstado(
+              filtroEstado === "reservada" ? "todas" : "reservada",
+            )
+          }
+          style={{ cursor: "pointer" }}
         >
-          <div className="mesa-resumen-icono" style={{ background: 'rgba(245, 158, 11, 0.12)' }}>
-            <img src="https://img.icons8.com/ios-filled/22/F59E0B/clock--v1.png" alt="" width="22" height="22" />
+          <div
+            className="mesa-resumen-icono"
+            style={{ background: "rgba(245, 158, 11, 0.12)" }}
+          >
+            <img
+              src="https://img.icons8.com/ios-filled/22/F59E0B/clock--v1.png"
+              alt=""
+              width="22"
+              height="22"
+            />
           </div>
           <div className="mesa-resumen-info">
-            <span className="mesa-resumen-numero" style={{ color: '#F59E0B' }}>{totalReservadas}</span>
+            <span className="mesa-resumen-numero" style={{ color: "#F59E0B" }}>
+              {totalReservadas}
+            </span>
             <span className="mesa-resumen-texto">Reservadas</span>
           </div>
         </div>
@@ -222,9 +334,23 @@ const VistaMesas = () => {
       <div className="mesas-barra-busqueda">
         <div className="mesas-busqueda-input">
           <span className="mesas-busqueda-icono">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <circle cx="9" cy="9" r="7" stroke="#FDB022" strokeWidth="2" />
-              <line x1="14.4142" y1="14" x2="18" y2="17.5858" stroke="#FDB022" strokeWidth="2" strokeLinecap="round" />
+              <line
+                x1="14.4142"
+                y1="14"
+                x2="18"
+                y2="17.5858"
+                stroke="#FDB022"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
             </svg>
           </span>
           <input
@@ -235,16 +361,18 @@ const VistaMesas = () => {
           />
         </div>
         <div className="mesas-filtros-rapidos">
-          {['todas', 'disponible', 'ocupada', 'reservada'].map(estado => (
+          {["todas", "disponible", "ocupada", "reservada"].map((estado) => (
             <Boton
               key={estado}
-              variante={filtroEstado === estado ? 'primario' : 'secundario'}
-              className={`mesas-filtro-btn ${filtroEstado === estado ? 'activo' : ''}`}
+              variante={filtroEstado === estado ? "primario" : "secundario"}
+              className={`mesas-filtro-btn ${filtroEstado === estado ? "activo" : ""}`}
               onClick={() => setFiltroEstado(estado)}
             >
-              {estado === 'todas' ? 'Todas' : configEstado[estado].texto + 's'}
+              {estado === "todas" ? "Todas" : configEstado[estado].texto + "s"}
               <span className="mesas-filtro-count">
-                {estado === 'todas' ? mesas.length : mesas.filter(m => m.estado === estado).length}
+                {estado === "todas"
+                  ? mesas.length
+                  : mesas.filter((m) => m.estado === estado).length}
               </span>
             </Boton>
           ))}
@@ -253,15 +381,35 @@ const VistaMesas = () => {
 
       {/* ====== GRID DE MESAS (TARJETAS) ====== */}
       <div className="mesas-grid">
-        {mesasFiltradas.map(mesa => (
-          <div className={`mesa-tarjeta mesa-tarjeta-${mesa.estado}`} key={mesa.id}>
+        {mesasFiltradas.map((mesa) => (
+          <div
+            className={`mesa-tarjeta mesa-tarjeta-${mesa.estado}`}
+            key={mesa.id}
+          >
             {/* Header de la tarjeta */}
             <div className="mesa-tarjeta-header">
-              <div className="mesa-tarjeta-numero" style={{ background: configEstado[mesa.estado].fondo, color: configEstado[mesa.estado].color }}>
+              <div
+                className="mesa-tarjeta-numero"
+                style={{
+                  background: configEstado[mesa.estado].fondo,
+                  color: configEstado[mesa.estado].color,
+                }}
+              >
                 {mesa.numero}
               </div>
-              <div className="mesa-tarjeta-badge" style={{ background: configEstado[mesa.estado].fondo, color: configEstado[mesa.estado].color }}>
-                <img src={configEstado[mesa.estado].icono} alt="" width="12" height="12" />
+              <div
+                className="mesa-tarjeta-badge"
+                style={{
+                  background: configEstado[mesa.estado].fondo,
+                  color: configEstado[mesa.estado].color,
+                }}
+              >
+                <img
+                  src={configEstado[mesa.estado].icono}
+                  alt=""
+                  width="12"
+                  height="12"
+                />
                 {configEstado[mesa.estado].texto}
               </div>
             </div>
@@ -271,11 +419,24 @@ const VistaMesas = () => {
               <h3>Mesa {mesa.numero}</h3>
               <div className="mesa-tarjeta-detalles">
                 <div className="mesa-tarjeta-detalle">
-                  <img src="https://img.icons8.com/ios-filled/14/1a1a2e/conference-call.png" alt="" width="14" height="14" />
+                  <img
+                    src="https://img.icons8.com/ios-filled/14/1a1a2e/conference-call.png"
+                    alt=""
+                    width="14"
+                    height="14"
+                  />
                   <span>{mesa.capacidad} personas</span>
                 </div>
                 <div className="mesa-tarjeta-detalle">
-                  <img src={iconoUbicacion[mesa.ubicacion] || iconoUbicacion['Interior']} alt="" width="14" height="14" />
+                  <img
+                    src={
+                      iconoUbicacion[mesa.ubicacion] ||
+                      iconoUbicacion["Interior"]
+                    }
+                    alt=""
+                    width="14"
+                    height="14"
+                  />
                   <span>{mesa.ubicacion}</span>
                 </div>
               </div>
@@ -283,20 +444,46 @@ const VistaMesas = () => {
 
             {/* Acciones */}
             <div className="mesa-tarjeta-acciones">
-              <Boton variante="secundario" className="mesa-btn-estado" onClick={() => { setMesaSeleccionada(mesa); setModalEstado(true); }} title="Cambiar estado">
-                <img src="https://img.icons8.com/ios-filled/16/1a1a2e/swap.png" alt="" width="16" height="16" />
+              <Boton
+                variante="secundario"
+                className="mesa-btn-estado"
+                onClick={() => {
+                  setMesaSeleccionada(mesa);
+                  setModalEstado(true);
+                }}
+                title="Cambiar estado"
+              >
+                <img
+                  src="https://img.icons8.com/ios-filled/16/1a1a2e/swap.png"
+                  alt=""
+                  width="16"
+                  height="16"
+                />
                 Cambiar estado
               </Boton>
-              <Boton variante="peligro" className="btn btn--peligro mesa-btn-eliminar" onClick={() => manejarEliminarMesa(mesa.id)} title="Eliminar mesa" />
+              <Boton
+                variante="peligro"
+                className="btn btn--peligro mesa-btn-eliminar"
+                onClick={() => manejarEliminarMesa(mesa.id)}
+                title="Eliminar mesa"
+              />
             </div>
           </div>
         ))}
 
         {/* Tarjeta para agregar nueva mesa */}
-        <div className="mesa-tarjeta mesa-tarjeta-agregar" onClick={() => setModalAgregar(true)}>
+        <div
+          className="mesa-tarjeta mesa-tarjeta-agregar"
+          onClick={() => setModalAgregar(true)}
+        >
           <div className="mesa-agregar-contenido">
             <div className="mesa-agregar-icono">
-              <img src="https://img.icons8.com/ios-filled/28/1a1a2e/plus-math.png" alt="+" width="28" height="28" />
+              <img
+                src="https://img.icons8.com/ios-filled/28/1a1a2e/plus-math.png"
+                alt="+"
+                width="28"
+                height="28"
+              />
             </div>
             <span>Agregar mesa</span>
           </div>
@@ -304,20 +491,49 @@ const VistaMesas = () => {
       </div>
 
       {mesasFiltradas.length === 0 && (
-        <div className="mesas-vacio">
-          <img src="https://img.icons8.com/ios-filled/48/1a1a2e/restaurant-table.png" alt="" width="48" height="48" />
-          <p>No se encontraron mesas con los filtros aplicados</p>
+        <div
+          className="mesas-vacio"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: 140,
+          }}
+        >
+          <img
+            src="https://img.icons8.com/ios-filled/48/1a1a2e/restaurant-table.png"
+            alt=""
+            width="48"
+            height="48"
+            style={{ display: "block", margin: "0 auto 12px" }}
+          />
+          <p style={{ textAlign: "center" }}>
+            No se encontraron mesas con los filtros aplicados
+          </p>
         </div>
       )}
 
       {/* ====== MODAL: AGREGAR MESA ====== */}
       {modalAgregar && (
         <div className="modal-overlay" onClick={() => setModalAgregar(false)}>
-          <div className="modal mesas-modal" onClick={e => e.stopPropagation()}>
+          <div
+            className="modal mesas-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="mesas-modal-header">
               <h2>Agregar Nueva Mesa</h2>
-              <Boton variante="ghost" className="mesas-modal-cerrar" onClick={() => setModalAgregar(false)}>
-                <img src="https://img.icons8.com/ios-filled/20/1a1a2e/delete-sign.png" alt="cerrar" width="20" height="20" />
+              <Boton
+                variante="ghost"
+                className="mesas-modal-cerrar"
+                onClick={() => setModalAgregar(false)}
+              >
+                <img
+                  src="https://img.icons8.com/ios-filled/20/1a1a2e/delete-sign.png"
+                  alt="cerrar"
+                  width="20"
+                  height="20"
+                />
               </Boton>
             </div>
 
@@ -329,7 +545,12 @@ const VistaMesas = () => {
                   min="1"
                   placeholder="Ej: 13"
                   value={formulario.numero}
-                  onChange={(e) => setFormulario(prev => ({ ...prev, numero: e.target.value }))}
+                  onChange={(e) =>
+                    setFormulario((prev) => ({
+                      ...prev,
+                      numero: e.target.value,
+                    }))
+                  }
                   required
                   autoFocus
                 />
@@ -340,10 +561,17 @@ const VistaMesas = () => {
                   <label>Capacidad (personas) *</label>
                   <select
                     value={formulario.capacidad}
-                    onChange={(e) => setFormulario(prev => ({ ...prev, capacidad: e.target.value }))}
+                    onChange={(e) =>
+                      setFormulario((prev) => ({
+                        ...prev,
+                        capacidad: e.target.value,
+                      }))
+                    }
                   >
-                    {[2, 4, 6, 8, 10, 12].map(n => (
-                      <option key={n} value={n}>{n} personas</option>
+                    {[2, 4, 6, 8, 10, 12].map((n) => (
+                      <option key={n} value={n}>
+                        {n} personas
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -351,21 +579,44 @@ const VistaMesas = () => {
                   <label>Ubicación *</label>
                   <select
                     value={formulario.ubicacion}
-                    onChange={(e) => setFormulario(prev => ({ ...prev, ubicacion: e.target.value }))}
+                    onChange={(e) =>
+                      setFormulario((prev) => ({
+                        ...prev,
+                        ubicacion: e.target.value,
+                      }))
+                    }
                   >
-                    {['Interior', 'Ventana', 'Terraza', 'Barra', 'Privado'].map(u => (
-                      <option key={u} value={u}>{u}</option>
-                    ))}
+                    {["Interior", "Ventana", "Terraza", "Barra", "Privado"].map(
+                      (u) => (
+                        <option key={u} value={u}>
+                          {u}
+                        </option>
+                      ),
+                    )}
                   </select>
                 </div>
               </div>
 
               <div className="mesas-modal-acciones">
-                <Boton tipo="button" variante="secundario" className="btn btn--secundario mesas-modal-btn-cancelar" onClick={() => setModalAgregar(false)}>
+                <Boton
+                  tipo="button"
+                  variante="secundario"
+                  className="btn btn--secundario mesas-modal-btn-cancelar"
+                  onClick={() => setModalAgregar(false)}
+                >
                   Cancelar
                 </Boton>
-                <Boton tipo="submit" variante="primario" className="btn btn--primario mesas-modal-btn-guardar">
-                  <img src="https://img.icons8.com/ios-filled/16/1a1a2e/plus-math.png" alt="" width="16" height="16" />
+                <Boton
+                  tipo="submit"
+                  variante="primario"
+                  className="btn btn--primario mesas-modal-btn-guardar"
+                >
+                  <img
+                    src="https://img.icons8.com/ios-filled/16/1a1a2e/plus-math.png"
+                    alt=""
+                    width="16"
+                    height="16"
+                  />
                   Agregar Mesa
                 </Boton>
               </div>
@@ -376,18 +627,45 @@ const VistaMesas = () => {
 
       {/* ====== MODAL: CAMBIAR ESTADO ====== */}
       {modalEstado && mesaSeleccionada && (
-        <div className="modal-overlay" onClick={() => { setModalEstado(false); setMesaSeleccionada(null); }}>
-          <div className="modal mesas-modal mesas-modal-estado" onClick={e => e.stopPropagation()}>
+        <div
+          className="modal-overlay"
+          onClick={() => {
+            setModalEstado(false);
+            setMesaSeleccionada(null);
+          }}
+        >
+          <div
+            className="modal mesas-modal mesas-modal-estado"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="mesas-modal-header">
               <h2>Cambiar Estado — Mesa #{mesaSeleccionada.numero}</h2>
-              <Boton variante="ghost" className="mesas-modal-cerrar" onClick={() => { setModalEstado(false); setMesaSeleccionada(null); }}>
-                <img src="https://img.icons8.com/ios-filled/20/1a1a2e/delete-sign.png" alt="cerrar" width="20" height="20" />
+              <Boton
+                variante="ghost"
+                className="mesas-modal-cerrar"
+                onClick={() => {
+                  setModalEstado(false);
+                  setMesaSeleccionada(null);
+                }}
+              >
+                <img
+                  src="https://img.icons8.com/ios-filled/20/1a1a2e/delete-sign.png"
+                  alt="cerrar"
+                  width="20"
+                  height="20"
+                />
               </Boton>
             </div>
 
             <p className="mesas-modal-estado-actual">
               Estado actual:
-              <span style={{ color: configEstado[mesaSeleccionada.estado].color, fontWeight: 700, marginLeft: '8px' }}>
+              <span
+                style={{
+                  color: configEstado[mesaSeleccionada.estado].color,
+                  fontWeight: 700,
+                  marginLeft: "8px",
+                }}
+              >
                 {configEstado[mesaSeleccionada.estado].texto}
               </span>
             </p>
@@ -396,19 +674,28 @@ const VistaMesas = () => {
               {Object.entries(configEstado).map(([estado, config]) => (
                 <Boton
                   key={estado}
-                  variante={mesaSeleccionada.estado === estado ? 'primario' : 'secundario'}
-                  className={`mesas-estado-opcion ${mesaSeleccionada.estado === estado ? 'actual' : ''}`}
+                  variante={
+                    mesaSeleccionada.estado === estado
+                      ? "primario"
+                      : "secundario"
+                  }
+                  className={`mesas-estado-opcion ${mesaSeleccionada.estado === estado ? "actual" : ""}`}
                   onClick={() => manejarCambiarEstado(estado)}
                   disabled={mesaSeleccionada.estado === estado}
                   style={{
-                    '--estado-color': config.color,
-                    '--estado-fondo': config.fondo,
+                    "--estado-color": config.color,
+                    "--estado-fondo": config.fondo,
                   }}
                 >
-                  <div className="mesas-estado-opcion-icono" style={{ background: config.fondo }}>
+                  <div
+                    className="mesas-estado-opcion-icono"
+                    style={{ background: config.fondo }}
+                  >
                     <img src={config.icono} alt="" width="24" height="24" />
                   </div>
-                  <span className="mesas-estado-opcion-texto">{config.texto}</span>
+                  <span className="mesas-estado-opcion-texto">
+                    {config.texto}
+                  </span>
                   {mesaSeleccionada.estado === estado && (
                     <span className="mesas-estado-opcion-badge">Actual</span>
                   )}
@@ -421,10 +708,19 @@ const VistaMesas = () => {
       {/* Confirm dialog (eliminar mesa) */}
       <ConfirmDialog
         abierto={confirmOpen}
-        titulo={confirmPayload ? `Eliminar ${confirmPayload.texto}` : 'Eliminar'}
-        mensaje={confirmPayload ? `¿Estás seguro de eliminar ${confirmPayload.texto}? Esta acción no se puede deshacer.` : '¿Estás seguro?'}
+        titulo={
+          confirmPayload ? `Eliminar ${confirmPayload.texto}` : "Eliminar"
+        }
+        mensaje={
+          confirmPayload
+            ? `¿Estás seguro de eliminar ${confirmPayload.texto}? Esta acción no se puede deshacer.`
+            : "¿Estás seguro?"
+        }
         onConfirm={ejecutarEliminar}
-        onCancel={() => { setConfirmOpen(false); setConfirmPayload(null); }}
+        onCancel={() => {
+          setConfirmOpen(false);
+          setConfirmPayload(null);
+        }}
       />
     </div>
   );

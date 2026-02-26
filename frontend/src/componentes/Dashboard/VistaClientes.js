@@ -368,12 +368,13 @@ const VistaClientes = () => {
               style={{ textAlign: "center", padding: "24px", color: "#718096" }}
             >
               <img
-                src="https://img.icons8.com/ios-filled/48/1a1a2e/people.png"
+                src="https://img.icons8.com/ios-filled/48/1a1a2e/conference-call.png"
                 alt="sin clientes"
                 width="48"
                 height="48"
+                style={{ display: 'block', margin: '0 auto 12px' }}
               />
-              <p style={{ marginTop: 12 }}>No se encontraron clientes</p>
+              <p style={{ textAlign: 'center', marginTop: 12 }}>No se encontraron clientes</p>
             </div>
           </div>
         ) : (

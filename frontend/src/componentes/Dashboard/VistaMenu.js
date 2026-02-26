@@ -388,6 +388,18 @@ const VistaMenu = () => {
             </div>
           </div>
         ))}
+        {platosFiltrados.length === 0 && (
+          <div className="menu-vacio" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
+            <img
+              src="https://img.icons8.com/ios-filled/48/1a1a2e/restaurant.png"
+              alt="sin platos"
+              width="48"
+              height="48"
+              style={{ display: 'block', margin: '0 auto 12px' }}
+            />
+            <p style={{ textAlign: 'center', marginTop: 12 }}>No se encontraron platos con los filtros aplicados</p>
+          </div>
+        )}
       </div>
 
       {/* Modal para nuevo/editar plato */}

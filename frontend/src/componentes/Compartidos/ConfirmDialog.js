@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import Boton from './Boton';
+import React, { useEffect, useRef } from "react";
+import Boton from "./Boton";
 
 /**
  * ConfirmDialog
@@ -10,7 +10,13 @@ import Boton from './Boton';
  *  - onConfirm: function
  *  - onCancel: function
  */
-const ConfirmDialog = ({ abierto, titulo = 'Confirmar', mensaje = '¿Estás seguro?', onConfirm, onCancel }) => {
+const ConfirmDialog = ({
+  abierto,
+  titulo = "Confirmar",
+  mensaje = "¿Estás seguro?",
+  onConfirm,
+  onCancel,
+}) => {
   const dialogRef = useRef(null);
   const confirmRef = useRef(null);
 
@@ -19,15 +25,17 @@ const ConfirmDialog = ({ abierto, titulo = 'Confirmar', mensaje = '¿Estás segu
 
     const previouslyFocused = document.activeElement;
     const node = dialogRef.current;
-    const focusable = node.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    const focusable = node.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
     if (focusable.length) focusable[0].focus();
 
     const handleKey = (e) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         e.preventDefault();
         onCancel && onCancel();
       }
-      if (e.key === 'Tab') {
+      if (e.key === "Tab") {
         // trap focus inside dialog
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
@@ -45,10 +53,11 @@ const ConfirmDialog = ({ abierto, titulo = 'Confirmar', mensaje = '¿Estás segu
       }
     };
 
-    document.addEventListener('keydown', handleKey);
+    document.addEventListener("keydown", handleKey);
     return () => {
-      document.removeEventListener('keydown', handleKey);
-      if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
+      document.removeEventListener("keydown", handleKey);
+      if (previouslyFocused && previouslyFocused.focus)
+        previouslyFocused.focus();
     };
   }, [abierto, onCancel]);
 
@@ -58,30 +67,82 @@ const ConfirmDialog = ({ abierto, titulo = 'Confirmar', mensaje = '¿Estás segu
     <div className="modal-overlay" onClick={onCancel}>
       <div
         className="modal"
-        onClick={e => e.stopPropagation()}
-        style={{ maxWidth: 420 }}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          maxWidth: 420,
+          borderRadius: 18,
+          boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
+        }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
         aria-describedby="confirm-dialog-desc"
         ref={dialogRef}
       >
-        <div className="modal-header">
-          <h2 id="confirm-dialog-title" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M12 2L2 20h20L12 2z" fill="#F59E0B" />
-              <path d="M11 9h2v5h-2V9zm0 7h2v2h-2v-2z" fill="#1e3a5f" />
-            </svg>
+        <div
+          className="modal-header"
+          style={{
+            borderBottom: "none",
+            background: "transparent",
+            paddingTop: 28,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src="https://img.icons8.com/?size=100&id=1474&format=png&color=000000"
+            alt="Advertencia"
+            width="48"
+            height="48"
+            style={{ marginBottom: 8 }}
+          />
+        </div>
+        <div style={{ textAlign: "center", padding: "0 24px 8px" }}>
+          <h2
+            id="confirm-dialog-title"
+            style={{
+              fontWeight: 700,
+              fontSize: "1.25rem",
+              margin: 0,
+              color: "#1a1a2e",
+            }}
+          >
             {titulo}
           </h2>
-          <Boton variante="ghost" className="modal-cerrar" onClick={onCancel} aria-label="Cerrar diálogo">✕</Boton>
         </div>
-        <div style={{ padding: '18px 24px' }}>
-          <p id="confirm-dialog-desc" style={{ margin: 0, color: 'var(--color-texto-claro)' }}>{mensaje}</p>
+        <div style={{ padding: "0 24px 18px", textAlign: "center" }}>
+          <p
+            id="confirm-dialog-desc"
+            style={{
+              margin: 0,
+              color: "var(--color-texto-claro)",
+              fontSize: "1.05rem",
+            }}
+          >
+            {mensaje}
+          </p>
         </div>
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', padding: '16px 24px 24px' }}>
-          <Boton variante="secundario" onClick={onCancel}>Cancelar</Boton>
-          <Boton variante="primario" onClick={onConfirm} ref={confirmRef}>Confirmar</Boton>
+        <div
+          style={{
+            display: "flex",
+            gap: 12,
+            justifyContent: "center",
+            padding: "0 24px 24px",
+          }}
+        >
+          <Boton variante="secundario" onClick={onCancel}>
+            Cancelar
+          </Boton>
+          <Boton
+            variante="primario"
+            onClick={onConfirm}
+            ref={confirmRef}
+            style={{ background: "#10b981", color: "#fff", border: "none" }}
+          >
+            Confirmar
+          </Boton>
         </div>
       </div>
     </div>
