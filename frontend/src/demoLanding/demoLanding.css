@@ -57,6 +57,26 @@
   gap: 12px;
 }
 
+/* Make left and right navs take equal space so the central logo can be perfectly centered */
+.demo-header {
+  position: relative;
+}
+.demo-nav.left,
+.demo-nav.right {
+  flex: 1 1 0;
+}
+
+/* Center the logo absolutely so it remains visually centered even if left/right navs differ */
+.demo-header .logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .demo-header .logo {
   display: flex;
   align-items: center;

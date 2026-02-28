@@ -209,7 +209,25 @@ const VistaClientes = () => {
 
   const formatearFecha = (fecha) => {
     if (!fecha) return "—";
-    const d = new Date(fecha + "T00:00:00");
+    let d;
+    // Si ya es un objeto Date
+    if (fecha instanceof Date) {
+      d = fecha;
+    } else if (typeof fecha === 'number') {
+      d = new Date(fecha);
+    } else if (typeof fecha === 'string') {
+      // Detectar formato 'YYYY-MM-DD' y forzar parseo como hora local para evitar
+      // que algunos navegadores interpreten la fecha como UTC (lo que causa -1 día)
+      const ymd = /^\d{4}-\d{2}-\d{2}$/;
+      if (ymd.test(fecha)) {
+        d = new Date(fecha + 'T00:00:00');
+      } else {
+        d = new Date(fecha);
+      }
+    } else {
+      d = new Date(fecha);
+    }
+    if (isNaN(d)) return "—";
     return d.toLocaleDateString("es-ES", {
       day: "2-digit",
       month: "short",

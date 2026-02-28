@@ -20,6 +20,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { crearCliente } from "../../servicios/api";
 import Alerta from "../Compartidos/Alerta";
 import Boton from "../Compartidos/Boton";
 
@@ -36,6 +37,7 @@ const ModalNuevaReserva = ({
   // Estado del formulario con todos los campos
   const [formulario, setFormulario] = useState({
     cliente_id: "",
+    cliente_nombre: "",
     fecha: "",
     hora: "",
     numero_personas: "",
@@ -48,12 +50,17 @@ const ModalNuevaReserva = ({
     tipo: "info",
     mensaje: "",
   });
+  const [clienteEditable, setClienteEditable] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [creandoCliente, setCreandoCliente] = useState(false);
 
   // Si recibimos una reserva en props, rellenar el formulario (modo edición)
   useEffect(() => {
     if (reserva) {
       setFormulario({
         cliente_id: reserva.cliente_id || reserva.cliente || "",
+        cliente_nombre: reserva.cliente_nombre || reserva.cliente || "",
         fecha: reserva.fecha || "",
         hora: reserva.hora || "",
         numero_personas:
@@ -64,6 +71,7 @@ const ModalNuevaReserva = ({
     } else {
       setFormulario({
         cliente_id: "",
+        cliente_nombre: "",
         fecha: "",
         hora: "",
         numero_personas: "",
@@ -71,6 +79,7 @@ const ModalNuevaReserva = ({
         notas_especiales: "",
       });
     }
+    setClienteEditable(false);
   }, [reserva, visible]);
 
   // Si el modal no debe mostrarse, no renderizar nada
@@ -88,6 +97,39 @@ const ModalNuevaReserva = ({
     }));
   };
 
+  const handleClienteInputChange = (value) => {
+    // cuando el usuario escribe en el input de cliente
+    setFormulario((prev) => ({ ...prev, cliente_nombre: value, cliente_id: "" }));
+    setSearchText(value);
+    setShowSuggestions(true);
+  };
+
+  const seleccionarCliente = (cliente) => {
+    setFormulario((prev) => ({ ...prev, cliente_id: cliente.id, cliente_nombre: cliente.nombre }));
+    setSearchText(cliente.nombre);
+    setShowSuggestions(false);
+  };
+
+  const handleAgregarCliente = async () => {
+    const nombre = (formulario.cliente_nombre || searchText || "").trim();
+    if (!nombre) return;
+    setCreandoCliente(true);
+    try {
+      const res = await crearCliente({ nombre });
+      const nuevo = res.cliente || res;
+      // set cliente into form
+      setFormulario((prev) => ({ ...prev, cliente_id: nuevo.id, cliente_nombre: nuevo.nombre }));
+      setShowSuggestions(false);
+      setAlerta({ visible: true, tipo: "exito", mensaje: "Cliente creado y asociado a la reserva." });
+      setTimeout(() => setAlerta({ ...alerta, visible: false }), 2200);
+    } catch (error) {
+      setAlerta({ visible: true, tipo: "error", mensaje: "Error creando cliente: " + (error.message || error) });
+      setTimeout(() => setAlerta({ ...alerta, visible: false }), 3000);
+    } finally {
+      setCreandoCliente(false);
+    }
+  };
+
   /**
    * Manejar el envío del formulario
    */
@@ -95,8 +137,9 @@ const ModalNuevaReserva = ({
     e.preventDefault();
 
     // Validar campos obligatorios
+    const clienteValido = formulario.cliente_id || formulario.cliente_nombre;
     if (
-      !formulario.cliente_id ||
+      !clienteValido ||
       !formulario.fecha ||
       !formulario.hora ||
       !formulario.numero_personas
@@ -182,22 +225,113 @@ const ModalNuevaReserva = ({
         </h2>
 
         <form className="modal-formulario" onSubmit={manejarSubmit}>
-          {/* Seleccionar cliente */}
-          <div className="campo-grupo">
+          {/* Seleccionar cliente
+              - En modo edición mostramos solo el cliente asociado (no listamos todos)
+              - En modo creación mostramos input con autocomplete y opción crear */}
+          <div className="campo-grupo" style={{ position: "relative" }}>
             <label className="campo-label">Cliente *</label>
-            <select
-              name="cliente_id"
-              value={formulario.cliente_id}
-              onChange={manejarCambio}
-              required
-            >
-              <option value="">Seleccionar cliente...</option>
-              {clientes.map((cliente) => (
-                <option key={cliente.id} value={cliente.id}>
-                  {cliente.nombre}
-                </option>
-              ))}
-            </select>
+            {modo === "editar" && reserva ? (
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <input
+                  type="text"
+                  name="cliente_nombre"
+                  className="campo-input"
+                  value={formulario.cliente_nombre || ""}
+                  readOnly={!clienteEditable}
+                  onChange={(e) =>
+                    setFormulario((prev) => ({ ...prev, cliente_nombre: e.target.value }))
+                  }
+                  style={{ flex: 1 }}
+                />
+                <Boton
+                  tipo="button"
+                  variante="ghost"
+                  className="accion-btn accion-editar"
+                  onClick={() => setClienteEditable((prev) => !prev)}
+                  title={clienteEditable ? "Finalizar edición" : "Editar nombre"}
+                >
+                  {clienteEditable ? "Guardar" : "Editar"}
+                </Boton>
+              </div>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  name="cliente_nombre"
+                  className="campo-input"
+                  placeholder="Buscar o crear cliente..."
+                  value={formulario.cliente_nombre || searchText}
+                  onChange={(e) => handleClienteInputChange(e.target.value)}
+                  onFocus={() => setShowSuggestions(true)}
+                  autoComplete="off"
+                  required
+                />
+
+                {showSuggestions && searchText && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      right: 0,
+                      background: "#fff",
+                      zIndex: 900,
+                      border: "1px solid #e6e6e6",
+                      borderRadius: 8,
+                      boxShadow: "0 6px 18px rgba(0,0,0,0.06)",
+                      maxHeight: 200,
+                      overflowY: "auto",
+                    }}
+                  >
+                    <ul style={{ listStyle: "none", margin: 0, padding: 8 }}>
+                      {clientes &&
+                        clientes
+                          .filter((c) => (c.nombre || "").toLowerCase().includes((searchText || "").toLowerCase()))
+                          .slice(0, 8)
+                          .map((c) => (
+                            <li
+                              key={c.id}
+                              style={{ padding: "8px 10px", cursor: "pointer" }}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                seleccionarCliente(c);
+                              }}
+                            >
+                              {c.nombre}
+                            </li>
+                          ))}
+
+                      {(!clientes ||
+                        clientes.filter((c) => (c.nombre || "").toLowerCase().includes((searchText || "").toLowerCase())).length ===
+                          0) && (
+                        <li
+                          style={{
+                            padding: "8px 10px",
+                            display: "flex",
+                            gap: 8,
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <span>No se encontraron coincidencias</span>
+                          <button
+                            type="button"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              handleAgregarCliente();
+                            }}
+                            disabled={creandoCliente}
+                            style={{ background: "transparent", border: "none", color: "#10B981", cursor: "pointer" }}
+                          >
+                            {creandoCliente ? "Creando..." : "Agregar nuevo"}
+                          </button>
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* Fecha y hora alineadas */}

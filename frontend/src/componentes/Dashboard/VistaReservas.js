@@ -144,7 +144,9 @@ const VistaReservas = () => {
 
   useEffect(() => {
     cargarReservas();
-    cargarClientes();
+    // Nota: no cargamos todos los clientes por defecto aquí para evitar
+    // descargar/mostrar la lista completa cuando sólo se editan reservas.
+    // Los clientes se cargarán cuando el usuario abra el modal en modo creación.
   }, []);
 
   const cargarReservas = async () => {
@@ -167,6 +169,20 @@ const VistaReservas = () => {
     } catch (error) {
       console.error("Error al cargar clientes:", error);
     }
+  };
+
+  // Abrir modal de creación asegurando que los clientes estén cargados
+  const abrirModalCrear = async () => {
+    try {
+      if (!clientes || clientes.length === 0) {
+        await cargarClientes();
+      }
+    } catch (error) {
+      console.error('No se pudieron cargar los clientes antes de crear:', error);
+    }
+    setReservaDetalle(null);
+    setModalModo('crear');
+    setModalVisible(true);
   };
 
   const manejarCambiarEstado = async (id, nuevoEstado) => {
@@ -322,11 +338,7 @@ const VistaReservas = () => {
         <Boton
           variante="primario"
           className="btn-nueva-reserva"
-          onClick={() => {
-            setReservaDetalle(null);
-            setModalModo("crear");
-            setModalVisible(true);
-          }}
+          onClick={abrirModalCrear}
         >
           + Nueva Reserva
         </Boton>
@@ -649,7 +661,7 @@ const VistaReservas = () => {
         onActualizar={manejarActualizar}
         reserva={reservaDetalle}
         modo={modalModo}
-        clientes={clientes}
+        clientes={modalModo === 'crear' ? clientes : []} // evitar pasar lista completa cuando editando
         mesas={[]}
       />
 
