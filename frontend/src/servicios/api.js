@@ -116,6 +116,7 @@ export const obtenerTodasReservas = async () => {
   return peticion('/reservas/obtener-todas.php');
 };
 
+
 /**
  * Crear una nueva reserva
  * @param {Object} datosReserva - { cliente_id, fecha, hora, numero_personas, mesa_id, notas_especiales }

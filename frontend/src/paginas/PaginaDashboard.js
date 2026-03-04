@@ -24,6 +24,7 @@ import {
   crearReserva,
   cerrarSesion,
 } from "../servicios/api";
+import { obtenerTodasReservas } from "../servicios/api";
 import "../estilos/dashboard.css";
 
 const PaginaDashboard = () => {
@@ -37,6 +38,7 @@ const PaginaDashboard = () => {
   const [clientes, setClientes] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [cargando, setCargando] = useState(true);
+  const [tasaCancelacion, setTasaCancelacion] = useState(0);
   const [seccionActiva, setSeccionActiva] = useState("inicio");
   const [busquedaGlobal, setBusquedaGlobal] = useState("");
   
@@ -68,12 +70,13 @@ const PaginaDashboard = () => {
     try {
       // Hacer todas las peticiones al mismo tiempo con Promise.allSettled
       // Así es más rápido que hacerlas una por una
-      const [resMetricas, resGrafica, resReservas, resClientes] =
+      const [resMetricas, resGrafica, resReservas, resClientes, resTodas] =
         await Promise.allSettled([
           obtenerMetricasHoy(),
           obtenerReservasSemana(),
           obtenerProximasReservas(),
           obtenerTodosClientes(),
+          obtenerTodasReservas(),
         ]);
 
       // Asignar datos si la petición fue exitosa
@@ -88,6 +91,27 @@ const PaginaDashboard = () => {
       }
       if (resClientes.status === "fulfilled") {
         setClientes(resClientes.value);
+      }
+      if (resTodas && resTodas.status === "fulfilled") {
+        try {
+          const todas = resTodas.value;
+          // Calcular tasa de cancelación para el mes actual
+          const ahora = new Date();
+          const yy = String(ahora.getFullYear());
+          const mm = String(ahora.getMonth() + 1).padStart(2, '0');
+          const reservasMes = todas.filter((r) => {
+            if (!r.fecha) return false;
+            const ymd = r.fecha.split('T')[0] || r.fecha;
+            const [y, m] = ymd.split('-');
+            return y == yy && m == mm;
+          });
+          const total = reservasMes.length;
+          const canceladas = reservasMes.filter((r) => (r.estado || '').toLowerCase() === 'cancelada').length;
+          const tasa = total > 0 ? Number(((canceladas / total) * 100).toFixed(1)) : 0;
+          setTasaCancelacion(tasa);
+        } catch (err) {
+          console.error('Error calculando tasa de cancelación:', err);
+        }
       }
     } catch (error) {
       console.error("Error al cargar datos del dashboard:", error);
@@ -281,19 +305,26 @@ const PaginaDashboard = () => {
                   colorFondo="#10B981"
                 />
                 <TarjetaMetrica
-                  titulo="Ingresos Hoy"
-                  numero={formatearMoneda(metricasActuales.ingresos_hoy)}
-                  subtexto={`(${Math.round(metricasActuales.ingresos_hoy).toLocaleString()} COP)`}
-                  badge="↑ +18%"
-                  icono="https://img.icons8.com/ios-filled/20/FFFFFF/money.png"
-                  colorFondo="#FDB022"
+                  titulo="Tasa de Cancelación"
+                  numero={`${tasaCancelacion}%`}
+                  badge="↓ -2%"
+                  icono="https://img.icons8.com/ios-filled/20/FFFFFF/cancel.png"
+                  colorFondo="#EF4444"
                 />
+                {/* Tarjeta 'Ingresos Hoy' removida por petición del usuario */}
               </div>
 
               {/* ====== GRÁFICA Y LISTA DE RESERVAS ====== */}
               <div className="dashboard-grid">
-                {/* Gráfica de barras semanal */}
-                <GraficaReservas datos={graficaActual} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  <div style={{ minHeight: 260 }}>
+                    {/* Gráfica de barras semanal */}
+                    <GraficaReservas datos={graficaActual} />
+                  </div>
+                    <VistaResenas limit={4} compact />
+                    {/* reseñas removidas */}
+                  
+                </div>
 
                 {/* Lista de próximas reservas */}
                 <ListaReservas

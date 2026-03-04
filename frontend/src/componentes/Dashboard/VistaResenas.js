@@ -26,7 +26,7 @@ const resenasEjemplo = [
   { id: 8, cliente: 'Diego Torres', calificacion: 4, comentario: 'La terraza tiene una vista espectacular. La comida sin gluten que pedí estaba muy bien preparada y sabrosa.', fecha: '2026-02-01' },
 ];
 
-const VistaResenas = () => {
+const VistaResenas = ({ limit = null, compact = false }) => {
   const [resenas] = useState(resenasEjemplo);
   const [filtroCalificacion, setFiltroCalificacion] = useState('todas');
 
@@ -35,6 +35,9 @@ const VistaResenas = () => {
     if (filtroCalificacion === 'todas') return true;
     return r.calificacion === parseInt(filtroCalificacion);
   });
+
+  // Aplicar límite si se proporcionó
+  const resenasMostradas = limit ? resenasFiltradas.slice(0, limit) : resenasFiltradas;
 
   // Calcular promedio
   const promedio = (resenas.reduce((sum, r) => sum + r.calificacion, 0) / resenas.length).toFixed(1);
@@ -65,12 +68,14 @@ const VistaResenas = () => {
   return (
     <div className="vista-modulo">
       {/* Header */}
-      <div className="modulo-header">
-        <div>
-          <h1 className="modulo-titulo">Reseñas de Clientes</h1>
-          <p className="modulo-subtitulo">{resenas.length} reseñas en total</p>
+      {!compact && (
+        <div className="modulo-header">
+          <div>
+            <h1 className="modulo-titulo">Reseñas de Clientes</h1>
+            <p className="modulo-subtitulo">{resenas.length} reseñas en total</p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Resumen */}
       <div className="resenas-resumen">
@@ -116,7 +121,7 @@ const VistaResenas = () => {
 
       {/* Lista de reseñas */}
       <div className="resenas-lista">
-        {resenasFiltradas.map((resena, indice) => (
+        {resenasMostradas.map((resena, indice) => (
           <div className="resena-tarjeta" key={resena.id}>
             <div className="resena-header">
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -137,7 +142,7 @@ const VistaResenas = () => {
           </div>
         ))}
 
-        {resenasFiltradas.length === 0 && (
+        {resenasMostradas.length === 0 && (
           <p style={{ textAlign: 'center', color: '#718096', padding: '40px' }}>
             No hay reseñas con esta calificación
           </p>
