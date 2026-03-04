@@ -2917,6 +2917,11 @@
   gap: 12px;
 }
 
+/* When a ModalSimple is open, hide the platos grid to avoid showing large cards underneath */
+body.has-modal-open .platos-grid {
+  display: none !important;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

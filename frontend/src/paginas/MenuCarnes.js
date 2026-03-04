@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ModalItem from '../componentes/Compartidos/ModalItem';
-import { getPlatos } from '../servicios/menuStorage';
 
 const defaultItems = [
-  { nombre: 'Entrecot', descripcion: 'Corte premium a la parrilla', precio: 15000, imagen: '/assets/images/carnes.jpg', categoria: 'principales' },
-  { nombre: 'Pollo Asado', descripcion: 'Marinado y dorado al horno', precio: 11000, imagen: '/assets/images/para-empezar.jpg', categoria: 'principales' },
-  { nombre: 'Costillas BBQ', descripcion: 'Salsa casera y cocción lenta', precio: 13500, imagen: '/assets/images/parrilla.jpg', categoria: 'principales' },
+  { nombre: 'Bistec a la criolla', descripcion: 'Bistec con cebolla y salsa criolla', precio: 25000, imagen: '/assets/images/carnes.jpg', categoria: 'carnes' },
+  { nombre: 'Costillas BBQ', descripcion: 'Costillas glaseadas con salsa casera', precio: 32000, imagen: '/assets/images/parrilla.jpg', categoria: 'carnes' },
+  { nombre: 'Milanesa de res', descripcion: 'Milanesa empanada con papas', precio: 20000, imagen: '/assets/images/carnes.jpg', categoria: 'carnes' },
+  { nombre: 'Filete al ajillo', descripcion: 'Filete de res con ajo y mantequilla', precio: 30000, imagen: '/assets/images/carnes.jpg', categoria: 'carnes' },
+  { nombre: 'Cazuela de res', descripcion: 'Estofado tradicional con verduras', precio: 27000, imagen: '/assets/images/carnes.jpg', categoria: 'carnes' },
 ];
 
 const MenuCarnes = () => {
@@ -14,13 +15,8 @@ const MenuCarnes = () => {
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    const stored = getPlatos();
-    if (stored && Array.isArray(stored)) {
-      // filtrar por categoría 'principales' (carnes)
-      setItems(stored.filter(p => p.categoria === 'principales' || p.categoria === 'carnes'));
-    } else {
-      setItems(defaultItems);
-    }
+    // Always show default demo items for Carnes (do not include newly created platos automatically)
+    setItems(defaultItems);
   }, []);
 
   const abrir = (it) => { setSelected(it); setOpen(true); };

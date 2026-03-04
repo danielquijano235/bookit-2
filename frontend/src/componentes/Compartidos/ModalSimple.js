@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const overlay = {
   position: 'fixed',
@@ -31,6 +31,15 @@ const header = {
 };
 
 const ModalSimple = ({ open, title, children, onClose, hideHeader = false }) => {
+  useEffect(() => {
+    if (open) {
+      document.body.classList.add('has-modal-open');
+    } else {
+      document.body.classList.remove('has-modal-open');
+    }
+    return () => { document.body.classList.remove('has-modal-open'); };
+  }, [open]);
+
   if (!open) return null;
   return (
     <div style={overlay} onMouseDown={onClose}>

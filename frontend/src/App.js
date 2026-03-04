@@ -28,6 +28,8 @@ import MenuBebidas from './paginas/MenuBebidas';
 import MenuDesayunos from './paginas/MenuDesayunos';
 import MenuCenas from './paginas/MenuCenas';
 import MenuCarnes from './paginas/MenuCarnes';
+import { seedIfEmpty } from './servicios/menuStorage';
+import samplePlatos from './servicios/samplePlatos';
 import './estilos/variables.css';
 import './estilos/compartidos.css';
 
@@ -73,6 +75,10 @@ const RutaProtegida = ({ children }) => {
  * Configura todas las rutas de la aplicación
  */
 function App() {
+  useEffect(() => {
+    // Seed localStorage with sample platos on first load to avoid losing demo items
+    try { seedIfEmpty(samplePlatos); } catch (e) { /* ignore */ }
+  }, []);
   return (
     <BrowserRouter>
       <Routes>

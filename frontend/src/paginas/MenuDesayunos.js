@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ModalItem from '../componentes/Compartidos/ModalItem';
-import { getPlatos } from '../servicios/menuStorage';
 
 const defaultItems = [
-  { nombre: 'Tostadas Francesas', descripcion: 'Pan brioche con miel y frutas', precio: 6500, imagen: '/assets/images/para-empezar.jpg', categoria: 'entradas' },
-  { nombre: 'Omelette', descripcion: 'Huevos, queso y verduras frescas', precio: 5500, imagen: '/assets/images/para-empezar.jpg', categoria: 'entradas' },
-  { nombre: 'Avena', descripcion: 'Avena caliente con frutas', precio: 4000, imagen: '/assets/images/para-empezar.jpg', categoria: 'entradas' },
+  { nombre: 'Tostadas Francesas', descripcion: 'Pan brioche con miel y frutas', precio: 6500, imagen: '/assets/images/para-empezar.jpg', categoria: 'desayunos' },
+  { nombre: 'Omelette', descripcion: 'Huevos, queso y verduras frescas', precio: 5500, imagen: '/assets/images/para-empezar.jpg', categoria: 'desayunos' },
+  { nombre: 'Avena', descripcion: 'Avena caliente con frutas', precio: 4000, imagen: '/assets/images/para-empezar.jpg', categoria: 'desayunos' },
+  { nombre: 'Pancakes con miel', descripcion: 'Tortitas dulces con miel y fruta', precio: 8000, imagen: '/assets/images/para-empezar.jpg', categoria: 'desayunos' },
+  { nombre: 'Arepa con huevo', descripcion: 'Arepa rellena con huevo y queso', precio: 7000, imagen: '/assets/images/para-empezar.jpg', categoria: 'desayunos' },
 ];
 
 const MenuDesayunos = () => {
@@ -14,12 +15,8 @@ const MenuDesayunos = () => {
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    const stored = getPlatos();
-    if (stored && Array.isArray(stored)) {
-      setItems(stored.filter(p => p.categoria === 'entradas' || p.categoria === 'desayunos'));
-    } else {
-      setItems(defaultItems);
-    }
+    // Always show default demo items in this listing (do not auto-include newly created platos)
+    setItems(defaultItems);
   }, []);
 
   const abrir = (it) => { setSelected(it); setOpen(true); };

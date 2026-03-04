@@ -13,46 +13,47 @@ import React, { useState, useEffect } from 'react';
 import ConfirmDialog from '../Compartidos/ConfirmDialog';
 import { useNotificaciones } from '../../contextos/NotificacionesContext';
 import Boton from '../Compartidos/Boton';
+import ModalSimple from '../Compartidos/ModalSimple';
+import { getPlatos, savePlatos, getPlatosByCategoria, normalizeCategoria, addPlato, upsertPlato } from '../../servicios/menuStorage';
+import samplePlatos from '../../servicios/samplePlatos';
+import categorias from '../../servicios/categorias';
 
 // Datos de ejemplo para el menú (vacio por defecto)
 const menuInicial = [];
 
-const categorias = [
-  { id: 'para-empezar', nombre: 'PARA EMPEZAR' },
-  { id: 'sopas', nombre: 'SOPAS' },
-  { id: 'carnes', nombre: 'CARNES' },
-  { id: 'parrilla', nombre: 'PARRILLA' },
-  { id: 'especiales', nombre: 'ESPECIALES' },
-  { id: 'ensaladas', nombre: 'ENSALADAS' },
-  { id: 'hamburguesas', nombre: 'HAMBURGUESAS' },
-  { id: 'infantil', nombre: 'INFANTIL' },
-  { id: 'cafes', nombre: 'CAFÉS' },
-  { id: 'jugos', nombre: 'JUGOS' },
-  { id: 'bebidas', nombre: 'BEBIDAS' },
-  { id: 'licores', nombre: 'LICORES' },
-];
-
 const VistaMenu = () => {
   const [platos, setPlatos] = useState(() => {
     try {
-      const stored = localStorage.getItem('bookit:menu:platos');
-      return stored ? JSON.parse(stored) : menuInicial;
+      const stored = getPlatos() || [];
+      const normalized = stored.map((p, i) => ({
+        ...p,
+        id: p && p.id != null ? p.id : Date.now() + i,
+        categoria: p && p.categoria ? normalizeCategoria(p.categoria) : (categorias[0] ? categorias[0].id : 'para-empezar')
+      }));
+      if (normalized.length !== stored.length || normalized.some((p, i) => p !== stored[i])) {
+        try { savePlatos(normalized); } catch (e) { /* ignore */ }
+      }
+      return normalized.length > 0 ? normalized : menuInicial;
     } catch (e) {
       return menuInicial;
     }
   });
   const [categoriaActiva, setCategoriaActiva] = useState('todos');
   const [busqueda, setBusqueda] = useState('');
+  const [openCategoria, setOpenCategoria] = useState(false);
+  const [categoriaModal, setCategoriaModal] = useState(null);
+  const [itemsCategoria, setItemsCategoria] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [platoEditando, setPlatoEditando] = useState(null);
   const [filtroDisponibilidad, setFiltroDisponibilidad] = useState('todos');
+
 
   // Formulario para nuevo/editar plato
   const [formulario, setFormulario] = useState({
     nombre: '',
     descripcion: '',
     precio: '',
-    categoria: 'para-empezar',
+    categoria: categorias && categorias.length > 0 ? categorias[0].id : 'para-empezar',
     disponible: true,
     imagen: '',
     tiempoPreparacion: '',
@@ -78,6 +79,23 @@ const VistaMenu = () => {
       minimumFractionDigits: 0,
     }).format(precio);
   };
+
+  const abrirCategoriaModal = (c) => {
+    // cargar platos por categoria y fallback a samplePlatos
+    let found = getPlatosByCategoria(c.id) || [];
+    if (!found || found.length === 0) found = samplePlatos[c.id] || [];
+    setCategoriaModal(c);
+    setItemsCategoria(found);
+    setOpenCategoria(true);
+  };
+
+  const cerrarCategoriaModal = () => {
+    setOpenCategoria(false);
+    setCategoriaModal(null);
+    setItemsCategoria([]);
+  };
+
+  
 
   const abrirModalNuevo = () => {
     setPlatoEditando(null);
@@ -120,12 +138,12 @@ const VistaMenu = () => {
       return;
     }
 
-    const nuevoPlato = {
+      const nuevoPlato = {
       id: platoEditando ? platoEditando.id : Date.now(),
       nombre: formulario.nombre,
       descripcion: formulario.descripcion,
       precio: parseInt(formulario.precio),
-      categoria: formulario.categoria,
+      categoria: normalizeCategoria(formulario.categoria),
       disponible: formulario.disponible,
       imagen: formulario.imagen || 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=300&h=200&fit=crop',
       tiempoPreparacion: parseInt(formulario.tiempoPreparacion) || 15,
@@ -133,14 +151,16 @@ const VistaMenu = () => {
       popularidad: platoEditando ? platoEditando.popularidad : Math.floor(Math.random() * 20) + 70,
     };
 
-    if (platoEditando) {
-      const updated = platos.map(p => p.id === platoEditando.id ? nuevoPlato : p);
+    // Read current stored platos to avoid overwriting if local state is stale
+    try {
+      const updated = upsertPlato(nuevoPlato);
       setPlatos(updated);
-      localStorage.setItem('bookit:menu:platos', JSON.stringify(updated));
-    } else {
-      const updated = [...platos, nuevoPlato];
-      setPlatos(updated);
-      localStorage.setItem('bookit:menu:platos', JSON.stringify(updated));
+    } catch (e) {
+      // fallback: merge with current state
+      setPlatos((prev) => {
+        const updated = upsertPlato(nuevoPlato);
+        return updated;
+      });
     }
 
     cerrarModal();
@@ -160,9 +180,11 @@ const VistaMenu = () => {
     if (!confirmPayload) return;
     const { tipo, id, texto } = confirmPayload;
     if (tipo === 'plato') {
-      const updated = platos.filter(p => p.id !== id);
-      setPlatos(updated);
-      localStorage.setItem('bookit:menu:platos', JSON.stringify(updated));
+      setPlatos((prev) => {
+        const updated = prev.filter(p => p.id !== id);
+        savePlatos(updated);
+        return updated;
+      });
       agregarNotificacion('sistema', 'Plato eliminado', `${texto} ha sido eliminado del menú`);
     }
     setConfirmOpen(false);
@@ -170,9 +192,11 @@ const VistaMenu = () => {
   };
 
   const toggleDisponibilidad = (id) => {
-    setPlatos(platos.map(p =>
-      p.id === id ? { ...p, disponible: !p.disponible } : p
-    ));
+    setPlatos((prev) => {
+      const updated = prev.map(p => p.id === id ? { ...p, disponible: !p.disponible } : p);
+      savePlatos(updated);
+      return updated;
+    });
   };
 
   const agregarAlergeno = (alergeno) => {
@@ -265,67 +289,21 @@ const VistaMenu = () => {
 
       {/* Filtros por categoría */}
       <div className="categorias-filtro">
-        {categorias.map(categoria => (
+          {categorias.map(categoria => (
           <Boton
             key={categoria.id}
             variante={categoriaActiva === categoria.id ? 'primario' : 'secundario'}
             className={`categoria-btn ${categoriaActiva === categoria.id ? 'activo' : ''}`}
-            onClick={() => setCategoriaActiva(categoria.id)}
+            onClick={() => { setCategoriaActiva(categoria.id); abrirCategoriaModal(categoria); }}
           >
-            <span className="categoria-nombre">{categoria.nombre}</span>
+            <span className="categoria-nombre">{categoria.title}</span>
           </Boton>
         ))}
       </div>
 
-      {/* Grid de platos */}
-      <div className="platos-grid">
-        {platosFiltrados.map(plato => (
-          <div key={plato.id} className={`plato-card ${!plato.disponible ? 'no-disponible' : ''}`}>
-            <div className="plato-imagen">
-              <img src={plato.imagen ? plato.imagen : '/assets/images/placeholder-plato.png'} alt={plato.nombre} onError={e => { e.target.onerror = null; e.target.src = '/assets/images/placeholder-plato.png'; }} />
-              {!plato.disponible && <div className="plato-overlay">No disponible</div>}
-            </div>
+      {/* Grid de platos removed per user request */}
 
-            <div className="plato-info">
-              <div className="plato-header">
-                <h3 className="plato-nombre">{plato.nombre}</h3>
-                <div className="plato-acciones">
-                  <Boton variante="ghost" className="btn-accion" onClick={() => toggleDisponibilidad(plato.id)} title={plato.disponible ? 'Marcar como no disponible' : 'Marcar como disponible'}>
-                    <img src={plato.disponible ? 'https://img.icons8.com/ios-filled/20/1a1a2e/checkmark.png' : 'https://img.icons8.com/ios-filled/20/1a1a2e/cancel.png'} alt="" style={{width:'16px', height:'16px'}} />
-                  </Boton>
-                  <Boton variante="ghost" className="btn-accion" onClick={() => abrirModalEditar(plato)} title="Editar plato">
-                    <img src="https://img.icons8.com/ios-filled/20/1a1a2e/edit.png" alt="" style={{width:'16px', height:'16px'}} />
-                  </Boton>
-                  <Boton variante="peligro" className="btn-accion eliminar" onClick={() => eliminarPlato(plato.id)} title="Eliminar plato" />
-                </div>
-              </div>
-
-              <p className="plato-descripcion">{plato.descripcion}</p>
-
-              <div className="plato-detalles">
-                <span className="plato-precio">{formatearPrecio(plato.precio)}</span>
-                <span className="plato-tiempo">{plato.tiempoPreparacion}min</span>
-                <div className="plato-popularidad">
-                  <span className="popularidad-icono">
-                    <img src="https://img.icons8.com/ios-filled/20/1a1a2e/star--v1.png" alt="" style={{width:'16px', height:'16px'}} />
-                  </span>
-                  <span className="popularidad-valor">{plato.popularidad}%</span>
-                </div>
-              </div>
-
-              {plato.alergenos.length > 0 && (
-                <div className="plato-alergenos">
-                  <span className="alergenos-etiqueta">⚠️ Alérgenos:</span>
-                  {plato.alergenos.map(alergeno => (
-                    <span key={alergeno} className="alergeno-tag">{alergeno}</span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-        
-      </div>
+      
 
       {/* Modal para nuevo/editar plato */}
       {modalVisible && (
@@ -367,7 +345,7 @@ const VistaMenu = () => {
                     onChange={(e) => setFormulario({...formulario, categoria: e.target.value})}
                   >
                     {categorias.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+                      <option key={cat.id} value={cat.id}>{cat.title}</option>
                     ))}
                   </select>
                 </div>
@@ -417,6 +395,21 @@ const VistaMenu = () => {
           </div>
         </div>
       )}
+      {/* ModalSimple: listar platos por categoría (mismo modal que PaginaMenu) */}
+      <ModalSimple open={openCategoria} title={categoriaModal ? (categoriaModal.title || categoriaModal.nombre) : ''} onClose={cerrarCategoriaModal}>
+        <div className="categoria-list">
+          {itemsCategoria.map((it, idx) => (
+            <div className="categoria-item" key={it.id || it.nombre || idx}>
+              <div className="categoria-row">
+                <div className="categoria-nombre">{it.nombre}</div>
+                <div className="categoria-precio">{it.precio ? ('$' + Number(it.precio).toLocaleString('es-CO')) : ''}</div>
+              </div>
+              {it.descripcion ? <div className="categoria-desc">{it.descripcion}</div> : null}
+              <div className="categoria-sep" />
+            </div>
+          ))}
+        </div>
+      </ModalSimple>
       {/* Confirm dialog (eliminar plato) */}
       <ConfirmDialog
         abierto={confirmOpen}
