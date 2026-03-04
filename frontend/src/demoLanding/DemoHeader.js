@@ -13,7 +13,7 @@ const DemoHeader = ({ onOpenReserva }) => {
   <header className="demo-header">
     <nav className="demo-nav left">
       <a href="#info">NOSOTROS</a>
-      <a href="#menu">MENÚ</a>
+      <a href="/menu" onClick={(e) => { e.preventDefault(); navigate('/menu'); }}>MENÚ</a>
       <a href="#historia">HISTORIA</a>
     </nav>
 

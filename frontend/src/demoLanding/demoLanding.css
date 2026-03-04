@@ -376,6 +376,46 @@
   color: #f7f7f7;
 }
 
+/* Historia section */
+.demo-historia {
+  padding: 3.5rem 1.5rem;
+  background: linear-gradient(180deg, rgba(30,58,95,0.02), rgba(30,58,95,0.01));
+}
+.demo-historia-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+.demo-historia h2 { margin-bottom: 0.6rem; color: var(--color-azul-oscuro); }
+.demo-historia-intro { color: #234156; margin-bottom: 1.6rem; line-height: 1.6; }
+.historia-grid {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch;
+  margin-bottom: 1.6rem;
+}
+.historia-item {
+  background: #fff;
+  border-radius: 10px;
+  padding: 18px;
+  width: 260px;
+  box-shadow: var(--sombra-pequena);
+  text-align: left;
+}
+.historia-year {
+  font-weight: 800;
+  color: var(--color-amarillo);
+  margin-bottom: 8px;
+}
+.historia-text { color: #234156; line-height: 1.4; }
+.demo-historia-cta { margin-top: 12px; }
+
+@media (max-width: 900px) {
+  .historia-grid { flex-direction: column; gap: 12px; }
+  .historia-item { width: 100%; }
+}
+
 .gallery-arrow {
   position: absolute;
   top: 50%;

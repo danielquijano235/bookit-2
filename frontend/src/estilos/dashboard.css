@@ -1597,9 +1597,44 @@
   font-family: var(--fuente-principal);
 }
 
+/* position context for the back button */
+.menu-header { position: relative; }
+
+/* Back arrow button styled to match category buttons */
+.menu-back-btn {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 3px solid var(--color-amarillo);
+  background: var(--color-blanco);
+  color: var(--color-amarillo);
+  text-decoration: none;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+  z-index: 10;
+}
+.menu-back-btn:hover {
+  background: var(--color-amarillo);
+  color: var(--color-azul-oscuro);
+  transform: translateY(-50%) translateY(-3px);
+}
+.menu-back-btn svg { display: block; width: 18px; height: 18px; stroke: currentColor; }
+
+@media (max-width: 600px) {
+  .menu-back-btn { left: 8px; width: 44px; height: 44px; }
+}
+
 .menu-grid-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding-bottom: 160px;
+  overflow-x: hidden; /* evitar scroll horizontal causado por tarjetas o imágenes */
 }
 
 .menu-grid {
@@ -1666,7 +1701,13 @@
   .menu-grid { grid-template-columns: 1fr; }
   .menu-card-img { height: 220px; }
   .menu-landing { padding: 24px 16px; }
+  .menu-grid-container { padding-bottom: 200px; overflow-x: hidden; }
 }
+
+/* Prevent horizontal overflow from grid gaps or content inside the menu view */
+.menu-landing { overflow-x: hidden; }
+.menu-grid { box-sizing: border-box; }
+.menu-card-img img { max-width: 100%; display: block; }
 
 /* Responsive grid for category buttons */
 @media (max-width: 992px) {

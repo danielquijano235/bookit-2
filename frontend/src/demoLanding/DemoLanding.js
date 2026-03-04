@@ -4,6 +4,7 @@ import DemoHeader from './DemoHeader';
 import DemoHero from './DemoHero';
 import DemoInfo from './DemoInfo';
 import DemoMenu from './DemoMenu';
+import DemoHistoria from './DemoHistoria';
 import DemoReservar from './DemoReservar';
 import DemoEventos from './DemoEventos';
 import DemoContacto from './DemoContacto';
@@ -35,6 +36,7 @@ const DemoLanding = () => {
       <DemoHeader onOpenReserva={abrirModal} />
       <DemoHero onOpenReserva={abrirModal} />
       <DemoInfo />
+      <DemoHistoria />
 
       {/* Galería a pantalla completa: muestra varios platos grandes juntos */}
       <section className="demo-gallery-section" id="galeria">

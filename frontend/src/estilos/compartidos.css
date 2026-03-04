@@ -137,3 +137,9 @@ input, select, textarea {
     padding: 0 15px;
   }
 }
+
+/* Mostrar demo footer en vistas de menú donde no exista el contenedor .demo-landing */
+.vista-menu .demo-footer,
+.menu-landing .demo-footer {
+  display: block !important;
+}
