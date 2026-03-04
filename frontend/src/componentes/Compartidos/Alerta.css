@@ -49,7 +49,9 @@
   transition: background 0.2s;
 }
 .alerta-cerrar:hover {
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transform: none;
 }
 
 /* Colores por tipo */

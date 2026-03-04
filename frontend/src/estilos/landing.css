@@ -1697,6 +1697,15 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
 }
 
+/* Force landing's close button hover to match unified modal close style
+   (more specific selector to override any yellow hover rules elsewhere) */
+.demo-landing .demo-cerrar:hover,
+.demo-landing .demo-cerrar:focus {
+  background: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28) !important;
+  transform: none !important;
+}
+
 .demo-cerrar .demo-close-x {
   font-size: 18px;
   line-height: 1;

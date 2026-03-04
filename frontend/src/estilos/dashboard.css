@@ -2172,7 +2172,9 @@
 }
 
 .mesas-modal-cerrar:hover {
-  background: var(--color-fondo);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  transform: none;
 }
 
 .mesas-modal-form {
@@ -2940,7 +2942,9 @@
 }
 
 .menu-modal .modal-cerrar:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  transform: none;
 }
 
 .menu-modal .modal-body {

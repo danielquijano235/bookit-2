@@ -24,6 +24,18 @@ const BarraNavegacion = () => {
   // Hook de React Router para navegar a otras páginas
   const navigate = useNavigate();
 
+  const irContacto = () => {
+    const el = document.getElementById('contacto');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // close mobile menu if open
+      setMenuAbierto(false);
+    } else {
+      // not on landing page: redirect to landing with hash
+      window.location.href = '/#contacto';
+    }
+  };
+
   // Efecto que escucha el scroll de la ventana
   useEffect(() => {
     const manejarScroll = () => {
@@ -63,7 +75,7 @@ const BarraNavegacion = () => {
         </button>
         <button 
           className="btn-empezar-nav"
-          onClick={() => navigate('/login')}
+          onClick={irContacto}
         >
           Empezar Ahora
         </button>
