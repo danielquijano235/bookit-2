@@ -760,11 +760,13 @@
   gap: 8px;
   flex: 1 1 auto; /* permitir que el contenido ocupe el espacio disponible */
   justify-content: space-between; /* mantener las acciones (botones) alineadas abajo */
+  align-items: center; /* centrar elementos horiz. dentro de la card */
+  text-align: center; /* centrar texto */
 }
 .event-title { margin: 0; font-size: 1.1rem; color: var(--color-azul-oscuro); }
 .event-date { display: none; }
 .event-desc { color: #3b5563; font-size: 0.95rem; margin: 0; }
-.event-actions { margin-top: 6px; display:flex; justify-content:flex-start }
+.event-actions { margin-top: 6px; display:flex; justify-content:center }
 .event-actions .demo-reservar-btn { padding: 0.5rem 1rem; border-radius: 20px; }
 
 @media (max-width: 980px) {
