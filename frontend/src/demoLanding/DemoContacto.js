@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const DemoContacto = () => {
   const bg = (process.env.PUBLIC_URL || '') + '/assets/images/demo-restaurant.jpg';
   const style = { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' };
+  const [enviando, setEnviando] = useState(false);
+  const [enviado, setEnviado] = useState(false);
   return (
     <section className="demo-contacto with-image" id="contacto" aria-label="Contacto" style={style}>
     <div className="demo-contacto-inner">
@@ -22,15 +24,34 @@ const DemoContacto = () => {
 
       <div className="contacto-form">
         <h3>Contacto</h3>
-        <form className="contacto-form-inner" onSubmit={(e) => {
-          e.preventDefault();
-          const fd = new FormData(e.target);
-          const nombre = fd.get('nombre');
-          const email = fd.get('email');
-          const mensaje = fd.get('mensaje');
-          alert(`Gracias ${nombre}!\nMensaje recibido:\n${mensaje}\n\nNos pondremos en contacto al correo: ${email}\n(Esto es una demo, no se envía al servidor)`);
-          e.target.reset();
-        }}>
+        <form
+          className="contacto-form-inner"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setEnviando(true);
+
+            // Simular envío y mostrar mensaje de éxito (igual que SeccionContacto)
+            setTimeout(() => {
+              setEnviando(false);
+              setEnviado(true);
+              e.target.reset();
+
+              // ocultar mensaje de éxito después de 4 segundos
+              setTimeout(() => setEnviado(false), 4000);
+            }, 2000);
+          }}
+        >
+          {enviado && (
+            <div className="contacto-exito">
+              <img
+                src="https://img.icons8.com/ios-filled/28/10B981/checkmark--v1.png"
+                alt="ok"
+                width="28"
+                height="28"
+              />
+              <span>¡Mensaje enviado correctamente! Te contactaremos pronto.</span>
+            </div>
+          )}
           <div className="form-row">
             <label>
               Nombre
@@ -48,7 +69,19 @@ const DemoContacto = () => {
           </label>
 
           <div className="contacto-form-actions">
-            <button type="submit" className="contacto-submit">Enviar mensaje</button>
+            <button type="submit" className="contacto-btn-enviar" disabled={enviando}>
+              {enviando ? (
+                <>
+                  <span className="contacto-spinner"></span>
+                  Enviando...
+                </>
+              ) : (
+                <>
+                  Enviar Mensaje
+                  <img src="https://img.icons8.com/ios-filled/18/ffffff/sent.png" alt="" width="18" height="18" />
+                </>
+              )}
+            </button>
           </div>
         </form>
       </div>

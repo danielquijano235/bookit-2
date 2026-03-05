@@ -9,7 +9,7 @@ const DemoReservar = ({ onOpenReserva }) => (
       <p className="reservas-desc">¿Un plan especial, una noche inolvidable o simplemente antojo de buena comida? Reserva fácil y vive Restaurant Demo: con sabor, música en vivo y todo el encanto local.</p>
 
       <div className="reservar-cta-wrap">
-        <button className="demo-reservar-btn demo-reservar-cta" onClick={() => onOpenReserva && onOpenReserva()}>
+        <button className="demo-reservar-btn demo-reservar-cta" onClick={() => onOpenReserva && onOpenReserva('reservar')}>
           RESERVA
         </button>
       </div>

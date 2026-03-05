@@ -6,7 +6,7 @@ const DemoHero = ({ onOpenReserva }) => (
     <div className="demo-hero-content">
       <h1>Bienvenido a Restaurante ...</h1>
       <p>Una experiencia gastronómica única para tus clientes.</p>
-      <a href="#reservar" className="demo-hero-btn" onClick={(e) => { e.preventDefault(); onOpenReserva && onOpenReserva(); }}>Reservar ahora</a>
+      <a href="#reservar" className="demo-hero-btn" onClick={(e) => { e.preventDefault(); onOpenReserva && onOpenReserva('hero'); }}>Reservar ahora</a>
     </div>
   </section>
 );

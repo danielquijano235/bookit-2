@@ -40,7 +40,7 @@ const obtenerDiasMes = (anio, mes) => {
   return dias;
 };
 
-const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false }) => {
+const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, source = null }) => {
   // ============================================
   // ESTADOS
   // ============================================
@@ -62,6 +62,17 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false }) => 
 
   const hoy = new Date();
   const diasMes = obtenerDiasMes(anioActual, mesActual);
+
+  // Determinar límite de personas según origen del modal:
+  // - Si `selectedEvent` existe -> modal de evento -> límite 200
+  // - Si `source` es 'hero' o 'reservar' -> modal abierto desde hero/cta -> límite 15
+  // - En resto de casos mantener el comportamiento histórico (12)
+  const maxPersonas = selectedEvent ? 200 : (source === 'hero' || source === 'reservar' ? 25 : 12);
+
+  // Asegurar que el estado `personas` no supere el máximo al cambiar la fuente
+  useEffect(() => {
+    if (personas > maxPersonas) setPersonas(maxPersonas);
+  }, [maxPersonas]);
 
   // Reset al abrir
   useEffect(() => {
@@ -149,11 +160,9 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false }) => 
       try {
         const notaEvento = selectedEvent ? `Evento: ${selectedEvent.title}` : '';
 
-        // Si este modal es solo demo (hero), almacenar localmente y NO enviar al backend
+        // Si este modal es solo demo (hero), simulamos la reserva pero NO la almacenamos
         if (demoOnly) {
-          const almacen = JSON.parse(localStorage.getItem('demo_reservas') || '[]');
           const fechaISO = diaSeleccionado ? `${anioActual}-${String(mesActual+1).padStart(2,'0')}-${String(diaSeleccionado).padStart(2,'0')}` : '';
-          // parseHora: convierte strings tipo "7:30 pm" a formato 24h "19:30:00"
           const parseHora = (h) => {
             if (!h) return '';
             const m = h.match(/(\d{1,2}):(\d{2})\s*(am|pm)?/i);
@@ -178,8 +187,7 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false }) => 
             mesa_numero: null,
             notas_especiales: notaEvento
           };
-          almacen.unshift(demo);
-          localStorage.setItem('demo_reservas', JSON.stringify(almacen));
+          // Intencionalmente NO se persiste `demo` en localStorage ni se envía al backend.
         } else {
           // Intentar verificar sesión en backend. Si existe sesión autenticada,
           // creamos el cliente (si se proporcionó nombre) y luego la reserva.
@@ -210,7 +218,7 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false }) => 
               notas_especiales: notaEvento
             };
 
-            await crearReserva(datosReserva);
+            const res = await crearReserva(datosReserva);
           }
         }
 
@@ -313,10 +321,36 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false }) => 
                     {personas === 1 ? 'persona' : 'personas'}
                   </span>
                 </div>
+
+                {/* Input numérico para modal de evento: permite escribir la cantidad directamente */}
+                {selectedEvent && (
+                  <div style={{ marginLeft: 12 }}>
+                    <input
+                      type="number"
+                      min={1}
+                      max={maxPersonas}
+                      value={personas}
+                      onChange={(e) => {
+                        const v = parseInt(e.target.value || '0', 10);
+                        if (Number.isNaN(v)) return;
+                        const clamped = Math.max(1, Math.min(maxPersonas, v));
+                        setPersonas(clamped);
+                      }}
+                      onBlur={(e) => {
+                        const v = parseInt(e.target.value || '0', 10);
+                        const clamped = Number.isNaN(v) ? 1 : Math.max(1, Math.min(maxPersonas, v));
+                        if (clamped !== personas) setPersonas(clamped);
+                      }}
+                      className="demo-personas-input"
+                      aria-label="Número de personas"
+                      style={{ width: 86, padding: '6px 8px', borderRadius: 8, border: '1px solid #e6e6e6' }}
+                    />
+                  </div>
+                )}
                 <button
                   className="demo-personas-btn"
-                  onClick={() => setPersonas(prev => Math.min(12, prev + 1))}
-                  disabled={personas >= 12}
+                  onClick={() => setPersonas(prev => Math.min(maxPersonas, prev + 1))}
+                  disabled={personas >= maxPersonas}
                   aria-label="Sumar personas"
                   title="Sumar"
                 >
@@ -331,17 +365,19 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false }) => 
                     key={n}
                     variante={personas === n ? 'primario' : 'secundario'}
                     className={`demo-persona-rapida ${personas === n ? 'activa' : ''}`}
-                    onClick={() => setPersonas(n)}
+                    onClick={() => setPersonas(Math.min(n, maxPersonas))}
                   >
                     {n}
                   </Boton>
                 ))}
               </div>
 
-              <p className="demo-paso-nota">
-                <img src="https://img.icons8.com/ios-filled/14/999999/info.png" alt="" width="14" height="14" />
-                Para grupos mayores a 12, se recomienda reserva especial
-              </p>
+              { (source === 'hero' || source === 'reservar') && (
+                <p className="demo-paso-nota">
+                  <img src="https://img.icons8.com/ios-filled/14/999999/info.png" alt="" width="14" height="14" />
+                  Para grupos mayores a 25, se recomienda reserva especial
+                </p>
+              ) }
 
               <Boton variante="primario" className="demo-btn-siguiente" onClick={irSiguiente}>
                 Siguiente

@@ -1048,12 +1048,12 @@
 .modal-botones {
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: center; /* centrar botones dentro del modal */
   margin-top: 8px;
 }
 
 .btn-cancelar {
-  padding: 11px 24px;
+  padding: 9px 18px; /* menos ancho */
   background: none;
   border: 1.5px solid var(--color-borde);
   border-radius: var(--radio-normal);
@@ -1070,7 +1070,7 @@
 }
 
 .btn-crear-reserva {
-  padding: 11px 24px;
+  padding: 9px 18px; /* menos ancho */
   background: var(--color-amarillo);
   border: none;
   border-radius: var(--radio-normal);

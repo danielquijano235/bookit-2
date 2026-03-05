@@ -87,7 +87,25 @@ const PaginaDashboard = () => {
         setDatosGrafica(resGrafica.value);
       }
       if (resReservas.status === "fulfilled") {
-        setReservas(resReservas.value);
+        try {
+          // Filtrar reservas de demo para que NO se muestren en el dashboard.
+          // Criterios: id con prefijo 'demo-' o nombre/cliente que contiene la palabra 'demo' (case-insensitive).
+          const isDemo = (r) => {
+            try {
+              if (!r) return false;
+              if (typeof r.id === 'string' && r.id.startsWith('demo-')) return true;
+              const nombre = (r.cliente_nombre || r.cliente || '');
+              return /demo/i.test(String(nombre));
+            } catch (e) {
+              return false;
+            }
+          };
+          const filtradas = (resReservas.value || []).filter(r => !isDemo(r));
+          setReservas(filtradas);
+        } catch (err) {
+          console.warn('Error filtrando reservas demo:', err);
+          setReservas(resReservas.value);
+        }
       }
       if (resClientes.status === "fulfilled") {
         setClientes(resClientes.value);

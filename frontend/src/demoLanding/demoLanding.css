@@ -4,9 +4,22 @@
   overflow-x: hidden; /* evitar scroll horizontal cuando footer es full-bleed */
   position: relative; /* permitir que el header se posicione sobre el hero */
 }
+<<<<<<< HEAD
 .demo-landing .demo-footer {
   display: block !important;
 }
+=======
+
+/* Asegurar cursor pointer en elementos interactivos dentro del demo landing
+   (fix visual local; no afecta otros modales ni estilos globales) */
+.demo-landing a,
+.demo-landing button,
+.demo-landing .demo-reservar-btn,
+.demo-landing .demo-btn-empezar {
+  cursor: pointer !important;
+}
+.demo-landing .demo-footer { display: block !important; }
+>>>>>>> 10e3833a0541c0c9ce822a93bcabfc03f2e9caa2
 
 /* Credit bar below demo footer */
 .demo-credit-bar {
@@ -211,17 +224,22 @@
     rgba(253, 176, 34, 0.02)
   );
   border-radius: 12px;
-  padding: 4rem 1.5rem; /* aumentar padding vertical para más espacio */
+  padding: 4rem 3rem; /* ampliar padding lateral para más espacio a los lados */
   min-height: 520px; /* contenedor más alto, evita efecto 'sándwich' */
 }
 
 .demo-info-grid {
   display: grid;
-  /* texto (35%) + imagen (65%) — imagen más ancha */
-  grid-template-columns: 35% 65%;
-  gap: 3rem; /* espacio entre texto e imagen */
+  /* texto (40%) + imagen (60%) — imagen más ancha */
+  grid-template-columns: 40% 60%;
+  gap: 3.5rem; /* espacio entre texto e imagen */
   align-items: center;
   justify-content: center; /* center the two-column block inside the section */
+  max-width: 1500px; /* ampliar el ancho permitido para que no quede tan centrado estrecho */
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0 0.75rem; /* pequeño padding interno para móviles */
 }
 
 .demo-info-text h2 {
