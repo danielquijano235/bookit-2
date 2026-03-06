@@ -14,21 +14,38 @@ header("Content-Type: application/json; charset=UTF-8");
 // ============================================
 // CONFIGURACION CORS
 // ============================================
-$origen_permitido = getenv('CORS_ORIGIN') ?: 'http://localhost:3000';
+$origenes_config = getenv('CORS_ORIGIN') ?: 'http://localhost:3000';
 $origen_peticion = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-if ($origen_permitido === '*') {
-    header("Access-Control-Allow-Origin: *");
-} elseif ($origen_peticion === $origen_permitido) {
-    header("Access-Control-Allow-Origin: " . $origen_permitido);
-    header("Access-Control-Allow-Credentials: true");
+$origenes_permitidos = array_values(array_filter(array_map('trim', explode(',', $origenes_config))));
+
+if (empty($origenes_permitidos)) {
+    $origenes_permitidos = ['http://localhost:3000'];
 }
 
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+$normalizar_origen = static function ($origen) {
+    return rtrim(strtolower(trim((string) $origen)), '/');
+};
+
+$origen_peticion_norm = $normalizar_origen($origen_peticion);
+$origenes_permitidos_norm = array_map($normalizar_origen, $origenes_permitidos);
+
+if ($origen_peticion !== '' && in_array('*', $origenes_permitidos_norm, true)) {
+    header('Access-Control-Allow-Origin: ' . $origen_peticion);
+    header('Access-Control-Allow-Credentials: true');
+    header('Vary: Origin');
+} elseif ($origen_peticion !== '' && in_array($origen_peticion_norm, $origenes_permitidos_norm, true)) {
+    header('Access-Control-Allow-Origin: ' . $origen_peticion);
+    header('Access-Control-Allow-Credentials: true');
+    header('Vary: Origin');
+}
+
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Max-Age: 86400');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
+    http_response_code(204);
     exit();
 }
 
