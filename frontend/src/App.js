@@ -18,7 +18,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PaginaLanding from './paginas/PaginaLanding';
 import PaginaLogin from './paginas/PaginaLogin';
 import PaginaDashboard from './paginas/PaginaDashboard';
@@ -26,6 +26,7 @@ import PaginaDemoLanding from './paginas/PaginaDemoLanding';
 import PaginaMenu from './paginas/PaginaMenu';
 import { seedIfEmpty } from './servicios/menuStorage';
 import samplePlatos from './servicios/samplePlatos';
+import { verificarSesion } from './servicios/api';
 import './estilos/variables.css';
 import './estilos/compartidos.css';
 
@@ -42,12 +43,9 @@ const RutaProtegida = ({ children }) => {
   const [autenticado, setAutenticado] = useState(null); // null = aún verificando
 
   useEffect(() => {
-    // Verificar si hay sesión activa en el servidor PHP
-    fetch('http://localhost/bookit-api/autenticacion/verificar-sesion.php', {
-      credentials: 'include', // Enviar cookies de sesión
-    })
-      .then(res => res.json())
-      .then(datos => {
+    // Verificar sesión usando la URL de API configurada por entorno
+    verificarSesion()
+      .then((datos) => {
         setAutenticado(datos.autenticado);
       })
       .catch(() => {
@@ -76,7 +74,7 @@ function App() {
     try { seedIfEmpty(samplePlatos); } catch (e) { /* ignore */ }
   }, []);
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         {/* Ruta pública: Landing Page */}
         <Route path="/" element={<PaginaLanding />} />
@@ -104,7 +102,7 @@ function App() {
         {/* Cualquier otra ruta redirige al inicio */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
