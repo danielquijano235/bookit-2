@@ -1,91 +1,81 @@
 -- ============================================
--- BOOKIT - Sistema de Gestión de Reservas
--- Archivo: bookit.sql
--- Descripción: Script de creación de la base de datos
--- y todas sus tablas con sus relaciones.
+-- BOOKIT - Sistema de Gestion de Reservas
+-- Archivo: bookit.sql (PostgreSQL)
 -- ============================================
 
--- Crear la base de datos si no existe
-CREATE DATABASE IF NOT EXISTS bookit CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE bookit;
+CREATE TABLE IF NOT EXISTS usuarios (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    contrasena VARCHAR(255) NOT NULL,
+    restaurante VARCHAR(100),
+    telefono VARCHAR(20),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
--- ============================================
--- TABLA: usuarios
--- Descripción: Almacena los datos de los dueños
--- o administradores de restaurantes que usan BookIt.
--- ============================================
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL COMMENT 'Nombre completo del usuario',
-    email VARCHAR(100) UNIQUE NOT NULL COMMENT 'Email único para login',
-    contrasena VARCHAR(255) NOT NULL COMMENT 'Contraseña hasheada con password_hash',
-    restaurante VARCHAR(100) COMMENT 'Nombre del restaurante',
-    telefono VARCHAR(20) COMMENT 'Teléfono de contacto',
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de registro',
-    INDEX idx_email (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Usuarios administradores del sistema';
+CREATE INDEX IF NOT EXISTS idx_usuarios_email ON usuarios(email);
 
--- ============================================
--- TABLA: clientes
--- Descripción: Almacena los datos de los clientes
--- que hacen reservas en los restaurantes.
--- Cada cliente pertenece a un usuario (restaurante).
--- ============================================
-CREATE TABLE clientes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NOT NULL COMMENT 'ID del restaurante al que pertenece',
-    nombre VARCHAR(100) NOT NULL COMMENT 'Nombre completo del cliente',
-    telefono VARCHAR(20) COMMENT 'Teléfono del cliente',
-    email VARCHAR(100) COMMENT 'Email del cliente',
-    visitas INT DEFAULT 0 COMMENT 'Número total de visitas',
-    ultima_visita DATE COMMENT 'Fecha de la última visita',
-    preferencias TEXT COMMENT 'Preferencias o alergias del cliente',
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de registro del cliente',
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-    INDEX idx_usuario (usuario_id),
-    INDEX idx_telefono (telefono),
-    INDEX idx_email (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Clientes de los restaurantes';
+CREATE TABLE IF NOT EXISTS clientes (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    usuario_id BIGINT NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20),
+    email VARCHAR(100),
+    visitas INT DEFAULT 0,
+    ultima_visita DATE,
+    preferencias TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_clientes_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
 
--- ============================================
--- TABLA: mesas
--- Descripción: Almacena la información de las mesas
--- de cada restaurante (capacidad, ubicación, estado).
--- ============================================
-CREATE TABLE mesas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NOT NULL COMMENT 'ID del restaurante al que pertenece',
-    numero INT NOT NULL COMMENT 'Número de mesa',
-    capacidad INT NOT NULL COMMENT 'Cantidad máxima de personas',
-    ubicacion ENUM('interior', 'terraza', 'ventana', 'privado') DEFAULT 'interior' COMMENT 'Ubicación de la mesa',
-    estado ENUM('disponible', 'ocupada', 'reservada', 'mantenimiento') DEFAULT 'disponible' COMMENT 'Estado actual de la mesa',
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-    INDEX idx_usuario (usuario_id),
-    INDEX idx_estado (estado),
-    UNIQUE KEY unique_mesa_usuario (numero, usuario_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Mesas de los restaurantes';
+CREATE INDEX IF NOT EXISTS idx_clientes_usuario ON clientes(usuario_id);
+CREATE INDEX IF NOT EXISTS idx_clientes_telefono ON clientes(telefono);
+CREATE INDEX IF NOT EXISTS idx_clientes_email ON clientes(email);
 
--- ============================================
--- TABLA: reservas
--- Descripción: Almacena todas las reservas realizadas.
--- Relaciona clientes con mesas en fechas y horas específicas.
--- ============================================
-CREATE TABLE reservas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT NOT NULL COMMENT 'ID del cliente que reserva',
-    usuario_id INT NOT NULL COMMENT 'ID del restaurante',
-    mesa_id INT COMMENT 'ID de la mesa asignada (puede ser NULL)',
-    numero_personas INT NOT NULL COMMENT 'Cantidad de personas en la reserva',
-    fecha DATE NOT NULL COMMENT 'Fecha de la reserva',
-    hora TIME NOT NULL COMMENT 'Hora de la reserva',
-    estado ENUM('pendiente', 'confirmada', 'cancelada', 'completada') DEFAULT 'pendiente' COMMENT 'Estado de la reserva',
-    notas_especiales TEXT COMMENT 'Notas o requerimientos especiales',
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha en que se creó la reserva',
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-    FOREIGN KEY (mesa_id) REFERENCES mesas(id) ON DELETE SET NULL,
-    INDEX idx_usuario (usuario_id),
-    INDEX idx_fecha (fecha),
-    INDEX idx_estado (estado),
-    INDEX idx_cliente (cliente_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Reservas de los restaurantes';
+CREATE TABLE IF NOT EXISTS mesas (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    usuario_id BIGINT NOT NULL,
+    numero INT NOT NULL,
+    capacidad INT NOT NULL,
+    ubicacion TEXT NOT NULL DEFAULT 'interior' CHECK (ubicacion IN ('interior', 'terraza', 'ventana', 'privado')),
+    estado TEXT NOT NULL DEFAULT 'disponible' CHECK (estado IN ('disponible', 'ocupada', 'reservada', 'mantenimiento')),
+    CONSTRAINT fk_mesas_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    CONSTRAINT unique_mesa_usuario UNIQUE (numero, usuario_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_mesas_usuario ON mesas(usuario_id);
+CREATE INDEX IF NOT EXISTS idx_mesas_estado ON mesas(estado);
+
+CREATE TABLE IF NOT EXISTS reservas (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    cliente_id BIGINT NOT NULL,
+    usuario_id BIGINT NOT NULL,
+    mesa_id BIGINT,
+    numero_personas INT NOT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    estado TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'confirmada', 'cancelada', 'completada')),
+    notas_especiales TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_reservas_cliente FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
+    CONSTRAINT fk_reservas_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    CONSTRAINT fk_reservas_mesa FOREIGN KEY (mesa_id) REFERENCES mesas(id) ON DELETE SET NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_reservas_usuario ON reservas(usuario_id);
+CREATE INDEX IF NOT EXISTS idx_reservas_fecha ON reservas(fecha);
+CREATE INDEX IF NOT EXISTS idx_reservas_estado ON reservas(estado);
+CREATE INDEX IF NOT EXISTS idx_reservas_cliente ON reservas(cliente_id);
+
+CREATE TABLE IF NOT EXISTS resenas (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    usuario_id BIGINT NOT NULL,
+    cliente VARCHAR(100) NOT NULL,
+    comentario TEXT NOT NULL,
+    calificacion INT NOT NULL CHECK (calificacion BETWEEN 1 AND 5),
+    fecha DATE NOT NULL DEFAULT CURRENT_DATE,
+    CONSTRAINT fk_resenas_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_resenas_usuario ON resenas(usuario_id);
+CREATE INDEX IF NOT EXISTS idx_resenas_calificacion ON resenas(calificacion);

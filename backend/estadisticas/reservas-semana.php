@@ -4,48 +4,18 @@
  * BOOKIT - Reservas de la Semana
  * Archivo: estadisticas/reservas-semana.php
  * ============================================
- * 
- * Recibe: GET (no requiere parámetros)
- * Devuelve: JSON con la cantidad de reservas por cada día
- *           de la última semana: { "Lun": 45, "Mar": 52, ... }
- * 
- * Estos datos se usan para la gráfica de barras del dashboard.
  */
 
 require_once '../configuracion/conexion.php';
 
-// Verificar sesión
 if (!isset($_SESSION['usuario_id'])) {
     http_response_code(401);
     echo json_encode(["error" => "No autenticado"]);
     exit();
 }
 
-$usuario_id = $_SESSION['usuario_id'];
+$usuario_id = (int)$_SESSION['usuario_id'];
 
-// ============================================
-// CONSULTA: Agrupar reservas por día de la semana
-// DATE_SUB(CURDATE(), INTERVAL 7 DAY) = hace 7 días
-// DAYNAME(fecha) = nombre del día en inglés
-// ============================================
-$consulta = "
-    SELECT 
-        DAYNAME(fecha) as dia_nombre,
-        DAYOFWEEK(fecha) as dia_numero,
-        COUNT(*) as cantidad
-    FROM reservas
-    WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-        AND usuario_id = ?
-    GROUP BY DATE(fecha), DAYNAME(fecha), DAYOFWEEK(fecha)
-    ORDER BY DATE(fecha)
-";
-
-$stmt = mysqli_prepare($conexion, $consulta);
-mysqli_stmt_bind_param($stmt, "i", $usuario_id);
-mysqli_stmt_execute($stmt);
-$resultado = mysqli_stmt_get_result($stmt);
-
-// Inicializar todos los días en 0
 $dias = [
     "Lun" => 0,
     "Mar" => 0,
@@ -56,22 +26,40 @@ $dias = [
     "Dom" => 0
 ];
 
-// Traducir nombres de días del inglés al español abreviado
-$traduccion_dias = [
-    "Monday"    => "Lun",
-    "Tuesday"   => "Mar",
-    "Wednesday" => "Mié",
-    "Thursday"  => "Jue",
-    "Friday"    => "Vie",
-    "Saturday"  => "Sáb",
-    "Sunday"    => "Dom"
+$mapa_dia = [
+    1 => "Lun",
+    2 => "Mar",
+    3 => "Mié",
+    4 => "Jue",
+    5 => "Vie",
+    6 => "Sáb",
+    7 => "Dom"
 ];
 
-// Recorrer resultados y asignar las cantidades
-while ($fila = mysqli_fetch_assoc($resultado)) {
-    $dia_traducido = $traduccion_dias[$fila['dia_nombre']] ?? $fila['dia_nombre'];
-    $dias[$dia_traducido] = (int)$fila['cantidad'];
-}
+try {
+    $consulta = "}
+            EXTRACT(ISODOW FROM fecha) AS dia_numero,
+            COUNT(*) as cantidad
+        FROM reservas
+        WHERE fecha >= (CURRENT_DATE - INTERVAL '6 days')
+          AND usuario_id = ?
+        GROUP BY DATE(fecha), EXTRACT(ISODOW FROM fecha)
+        ORDER BY DATE(fecha)
+    ";
 
-echo json_encode($dias);
+    $stmt = $conexion->prepare($consulta);
+    $stmt->execute([$usuario_id]);
+
+    while ($fila = $stmt->fetch()) {
+        $numero = (int)$fila['dia_numero'];
+        if (isset($mapa_dia[$numero])) {
+            $dias[$mapa_dia[$numero]] = (int)$fila['cantidad'];
+        }
+    }
+
+    echo json_encode($dias);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(["error" => "Error al cargar reservas de la semana"]);
+}
 ?>

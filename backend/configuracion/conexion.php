@@ -1,70 +1,60 @@
 <?php
 /**
  * ============================================
- * BOOKIT - Configuración de Conexión a Base de Datos
+ * BOOKIT - Configuracion de Conexion a Base de Datos
  * Archivo: configuracion/conexion.php
  * ============================================
- * 
- * Este archivo establece la conexión con la base de datos MySQL
- * y configura los headers necesarios para que React pueda
- * comunicarse con el backend (CORS).
- * 
- * Se incluye al inicio de todos los demás archivos PHP.
+ *
+ * Conexion central del backend usando PDO para PostgreSQL.
+ * Lee credenciales desde variables de entorno para despliegues en Render.
  */
 
-// ============================================
-// DATOS DE CONEXIÓN A LA BASE DE DATOS
-// Modificar según tu configuración de XAMPP
-// ============================================
-$servidor = "localhost";
-$usuario = "root";
-$contrasena = "";       // Vacía por defecto en XAMPP
-$base_datos = "bookit";
+header("Content-Type: application/json; charset=UTF-8");
 
 // ============================================
-// CREAR CONEXIÓN CON LA BASE DE DATOS
-// Usamos mysqli_connect para conectar PHP con MySQL
+// CONFIGURACION CORS
 // ============================================
-$conexion = mysqli_connect($servidor, $usuario, $contrasena, $base_datos);
+$origen_permitido = getenv('CORS_ORIGIN') ?: 'http://localhost:3000';
+$origen_peticion = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-// Verificar si la conexión fue exitosa
-if (!$conexion) {
-    // Si falla, mostrar error y detener el script
-    die("Error de conexión: " . mysqli_connect_error());
+if ($origen_permitido === '*') {
+    header("Access-Control-Allow-Origin: *");
+} elseif ($origen_peticion === $origen_permitido) {
+    header("Access-Control-Allow-Origin: " . $origen_permitido);
+    header("Access-Control-Allow-Credentials: true");
 }
 
-// Configurar la codificación a UTF-8 (utf8mb4) para soportar todos los caracteres
-mysqli_set_charset($conexion, "utf8mb4");
-// Asegurar también la conexión con SET NAMES en caso de capas intermedias
-mysqli_query($conexion, "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-// ============================================
-// CONFIGURACIÓN DE CORS (Cross-Origin Resource Sharing)
-// Esto es necesario porque React corre en localhost:3000
-// y PHP corre en localhost (puerto 80).
-// Sin estos headers, el navegador bloquea las peticiones.
-// ============================================
-header("Access-Control-Allow-Origin: http://localhost:3000");  // Permitir peticiones desde React
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");  // Métodos HTTP permitidos
-header("Access-Control-Allow-Headers: Content-Type, Authorization");  // Headers permitidos
-header("Access-Control-Allow-Credentials: true");  // Permitir envío de cookies (para sesiones)
-header("Content-Type: application/json; charset=UTF-8");  // Todas las respuestas serán JSON
-
-// ============================================
-// MANEJAR PETICIONES PREFLIGHT (OPTIONS)
-// El navegador envía una petición OPTIONS antes de
-// la petición real para verificar si tiene permisos.
-// Respondemos con 200 OK para que continúe.
-// ============================================
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
 // ============================================
-// INICIAR SESIÓN PHP
-// Esto permite guardar datos del usuario logueado
-// entre diferentes peticiones.
+// CONEXION POSTGRESQL (PDO)
 // ============================================
-session_start();
+$servidor = getenv('DB_HOST') ?: '127.0.0.1';
+$puerto = getenv('DB_PORT') ?: '5432';
+$base_datos = getenv('DB_NAME') ?: 'bookit';
+$usuario = getenv('DB_USER') ?: 'postgres';
+$contrasena = getenv('DB_PASSWORD') ?: '';
+
+$dsn = "pgsql:host={$servidor};port={$puerto};dbname={$base_datos}";
+
+try {
+    $conexion = new PDO($dsn, $usuario, $contrasena, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(["error" => "Error de conexion a base de datos"]);
+    exit();
+}
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>

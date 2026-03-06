@@ -4,9 +4,6 @@
  * BOOKIT - Obtener Un Cliente
  * Archivo: clientes/obtener-uno.php
  * ============================================
- * 
- * Recibe: GET con parámetro ?id=123
- * Devuelve: JSON con los datos de un cliente específico
  */
 
 require_once '../configuracion/conexion.php';
@@ -17,7 +14,7 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 
-$usuario_id = $_SESSION['usuario_id'];
+$usuario_id = (int)$_SESSION['usuario_id'];
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
@@ -26,17 +23,21 @@ if (!$id) {
     exit();
 }
 
-$consulta = "SELECT * FROM clientes WHERE id = ? AND usuario_id = ?";
-$stmt = mysqli_prepare($conexion, $consulta);
-mysqli_stmt_bind_param($stmt, "ii", $id, $usuario_id);
-mysqli_stmt_execute($stmt);
-$resultado = mysqli_stmt_get_result($stmt);
+try {
+    $consulta = "SELECT * FROM clientes WHERE id = ? AND usuario_id = ?";
+    $stmt = $conexion->prepare($consulta);
+    $stmt->execute([(int)$id, $usuario_id]);
+    $cliente = $stmt->fetch();
 
-if (mysqli_num_rows($resultado) === 0) {
-    http_response_code(404);
-    echo json_encode(["error" => "Cliente no encontrado"]);
-    exit();
+    if (!$cliente) {
+        http_response_code(404);
+        echo json_encode(["error" => "Cliente no encontrado"]);
+        exit();
+    }
+
+    echo json_encode($cliente);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(["error" => "Error al obtener el cliente"]);
 }
-
-echo json_encode(mysqli_fetch_assoc($resultado));
 ?>

@@ -1,0 +1,14 @@
+# Ignorar archivos innecesarios en la imagen Docker
+frontend/
+node_modules/
+.git/
+.gitignore
+README.md
+DEPLOY.md
+notas y comnetarios.md
+Procfile
+base-datos/
+*.md
+.DS_Store
+.env
+.vscode/

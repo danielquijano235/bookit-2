@@ -4,9 +4,6 @@
  * BOOKIT - Crear Nuevo Cliente
  * Archivo: clientes/crear.php
  * ============================================
- * 
- * Recibe: POST con JSON { "nombre", "telefono", "email", "preferencias" }
- * Devuelve: JSON con mensaje de éxito y datos del cliente creado
  */
 
 require_once '../configuracion/conexion.php';
@@ -19,33 +16,34 @@ if (!isset($_SESSION['usuario_id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(["error" => "Método no permitido"]);
+    echo json_encode(["error" => "Metodo no permitido"]);
     exit();
 }
 
-$usuario_id = $_SESSION['usuario_id'];
+$usuario_id = (int)$_SESSION['usuario_id'];
 $datos = json_decode(file_get_contents("php://input"), true);
 
-$nombre = $datos['nombre'] ?? '';
-$telefono = $datos['telefono'] ?? '';
-$email = $datos['email'] ?? '';
-$preferencias = $datos['preferencias'] ?? '';
+$nombre = trim($datos['nombre'] ?? '');
+$telefono = trim($datos['telefono'] ?? '');
+$email = trim($datos['email'] ?? '');
+$preferencias = trim($datos['preferencias'] ?? '');
 
-// Validar nombre obligatorio
-if (empty($nombre)) {
+if ($nombre === '') {
     http_response_code(400);
     echo json_encode(["error" => "El nombre del cliente es requerido"]);
     exit();
 }
 
-// Insertar el nuevo cliente
-$consulta = "INSERT INTO clientes (usuario_id, nombre, telefono, email, preferencias) VALUES (?, ?, ?, ?, ?)";
-$stmt = mysqli_prepare($conexion, $consulta);
-mysqli_stmt_bind_param($stmt, "issss", $usuario_id, $nombre, $telefono, $email, $preferencias);
+try {
+    $consulta = "
+        INSERT INTO clientes (usuario_id, nombre, telefono, email, preferencias)
+        VALUES (?, ?, ?, ?, ?)
+        RETURNING id
+    ";
+    $stmt = $conexion->prepare($consulta);
+    $stmt->execute([$usuario_id, $nombre, $telefono, $email, $preferencias]);
+    $id_nuevo = (int)$stmt->fetchColumn();
 
-if (mysqli_stmt_execute($stmt)) {
-    $id_nuevo = mysqli_insert_id($conexion);
-    
     http_response_code(201);
     echo json_encode([
         "mensaje" => "Cliente creado exitosamente",
@@ -56,7 +54,7 @@ if (mysqli_stmt_execute($stmt)) {
             "email" => $email
         ]
     ]);
-} else {
+} catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(["error" => "Error al crear el cliente"]);
 }

@@ -2,10 +2,10 @@
 
 // ============================================
 // CONFIGURACIÓN BASE
-// Esta URL debe coincidir con la carpeta del backend en XAMPP
-// Por ejemplo: C:/xampp/htdocs/bookit-api/
+// En producción usa REACT_APP_API_URL del entorno de Render
+// En desarrollo local usa el backend de XAMPP
 // ============================================
-const API_URL = 'http://localhost/bookit-api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost/bookit-api';
 
 /**
  * Función auxiliar para hacer peticiones HTTP
