@@ -957,6 +957,36 @@
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.5;
+
+/* Reglas más específicas para asegurar comportamiento en móviles pequeños
+   Fuerzan layout en columna y eliminan márgenes/anchos que dejan el panel
+   partido a la mitad en algunos builds o caches. Mantener solo en <=480px. */
+@media (max-width: 480px) {
+  .contacto-contenido {
+    flex-direction: column !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .contacto-info {
+    width: 100% !important;
+    flex: none !important;
+    padding: 18px 16px !important;
+    border-radius: 12px !important;
+    overflow: visible !important;
+  }
+
+  .contacto-formulario-contenedor {
+    width: 100% !important;
+    padding: 18px 16px !important;
+  }
+
+  .contacto-info::before,
+  .contacto-info::after {
+    display: none !important;
+  }
+}
 }
 
 /* Redes sociales */
