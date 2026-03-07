@@ -25,14 +25,18 @@ const BarraNavegacion = () => {
   const navigate = useNavigate();
 
   const irContacto = () => {
-    const el = document.getElementById('contacto');
+    scrollToSection('contacto');
+  };
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // close mobile menu if open
       setMenuAbierto(false);
     } else {
-      // not on landing page: redirect to landing with hash
-      window.location.href = '/#contacto';
+      // Si no estamos en la landing, redirigimos a la raíz con hash
+      // Esto permite que al cargar la landing el navegador salte a la sección
+      window.location.href = `/#${id}`;
     }
   };
 
@@ -59,10 +63,10 @@ const BarraNavegacion = () => {
 
       {/* Links de navegación (solo se ven en escritorio) */}
       <div className={`navbar-links ${menuAbierto ? 'abierto' : ''}`}>
-        <a href="#ventajas" onClick={() => setMenuAbierto(false)}>Ventajas</a>
-        <a href="#caracteristicas" onClick={() => setMenuAbierto(false)}>Características</a>
-        <a href="#testimonios" onClick={() => setMenuAbierto(false)}>Testimonios</a>
-        <a href="#contacto" onClick={() => setMenuAbierto(false)}>Contacto</a>
+        <a href="#ventajas" onClick={(e) => { e.preventDefault(); scrollToSection('ventajas'); }}>Ventajas</a>
+        <a href="#caracteristicas" onClick={(e) => { e.preventDefault(); scrollToSection('caracteristicas'); }}>Características</a>
+        <a href="#testimonios" onClick={(e) => { e.preventDefault(); scrollToSection('testimonios'); }}>Testimonios</a>
+        <a href="#contacto" onClick={(e) => { e.preventDefault(); scrollToSection('contacto'); }}>Contacto</a>
       </div>
 
       {/* Botones de acción */}
