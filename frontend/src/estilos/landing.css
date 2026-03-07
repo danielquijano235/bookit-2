@@ -957,6 +957,10 @@
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.5;
+}
+
+
+
 
 /* Reglas más específicas para asegurar comportamiento en móviles pequeños
    Fuerzan layout en columna y eliminan márgenes/anchos que dejan el panel
@@ -986,7 +990,6 @@
   .contacto-info::after {
     display: none !important;
   }
-}
 }
 
 /* Redes sociales */

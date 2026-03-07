@@ -1670,6 +1670,20 @@
   }
 }
 
+/* Prevent the back button from overlapping the centered title
+   by constraining the title's max-width so it stays visually centered
+   and does not extend beneath the absolute-positioned button. */
+.menu-titulo {
+  max-width: calc(100% - 120px);
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .menu-titulo {
+    max-width: calc(100% - 96px);
+  }
+}
+
 .menu-grid-container {
   max-width: 1200px;
   margin: 0 auto;
