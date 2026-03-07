@@ -1570,6 +1570,40 @@
     padding: 32px 24px;
   }
 
+  /* Ajustes responsive adicionales para evitar que el panel de contacto quede
+     demasiado estrecho o centrado lateralmente en móviles pequeños */
+  .contacto-contenido {
+    max-width: 100%;
+    margin: 0 12px;
+    box-sizing: border-box;
+  }
+
+  .contacto-info {
+    width: 100%;
+    max-width: none;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .contacto-tarjetas {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .contacto-tarjeta {
+    align-items: center;
+    gap: 12px;
+  }
+
+  .contacto-tarjeta-icono {
+    width: 40px;
+    height: 40px;
+  }
+
+  .contacto-tarjeta-linea {
+    font-size: 0.82rem;
+  }
+
   .footer-contenido {
     grid-template-columns: 1fr;
   }
