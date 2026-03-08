@@ -60,7 +60,7 @@
   left: 0;
   right: 0;
   z-index: 5;
-  padding: 16px 22px; /* un poco más alto */
+  padding: 16px 34px; /* un poco más alto y con mejor aire lateral */
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -133,6 +133,10 @@
   font-size: 0.95rem;
 }
 
+.demo-nav.right {
+  padding-right: 26px;
+}
+
 /* Hamburger button for mobile */
 .demo-hamburger {
   display: none;
@@ -173,7 +177,10 @@
     align-items: center;
   }
 
-  .demo-nav.abierto a { font-size: 1rem; color: #fff; }
+  .demo-nav.abierto a {
+    font-size: 1rem;
+    color: #fff;
+  }
 }
 
 /* Hamburger open state transform */
@@ -730,12 +737,12 @@
   position: relative;
   z-index: 2;
 }
-.contacto-info {
+.demo-contacto .contacto-info {
   flex: 0 0 50%;
   max-width: 50%;
   min-width: 200px;
 }
-.contacto-info h2 {
+.demo-contacto .contacto-info h2 {
   margin: 0 0 8px 0;
   font-family: "Georgia", serif;
   color: var(--color-azul-oscuro);
@@ -757,17 +764,17 @@
 .demo-contacto.with-image .contacto-horarios {
   color: rgba(255, 255, 255, 0.9);
 }
-.contacto-line a {
+.demo-contacto .contacto-line a {
   color: var(--color-azul-oscuro);
   text-decoration: none;
 }
-.contacto-horarios {
+.demo-contacto .contacto-horarios {
   list-style: none;
   padding: 0;
   margin: 8px 0 0 0;
   color: #334e57;
 }
-.contacto-horarios li {
+.demo-contacto .contacto-horarios li {
   margin-bottom: 6px;
 }
 
@@ -787,7 +794,7 @@
 
 /* make the form column narrower so the left blue/info area is less dominant */
 /* make left and right columns each take ~50% so they appear mitad y mitad */
-.contacto-form {
+.demo-contacto .contacto-form {
   flex: 0 0 50%;
   max-width: 50%;
   background: transparent;
@@ -796,25 +803,25 @@
   box-shadow: none;
   border: none;
 }
-.contacto-form h3 {
+.demo-contacto .contacto-form h3 {
   margin-top: 0;
   color: var(--color-azul-oscuro);
 }
-.contacto-form form {
+.demo-contacto .contacto-form form {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-.contacto-form label {
+.demo-contacto .contacto-form label {
   display: flex;
   flex-direction: column;
   font-size: 0.95rem;
   color: #334e57;
 }
 /* make inputs fill the available width and give placeholders more left spacing */
-.contacto-form input,
-.contacto-form textarea,
-.contacto-form select {
+.demo-contacto .contacto-form input,
+.demo-contacto .contacto-form textarea,
+.demo-contacto .contacto-form select {
   width: 100%;
   padding: 10px 16px;
   border: 1px solid #e6eef0;
@@ -822,17 +829,17 @@
   font-size: 0.95rem;
   background: #fff;
 }
-.form-row {
+.demo-contacto .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
-.contacto-form-actions {
+.demo-contacto .contacto-form-actions {
   display: flex;
   justify-content: flex-end;
   margin-top: 6px;
 }
-.contacto-submit {
+.demo-contacto .contacto-submit {
   background: var(--color-amarillo);
   color: var(--color-azul-oscuro);
   border-radius: 28px;
@@ -842,7 +849,7 @@
   cursor: pointer;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
-.contacto-submit:hover {
+.demo-contacto .contacto-submit:hover {
   background: var(--color-amarillo-hover);
 }
 
@@ -875,13 +882,13 @@
   .demo-contacto-inner {
     flex-direction: column;
   }
-  .contacto-form {
+  .demo-contacto .contacto-form {
     width: 100%;
   }
 }
 
 @media (max-width: 520px) {
-  .form-row {
+  .demo-contacto .form-row {
     grid-template-columns: 1fr;
   }
 }
@@ -1349,16 +1356,17 @@
   margin-right: 0;
   border-radius: 0;
   background: var(--color-azul-oscuro);
-  padding-left: 32px;
-  padding-right: 32px;
-  padding-top: 24px;
-  padding-bottom: 24px;
-  margin: 0 auto 48px auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  margin: 0 auto;
   box-shadow: var(--sombra-mediana);
   border: 1.5px solid var(--color-borde);
+  border-bottom: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 32px;
+  gap: 16px;
 }
 .demo-resenas-col-izq {
   flex: 1 1 260px;
@@ -1372,11 +1380,11 @@
   color: inherit;
 }
 .demo-resenas-col-izq .demo-section-title {
-  font-size: 2.2rem;
+  font-size: 1.45rem;
   font-weight: 800;
   color: var(--color-azul-oscuro);
-  margin-bottom: 18px;
-  line-height: 1.1;
+  margin-bottom: 8px;
+  line-height: 1.15;
 }
 .demo-resenas-col-izq .demo-resenas-img {
   width: 180px;
@@ -1408,24 +1416,24 @@
 .demo-resena-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 10px;
   background: var(--color-fondo-gris);
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow: var(--sombra-pequena);
-  padding: 14px 10px 12px 10px;
+  padding: 10px 10px 8px 10px;
   border: 1.5px solid var(--color-borde);
 }
 .demo-resena-form label {
   font-weight: 600;
   color: var(--color-azul-oscuro);
-  margin-bottom: 6px;
-  font-size: 1.08rem;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
 }
 .demo-resena-form input,
 .demo-resena-form textarea,
 .demo-resena-form select {
-  font-size: 1rem;
-  padding: 10px 12px;
+  font-size: 0.9rem;
+  padding: 7px 10px;
   border-radius: 8px;
   border: 1.5px solid var(--color-azul-claro);
   outline: none;
@@ -1435,20 +1443,20 @@
   margin-bottom: 2px;
 }
 .demo-resena-form textarea {
-  min-height: 60px;
-  max-height: 120px;
+  min-height: 42px;
+  max-height: 80px;
 }
 .demo-resena-form button {
   background: var(--color-amarillo);
   color: var(--color-azul-oscuro);
   font-weight: 700;
   border: none;
-  border-radius: 8px;
-  padding: 12px 0;
-  font-size: 1.08rem;
+  border-radius: 7px;
+  padding: 9px 0;
+  font-size: 0.92rem;
   cursor: pointer;
   transition: background var(--transicion-rapida);
-  margin-top: 8px;
+  margin-top: 4px;
 }
 .demo-resena-form button:hover {
   background: var(--color-amarillo-hover);
@@ -1456,15 +1464,15 @@
 .demo-resena-calificacion {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 4px;
+  margin-bottom: 2px;
 }
 .demo-resena-calificacion label {
   color: var(--color-azul-oscuro);
   font-weight: 600;
 }
 .demo-resena-calificacion .star {
-  font-size: 2rem;
+  font-size: 1.45rem;
   color: var(--color-amarillo);
   cursor: pointer;
   margin-right: 2px;
@@ -1494,18 +1502,18 @@
 .demo-resenas-lista {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  margin-top: 18px;
+  gap: 12px;
+  margin-top: 6px;
 }
 .demo-resena-item {
   background: var(--color-blanco);
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow: 0 2px 12px 0 rgba(30, 58, 95, 0.08);
-  padding: 32px 28px 28px 28px;
+  padding: 14px 12px;
   border: 1.5px solid var(--color-borde);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 .demo-resena-header {
   display: flex;
@@ -1517,16 +1525,15 @@
 .demo-resena-nombre {
   font-weight: 700;
   color: var(--color-azul-oscuro);
-  font-size: 1.08rem;
+  font-size: 0.96rem;
 }
 .demo-resena-fecha {
   color: var(--color-texto-claro);
-  font-size: 0.93rem;
+  font-size: 0.82rem;
 }
 .demo-resena-calificacion {
   color: var(--color-amarillo);
-  font-weight: 700;
-  font-size: 1.08rem;
+  font-size: 0.9rem;
 }
 .demo-resena-titulo {
   font-weight: 600;
@@ -1535,10 +1542,9 @@
 }
 .demo-resena-comentario {
   color: var(--color-texto);
-  font-size: 1.04rem;
+  font-size: 0.9rem;
   margin-top: 2px;
   line-height: 1.5;
-  padding-left: 2px;
 }
 .demo-resena-grupo {
   font-size: 0.95rem;
@@ -1549,39 +1555,44 @@
 .demo-resenas-form-grid {
   display: flex;
   flex-wrap: nowrap;
-  gap: 0;
+  gap: 44px;
   position: relative;
   width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
   min-height: unset;
-  align-items: stretch;
+  align-items: flex-start;
 }
+
 .demo-resenas-col-izq {
   flex: 0 0 50%;
   min-width: 0;
   max-width: 50%;
-  padding: 40px 32px 36px 40px;
+  padding: 12px 0 10px 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   background: none;
   color: inherit;
 }
+
 .demo-resenas-col-der {
   flex: 0 0 50%;
   min-width: 0;
   max-width: 50%;
-  padding: 40px 40px 36px 32px;
+  padding: 12px 0 10px 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   background: none;
 }
+
 .demo-resena-form {
   background: var(--color-fondo-gris);
   color: var(--color-texto);
   box-shadow: var(--sombra-pequena);
   border: 1.5px solid var(--color-borde);
-  padding: 32px 28px;
+  padding: 14px 12px;
 }
 
 .demo-resena-form label,
@@ -1590,8 +1601,8 @@
   color: var(--color-texto);
 }
 .demo-resena-form button {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 .demo-resenas-lista {
-  margin-top: 18px;
+  margin-top: 8px;
 }

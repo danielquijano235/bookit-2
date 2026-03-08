@@ -94,7 +94,7 @@ const SeccionContacto = () => {
       {/* Contenido: 2 columnas */}
       <div className="contacto-contenido">
         {/* ====== COLUMNA IZQUIERDA: Info de contacto ====== */}
-        <div className="contacto-info">
+        <div className="contacto-info contacto-info-principal">
           <div className="contacto-info-header">
             <h3 className="contacto-info-titulo">Información de Contacto</h3>
             <p className="contacto-info-subtitulo">

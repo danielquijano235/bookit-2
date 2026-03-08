@@ -41,6 +41,7 @@ const PiePagina = () => {
   };
 
   return (
+    <>
     <footer className="footer">
       <div className="footer-contenido">
         {/* Columna 1: Logo y descripción */}
@@ -143,6 +144,14 @@ const PiePagina = () => {
         </div>
       </ModalSimple>
     </footer>
+
+    <div className="demo-credit-bar" role="contentinfo" aria-label="Hecho por">
+      <div className="demo-credit-inner">
+        <span className="demo-credit-text">Hecho por</span>
+        <img className="demo-credit-logo" src="/assets/images/logo-bookit.png" alt="BookIt" />
+      </div>
+    </div>
+    </>
   );
 };
 

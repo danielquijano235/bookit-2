@@ -858,9 +858,11 @@
 }
 
 .contacto-contenido {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   gap: 0;
   max-width: 1100px;
+  width: 100%;
   margin: 0 auto;
   border-radius: 20px;
   overflow: hidden;
@@ -869,7 +871,6 @@
 
 /* --- Columna izquierda: Info --- */
 .contacto-info {
-  flex: 0 0 42%;
   background: linear-gradient(160deg, #1e3a5f 0%, #162540 100%);
   padding: 48px 36px;
   display: flex;
@@ -877,6 +878,15 @@
   justify-content: space-between;
   position: relative;
   overflow: hidden;
+  min-width: 0;
+}
+
+.contacto-info-principal {
+  width: 100%;
+  max-width: 100%;
+  justify-self: stretch;
+  align-self: stretch;
+  box-sizing: border-box;
 }
 
 /* Círculos decorativos de fondo */
@@ -926,6 +936,7 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
+  min-width: 0;
 }
 
 .contacto-tarjeta-icono {
@@ -943,6 +954,7 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
+  min-width: 0;
 }
 
 .contacto-tarjeta-titulo {
@@ -957,39 +969,8 @@
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.5;
-}
-
-
-
-
-/* Reglas más específicas para asegurar comportamiento en móviles pequeños
-   Fuerzan layout en columna y eliminan márgenes/anchos que dejan el panel
-   partido a la mitad en algunos builds o caches. Mantener solo en <=480px. */
-@media (max-width: 480px) {
-  .contacto-contenido {
-    flex-direction: column !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-  }
-
-  .contacto-info {
-    width: 100% !important;
-    flex: none !important;
-    padding: 18px 16px !important;
-    border-radius: 12px !important;
-    overflow: visible !important;
-  }
-
-  .contacto-formulario-contenedor {
-    width: 100% !important;
-    padding: 18px 16px !important;
-  }
-
-  .contacto-info::before,
-  .contacto-info::after {
-    display: none !important;
-  }
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Redes sociales */
@@ -1012,6 +993,7 @@
 .contacto-redes-iconos {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .contacto-red {
@@ -1032,9 +1014,9 @@
 
 /* --- Columna derecha: Formulario --- */
 .contacto-formulario-contenedor {
-  flex: 1;
   background: var(--color-blanco);
   padding: 48px 44px;
+  min-width: 0;
 }
 
 .contacto-exito {
@@ -1420,6 +1402,37 @@
   margin: 0 auto;
 }
 
+.demo-credit-bar {
+  height: 27px;
+  background: #0f2333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-credit-inner {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+}
+
+.demo-credit-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  line-height: 27px;
+}
+
+.demo-credit-logo {
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  filter: brightness(0) invert(1);
+}
+
 /* ====== RESPONSIVE - LANDING ====== */
 @media (max-width: 1024px) {
   .hero-titulo {
@@ -1450,12 +1463,17 @@
   }
 
   .contacto-contenido {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .contacto-info {
-    flex: auto;
     padding: 40px 32px;
+  }
+
+  .contacto-info-principal {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .contacto-tarjetas {
@@ -1482,7 +1500,7 @@
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 60px;
+    top: 100%;
     left: 0;
     right: 0;
     background: var(--color-azul-oscuro);
@@ -1559,6 +1577,12 @@
     padding: 60px 20px;
   }
 
+  .contacto-info-principal {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
   .contacto-formulario-contenedor {
     padding: 32px 24px;
   }
@@ -1603,19 +1627,56 @@
     padding: 32px 24px;
   }
 
-  /* Ajustes responsive adicionales para evitar que el panel de contacto quede
-     demasiado estrecho o centrado lateralmente en móviles pequeños */
   .contacto-contenido {
     max-width: 100%;
-    margin: 0 12px;
+    margin: 0;
     box-sizing: border-box;
+    border-radius: 16px;
+    box-shadow: 0 16px 36px rgba(30, 58, 95, 0.12);
   }
 
   .contacto-info {
     width: 100%;
     max-width: none;
-    border-radius: 12px;
     padding: 20px;
+    border-radius: 0;
+  }
+
+  .contacto-info-principal {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  .contacto-info-principal .contacto-info-header,
+  .contacto-info-principal .contacto-tarjetas,
+  .contacto-info-principal .contacto-redes {
+    width: 100%;
+  }
+
+  .contacto-info-principal .contacto-tarjetas {
+    align-items: center;
+  }
+
+  .contacto-info-principal .contacto-tarjeta {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .contacto-info-principal .contacto-tarjeta-texto {
+    align-items: center;
+  }
+
+  .contacto-info-principal .contacto-redes-iconos {
+    justify-content: center;
+  }
+
+  .contacto-formulario-contenedor {
+    padding: 24px 20px;
   }
 
   .contacto-tarjetas {
@@ -1635,6 +1696,15 @@
 
   .contacto-tarjeta-linea {
     font-size: 0.82rem;
+  }
+
+  .contacto-redes {
+    margin-top: 24px;
+  }
+
+  .contacto-info::before,
+  .contacto-info::after {
+    display: none;
   }
 
   .footer-contenido {
