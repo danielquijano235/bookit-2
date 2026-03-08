@@ -72,6 +72,32 @@ try {
 }
 
 if (session_status() === PHP_SESSION_NONE) {
+    $usa_https = (
+        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+        (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
+    );
+
+    $secure_env = getenv('SESSION_COOKIE_SECURE');
+    $session_cookie_secure = $secure_env === false || $secure_env === ''
+        ? $usa_https
+        : filter_var($secure_env, FILTER_VALIDATE_BOOLEAN);
+
+    $session_cookie_samesite = trim((string) (getenv('SESSION_COOKIE_SAMESITE') ?: ''));
+    if ($session_cookie_samesite === '') {
+        $session_cookie_samesite = $session_cookie_secure ? 'None' : 'Lax';
+    }
+
+    if (!$session_cookie_secure && strcasecmp($session_cookie_samesite, 'None') === 0) {
+        $session_cookie_samesite = 'Lax';
+    }
+
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'secure' => $session_cookie_secure,
+        'httponly' => true,
+        'samesite' => $session_cookie_samesite,
+    ]);
     session_start();
 }
 ?>

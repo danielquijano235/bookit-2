@@ -88,22 +88,11 @@ const PaginaDashboard = () => {
       }
       if (resReservas.status === "fulfilled") {
         try {
-          // Filtrar reservas de demo para que NO se muestren en el dashboard.
-          // Criterios: id con prefijo 'demo-' o nombre/cliente que contiene la palabra 'demo' (case-insensitive).
-          const isDemo = (r) => {
-            try {
-              if (!r) return false;
-              if (typeof r.id === 'string' && r.id.startsWith('demo-')) return true;
-              const nombre = (r.cliente_nombre || r.cliente || '');
-              return /demo/i.test(String(nombre));
-            } catch (e) {
-              return false;
-            }
-          };
-          const filtradas = (resReservas.value || []).filter(r => !isDemo(r));
-          setReservas(filtradas);
+          const demoLocales = JSON.parse(localStorage.getItem("demo_reservas") || "[]");
+          const reservasBackend = Array.isArray(resReservas.value) ? resReservas.value : [];
+          setReservas(demoLocales.concat(reservasBackend));
         } catch (err) {
-          console.warn('Error filtrando reservas demo:', err);
+          console.warn("Error mezclando reservas demo del dashboard:", err);
           setReservas(resReservas.value);
         }
       }

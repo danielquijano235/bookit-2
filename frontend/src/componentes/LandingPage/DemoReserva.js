@@ -40,6 +40,32 @@ const obtenerDiasMes = (anio, mes) => {
   return dias;
 };
 
+const formatearFechaISO = (anio, mes, dia) => {
+  if (!dia) return '';
+  return `${anio}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+};
+
+const convertirHoraA24 = (hora) => {
+  if (!hora) return '';
+  const match = String(hora).match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?/i);
+  if (!match) return hora;
+
+  let horas = parseInt(match[1], 10);
+  const minutos = match[2];
+  const segundos = match[3] || '00';
+  const ampm = (match[4] || '').toLowerCase();
+
+  if (ampm === 'pm' && horas < 12) horas += 12;
+  if (ampm === 'am' && horas === 12) horas = 0;
+
+  return `${String(horas).padStart(2, '0')}:${minutos}:${segundos}`;
+};
+
+const guardarReservaDemoLocal = (reserva) => {
+  const existentes = JSON.parse(localStorage.getItem('demo_reservas') || '[]');
+  localStorage.setItem('demo_reservas', JSON.stringify([reserva, ...existentes]));
+};
+
 const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, source = null }) => {
   // ============================================
   // ESTADOS
@@ -159,22 +185,11 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, sourc
       setAnimando(true);
       try {
         const notaEvento = selectedEvent ? `Evento: ${selectedEvent.title}` : '';
+        const fechaISO = formatearFechaISO(anioActual, mesActual, diaSeleccionado);
+        const hora24 = convertirHoraA24(horaSeleccionada);
 
         // Si este modal es solo demo (hero), simulamos la reserva pero NO la almacenamos
         if (demoOnly) {
-          const fechaISO = diaSeleccionado ? `${anioActual}-${String(mesActual+1).padStart(2,'0')}-${String(diaSeleccionado).padStart(2,'0')}` : '';
-          const parseHora = (h) => {
-            if (!h) return '';
-            const m = h.match(/(\d{1,2}):(\d{2})\s*(am|pm)?/i);
-            if (!m) return h;
-            let hh = parseInt(m[1],10);
-            const mm = m[2];
-            const ampm = (m[3] || '').toLowerCase();
-            if (ampm === 'pm' && hh < 12) hh += 12;
-            if (ampm === 'am' && hh === 12) hh = 0;
-            return `${String(hh).padStart(2,'0')}:${mm}:00`;
-          };
-          const hora24 = parseHora(horaSeleccionada);
           const demo = {
             id: `demo-${Date.now()}`,
             cliente_nombre: nombreDemo || 'Cliente Demo',
@@ -219,6 +234,20 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, sourc
             };
 
             const res = await crearReserva(datosReserva);
+          } else {
+            guardarReservaDemoLocal({
+              id: `demo-${Date.now()}`,
+              cliente_nombre: nombreDemo || 'Cliente Demo',
+              cliente_telefono: telefonoDemo || '',
+              cliente_email: emailDemo || '',
+              numero_personas: personas,
+              fecha: fechaISO,
+              hora: hora24,
+              estado: 'pendiente',
+              mesa_numero: null,
+              notas_especiales: notaEvento,
+              origen: source || 'demo-landing'
+            });
           }
         }
 
