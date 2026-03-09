@@ -139,7 +139,7 @@ Antes de instalar, asegúrate de tener:
 
 3. Asegúrate de que **Apache** esté corriendo en XAMPP
 
-### PASO 3: Configurar el Frontend (React)
+
 
 1. Abre una **terminal/CMD** en la carpeta `frontend`:
 

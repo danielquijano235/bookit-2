@@ -20,6 +20,16 @@ const SeccionHero = () => {
   const navigate = useNavigate();
   const [mostrarDemo, setMostrarDemo] = useState(false);
 
+  const irContacto = () => {
+    const el = document.getElementById('contacto');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      // Si no estamos en la landing, navegamos a la raíz con hash
+      window.location.href = '/#contacto';
+    }
+  };
+
   return (
     <section className="hero">
       <div className="hero-contenido">
@@ -45,7 +55,7 @@ const SeccionHero = () => {
 
           {/* Botones de acción */}
           <div className="hero-botones">
-            <Boton variante="primario" onClick={() => navigate('/login')}>Empezar Ahora →</Boton>
+            <Boton variante="primario" onClick={irContacto}>Empezar Ahora →</Boton>
             <Boton className="hero-demo-btn" variante="secundario" onClick={() => setMostrarDemo(true)}>
               <svg
                 width="14"
