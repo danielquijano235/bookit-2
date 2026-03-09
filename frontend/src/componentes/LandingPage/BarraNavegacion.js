@@ -67,6 +67,13 @@ const BarraNavegacion = () => {
         <a href="#caracteristicas" onClick={(e) => { e.preventDefault(); scrollToSection('caracteristicas'); }}>Características</a>
         <a href="#testimonios" onClick={(e) => { e.preventDefault(); scrollToSection('testimonios'); }}>Testimonios</a>
         <a href="#contacto" onClick={(e) => { e.preventDefault(); scrollToSection('contacto'); }}>Contacto</a>
+        {/* Botón de 'Iniciar Sesión' dentro del menú hamburguesa en móviles */}
+        <button
+          className="btn-login-nav btn-login-nav-mobile"
+          onClick={() => { setMenuAbierto(false); navigate('/login'); }}
+        >
+          Iniciar Sesión
+        </button>
       </div>
 
       {/* Botones de acción */}

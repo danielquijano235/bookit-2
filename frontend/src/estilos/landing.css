@@ -1507,6 +1507,30 @@
     padding: 20px 40px;
     gap: 16px;
   }
+  /* Ocultar el botón de 'Iniciar Sesión' que queda fuera del menu en pantallas móviles
+     y mostrar una versión dentro del menú desplegable. */
+  .navbar-botones .btn-login-nav {
+    display: none;
+  }
+
+  .navbar-links .btn-login-nav-mobile {
+    display: none;
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: var(--radio-completo);
+    background-color: var(--color-amarillo);
+    color: var(--color-azul-oscuro);
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .navbar-links.abierto .btn-login-nav-mobile {
+    display: block;
+    margin-top: 6px;
+  }
 
   .hero {
     padding: 90px 20px 40px;
@@ -1538,6 +1562,23 @@
   .hero-botones {
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  /* Asegurar que el botón "Cómo se vería tu restaurante" se adapte en móviles
+     y no desborde el layout. Se muestra full-width y con márgenes consistentes. */
+  .hero .btn--secundario.hero-preview-btn {
+    width: 100%;
+    max-width: 480px;
+    padding: 12px 18px;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 12px 0 18px 0;
+    text-align: center;
+  }
+
+  /* Ajuste para que la columna de texto quede centrada y no provoque overflow */
+  .hero-texto {
+    text-align: center;
   }
 
   .hero-estadisticas {
@@ -1610,7 +1651,10 @@
     padding: 12px 20px;
   }
 
-  .navbar-botones .btn-login-nav {
+  /* En pantallas muy pequeñas ocultamos el botón "Empezar Ahora"
+     para que no se superponga con otros elementos. Se mantiene
+     el botón de "Iniciar Sesión" visible. */
+  .navbar-botones .btn-empezar-nav {
     display: none;
   }
 
