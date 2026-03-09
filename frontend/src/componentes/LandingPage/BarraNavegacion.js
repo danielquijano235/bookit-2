@@ -55,52 +55,63 @@ const BarraNavegacion = () => {
   }, []);
 
   return (
-    <nav className={`navbar ${scrollActivo ? 'navbar-scroll' : ''}`}>
-      {/* Logo de BookIt */}
-      <div className="navbar-logo" onClick={() => navigate('/')}>
-        <img src="/assets/images/logo-bookit.png" alt="BookIt" className="navbar-logo-img" />
-      </div>
+    <>
+      <nav className={`navbar ${scrollActivo ? 'navbar-scroll' : ''}`}>
+        {/* Logo de BookIt */}
+        <div className="navbar-logo" onClick={() => navigate('/')}>
+          <img src="/assets/images/logo-bookit.png" alt="BookIt" className="navbar-logo-img" />
+        </div>
 
-      {/* Links de navegación (solo se ven en escritorio) */}
-      <div className={`navbar-links ${menuAbierto ? 'abierto' : ''}`}>
-        <a href="#ventajas" onClick={(e) => { e.preventDefault(); scrollToSection('ventajas'); }}>Ventajas</a>
-        <a href="#caracteristicas" onClick={(e) => { e.preventDefault(); scrollToSection('caracteristicas'); }}>Características</a>
-        <a href="#testimonios" onClick={(e) => { e.preventDefault(); scrollToSection('testimonios'); }}>Testimonios</a>
-        <a href="#contacto" onClick={(e) => { e.preventDefault(); scrollToSection('contacto'); }}>Contacto</a>
-        {/* Botón de 'Iniciar Sesión' dentro del menú hamburguesa en móviles */}
-        <button
-          className="btn-login-nav btn-login-nav-mobile"
-          onClick={() => { setMenuAbierto(false); navigate('/login'); }}
-        >
-          Iniciar Sesión
-        </button>
-      </div>
+        {/* Links de navegación (solo se ven en escritorio) */}
+        <div className="navbar-links navbar-links-desktop">
+          <a href="#ventajas" onClick={(e) => { e.preventDefault(); scrollToSection('ventajas'); }}>Ventajas</a>
+          <a href="#caracteristicas" onClick={(e) => { e.preventDefault(); scrollToSection('caracteristicas'); }}>Características</a>
+          <a href="#testimonios" onClick={(e) => { e.preventDefault(); scrollToSection('testimonios'); }}>Testimonios</a>
+          <a href="#contacto" onClick={(e) => { e.preventDefault(); scrollToSection('contacto'); }}>Contacto</a>
+        </div>
 
-      {/* Botones de acción */}
-      <div className="navbar-botones">
-        <button 
-          className="btn-login-nav" 
-          onClick={() => navigate('/login')}
-        >
-          Iniciar Sesión
-        </button>
-        <button 
-          className="btn-empezar-nav"
-          onClick={irContacto}
-        >
-          Empezar Ahora
-        </button>
-        {/* Botón hamburguesa para móviles */}
-        <button 
-          className="navbar-hamburguesa"
-          onClick={() => setMenuAbierto(!menuAbierto)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </nav>
+        {/* Botones de acción */}
+        <div className="navbar-botones">
+          <button 
+            className="btn-login-nav" 
+            onClick={() => navigate('/login')}
+          >
+            Iniciar Sesión
+          </button>
+          <button 
+            className="btn-empezar-nav"
+            onClick={irContacto}
+          >
+            Empezar Ahora
+          </button>
+          {/* Botón hamburguesa para móviles */}
+          <button 
+            className="navbar-hamburguesa"
+            onClick={() => setMenuAbierto(!menuAbierto)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </nav>
+
+      {/* Dropdown del menú móvil - FUERA del nav */}
+      {menuAbierto && (
+        <div className="navbar-dropdown-mobile">
+          <a href="#ventajas" onClick={(e) => { e.preventDefault(); scrollToSection('ventajas'); }}>Ventajas</a>
+          <a href="#caracteristicas" onClick={(e) => { e.preventDefault(); scrollToSection('caracteristicas'); }}>Características</a>
+          <a href="#testimonios" onClick={(e) => { e.preventDefault(); scrollToSection('testimonios'); }}>Testimonios</a>
+          <a href="#contacto" onClick={(e) => { e.preventDefault(); scrollToSection('contacto'); }}>Contacto</a>
+          <button 
+            className="btn-login-dropdown"
+            onClick={() => { setMenuAbierto(false); navigate('/login'); }}
+          >
+            Iniciar Sesión
+          </button>
+        </div>
+      )}
+    </>
   );
 };
 

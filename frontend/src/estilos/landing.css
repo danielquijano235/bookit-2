@@ -80,8 +80,8 @@
   right: 0;
   z-index: 1000;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  position: relative;
   padding: 15px 40px;
   background-color: var(--color-azul-oscuro);
   transition: var(--transicion-normal);
@@ -101,6 +101,13 @@
 .navbar-links {
   display: flex;
   gap: 30px;
+  flex: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  height: 100%;
+  align-items: center;
 }
 
 .navbar-links a {
@@ -118,6 +125,8 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  justify-content: flex-end;
+  flex: 1;
 }
 
 .btn-login-nav {
@@ -168,6 +177,20 @@
   height: 2px;
   background-color: white;
   transition: var(--transicion-rapida);
+}
+
+/* ====== DROPDOWN MÓVIL (fuera del navbar) ====== */
+.navbar-dropdown-mobile {
+  display: none;
+}
+
+/* En escritorio ocultamos el dropdown y mostramos los links en el navbar */
+.navbar-links-desktop {
+  display: flex;
+  gap: 30px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ====== SECCIÓN HERO ====== */
@@ -1488,27 +1511,66 @@
 }
 
 @media (max-width: 768px) {
-  .navbar-links {
-    display: none;
+  /* Ocultar los links del navbar en móvil */
+  .navbar-links-desktop {
+    display: none !important;
   }
 
   .navbar-hamburguesa {
     display: flex;
   }
 
-  .navbar-links.abierto {
+  /* Dropdown móvil - FUERA del navbar */
+  .navbar-dropdown-mobile {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: 62px;
+    right: 20px;
+    width: 220px;
     background: var(--color-azul-oscuro);
-    padding: 20px 40px;
-    gap: 16px;
+    padding: 16px 0;
+    gap: 0;
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    z-index: 9999;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
-  /* Ocultar el botón de 'Iniciar Sesión' que queda fuera del menu en pantallas móviles
-     y mostrar una versión dentro del menú desplegable. */
+
+  .navbar-dropdown-mobile a {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 12px 20px;
+    transition: all 0.2s ease;
+    display: block;
+    text-decoration: none;
+  }
+
+  .navbar-dropdown-mobile a:hover {
+    color: var(--color-amarillo);
+    background: rgba(253, 176, 34, 0.1);
+  }
+
+  .btn-login-dropdown {
+    margin: 12px 16px 8px;
+    padding: 10px 16px;
+    border-radius: var(--radio-completo);
+    background-color: var(--color-amarillo);
+    color: var(--color-azul-oscuro);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .btn-login-dropdown:hover {
+    background-color: var(--color-amarillo-hover);
+  }
+
+  /* Ocultar el botón de 'Iniciar Sesión' que queda fuera del menu en pantallas móviles */
   .navbar-botones .btn-login-nav {
     display: none;
   }
