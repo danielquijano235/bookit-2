@@ -81,7 +81,6 @@
   z-index: 1000;
   display: flex;
   align-items: center;
-  position: relative;
   padding: 15px 40px;
   background-color: var(--color-azul-oscuro);
   transition: var(--transicion-normal);
@@ -1516,25 +1515,48 @@
     display: none !important;
   }
 
+  /* Centrar el logo en la barra en móvil (logo en el centro, hamburguesa a la derecha) */
+  .navbar {
+    justify-content: flex-end; /* mantiene la hamburguesa a la derecha */
+  }
+
+  .navbar-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+  }
+
+  /* Asegurar que el contenedor de botones no cubra el logo */
+  .navbar-botones {
+    margin-left: auto;
+    z-index: 1100;
+  }
+
   .navbar-hamburguesa {
     display: flex;
   }
 
-  /* Dropdown móvil - FUERA del navbar */
+  /* Dropdown móvil - ahora anclado al navbar (dentro del <nav>) */
   .navbar-dropdown-mobile {
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 62px;
-    right: 20px;
+    position: absolute;
+    top: 100%;
+    right: 0;
     width: 220px;
     background: var(--color-azul-oscuro);
     padding: 16px 0;
     gap: 0;
     border-radius: 8px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    /* Menos sombra y sin desplazamiento para que quede anclado al header */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
     z-index: 9999;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transform: none;
+    margin: 0;
   }
 
   .navbar-dropdown-mobile a {

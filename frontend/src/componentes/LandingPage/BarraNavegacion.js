@@ -94,23 +94,23 @@ const BarraNavegacion = () => {
             <span></span>
           </button>
         </div>
+        {/* Dropdown del menú móvil - ahora dentro del nav para que quede anclado */}
+        {menuAbierto && (
+          <div className="navbar-dropdown-mobile">
+            <a href="#ventajas" onClick={(e) => { e.preventDefault(); scrollToSection('ventajas'); }}>Ventajas</a>
+            <a href="#caracteristicas" onClick={(e) => { e.preventDefault(); scrollToSection('caracteristicas'); }}>Características</a>
+            <a href="#testimonios" onClick={(e) => { e.preventDefault(); scrollToSection('testimonios'); }}>Testimonios</a>
+            <a href="#contacto" onClick={(e) => { e.preventDefault(); scrollToSection('contacto'); }}>Contacto</a>
+            <button 
+              className="btn-login-dropdown"
+              onClick={() => { setMenuAbierto(false); navigate('/login'); }}
+            >
+              Iniciar Sesión
+            </button>
+          </div>
+        )}
       </nav>
-
-      {/* Dropdown del menú móvil - FUERA del nav */}
-      {menuAbierto && (
-        <div className="navbar-dropdown-mobile">
-          <a href="#ventajas" onClick={(e) => { e.preventDefault(); scrollToSection('ventajas'); }}>Ventajas</a>
-          <a href="#caracteristicas" onClick={(e) => { e.preventDefault(); scrollToSection('caracteristicas'); }}>Características</a>
-          <a href="#testimonios" onClick={(e) => { e.preventDefault(); scrollToSection('testimonios'); }}>Testimonios</a>
-          <a href="#contacto" onClick={(e) => { e.preventDefault(); scrollToSection('contacto'); }}>Contacto</a>
-          <button 
-            className="btn-login-dropdown"
-            onClick={() => { setMenuAbierto(false); navigate('/login'); }}
-          >
-            Iniciar Sesión
-          </button>
-        </div>
-      )}
+      
     </>
   );
 };

@@ -251,9 +251,12 @@
 /* Live search dropdown under the top bar */
 .search-dropdown {
   position: absolute;
-  top: calc(100% + 10px);
+  /* Anchora el dropdown justo debajo del input para que no se "despegue" del header */
+  top: 100%;
   left: 0;
   width: 100%;
+  /* pequeño margen para separación visual sin crear un hueco grande */
+  margin-top: 6px;
   max-height: 320px;
   overflow: auto;
   background: var(--color-blanco);
