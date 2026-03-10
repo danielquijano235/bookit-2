@@ -2371,6 +2371,88 @@
   font-size: 0.9rem;
 }
 
+/* ====== RESPONSIVE VISTA MESAS ====== */
+@media (max-width: 900px) {
+  .modulo-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .mesas-resumen {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .mesa-resumen-tarjeta {
+    padding: 14px 12px;
+    gap: 10px;
+  }
+
+  .mesa-resumen-icono {
+    width: 38px;
+    height: 38px;
+  }
+
+  .mesa-resumen-numero {
+    font-size: 1.4rem;
+  }
+
+  .mesa-resumen-texto {
+    font-size: 0.75rem;
+  }
+
+  .mesas-barra-busqueda {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mesas-busqueda-input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mesas-filtros-rapidos {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .mesas-resumen {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .mesa-resumen-tarjeta {
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 8px;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .mesa-resumen-icono {
+    width: 34px;
+    height: 34px;
+  }
+
+  .mesa-resumen-numero {
+    font-size: 1.3rem;
+  }
+
+  .mesa-resumen-texto {
+    font-size: 0.72rem;
+  }
+
+  .mesas-filtro-btn {
+    padding: 7px 10px;
+    font-size: 0.78rem;
+  }
+
+  .mesas-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ====== MODALES MESAS ====== */
 .mesas-modal {
   max-width: 480px;
