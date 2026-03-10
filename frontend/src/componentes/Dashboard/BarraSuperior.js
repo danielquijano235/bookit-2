@@ -106,6 +106,14 @@ const BarraSuperior = ({ onNuevaReserva, onBuscar, onSeleccionarResultado, clien
     return () => document.removeEventListener('mousedown', manejarClickFuera);
   }, [panelAbierto, dropdownOpen]);
 
+  // Cerrar panel de notificaciones al hacer scroll
+  useEffect(() => {
+    if (!panelAbierto) return;
+    const manejarScroll = () => setPanelAbierto(false);
+    window.addEventListener('scroll', manejarScroll, { passive: true });
+    return () => window.removeEventListener('scroll', manejarScroll);
+  }, [panelAbierto]);
+
   // Abrir/cerrar dropdown según query
   useEffect(() => {
     setDropdownOpen(Boolean(query && query.trim().length > 0));
