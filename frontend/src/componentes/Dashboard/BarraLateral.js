@@ -12,7 +12,7 @@
  *   - onCerrarSesion: Función para cerrar la sesión
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Boton from '../Compartidos/Boton';
 
@@ -32,6 +32,28 @@ const menuSecundario = [
 
 const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCambiarSeccion }) => {
   const navigate = useNavigate();
+  const [menuAbierto, setMenuAbierto] = useState(false);
+
+  // Cerrar menú al cambiar de sección
+  const cambiarSeccion = (clave) => {
+    if (onCambiarSeccion) onCambiarSeccion(clave);
+    setMenuAbierto(false);
+  };
+
+  // Cerrar menú al redimensionar a pantalla grande
+  useEffect(() => {
+    const manejarResize = () => {
+      if (window.innerWidth > 900) setMenuAbierto(false);
+    };
+    window.addEventListener('resize', manejarResize);
+    return () => window.removeEventListener('resize', manejarResize);
+  }, []);
+
+  // NOTA: evitamos manipular `document.body.style.overflow` directamente
+  // porque puede dejar el body sin scroll si algo falla. El overlay
+  // ya impide interacción cuando está visible y el sidebar se renderiza
+  // solo mientras `menuAbierto` es true, por lo que no necesitamos bloquear
+  // el scroll del body aquí.
 
   const obtenerIniciales = (nombre) => {
     if (!nombre) return 'U';
@@ -50,7 +72,7 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
         key={indice}
         variante={activo ? 'primario' : 'ghost'}
         className={`sidebar-item ${activo ? 'activo' : ''}`}
-        onClick={() => onCambiarSeccion && onCambiarSeccion(item.clave)}
+        onClick={() => cambiarSeccion(item.clave)}
       >
         <span className="sidebar-item-icono">
           <img src={activo ? item.iconoActivo : item.icono} alt={item.nombre} width="18" height="18" />
@@ -61,7 +83,24 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
   };
 
   return (
-    <aside className="sidebar">
+    <>
+      {/* Botón hamburguesa - solo visible en móvil */}
+      <button
+        className={`hamburguesa-btn ${menuAbierto ? 'activo' : ''}`}
+        onClick={() => setMenuAbierto(!menuAbierto)}
+        aria-label="Abrir menú"
+      >
+        <span className="hamburguesa-linea"></span>
+        <span className="hamburguesa-linea"></span>
+        <span className="hamburguesa-linea"></span>
+      </button>
+
+      {/* Overlay oscuro al abrir menú */}
+      {menuAbierto && (
+        <div className="sidebar-overlay" onClick={() => setMenuAbierto(false)} />
+      )}
+
+      <aside className={`sidebar ${menuAbierto ? 'abierto' : ''}`}>
       {/* Logo (no navegar desde el dashboard a la landing) */}
       <div className="sidebar-logo" style={{ cursor: 'default' }} title="BookIt">
         <img src="/assets/images/logo-bookit.png" alt="BookIt" className="sidebar-logo-img" />
@@ -92,11 +131,12 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
       </div>
 
       {/* Botón para cerrar sesión */}
-      <Boton variante="ghost" className="btn btn--ghost btn-cerrar-sesion" onClick={onCerrarSesion}>
+      <Boton variante="ghost" className="btn btn--ghost btn-cerrar-sesion" onClick={() => { setMenuAbierto(false); onCerrarSesion(); }}>
         <img src="https://img.icons8.com/ios-filled/16/FFFFFF/exit.png" alt="salir" width="16" height="16" style={{verticalAlign: 'middle', marginRight: '8px', opacity: 0.7}} />
         Cerrar Sesión
       </Boton>
     </aside>
+    </>
   );
 };
 

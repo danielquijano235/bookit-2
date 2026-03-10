@@ -41,4 +41,8 @@
 
   /* ====== TIPOGRAFÍA ====== */
   --fuente-principal: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ====== ALIASES NECESARIOS (compatibilidad interna) ====== */
+  --color-principal: #FDB022;          /* alias de --color-amarillo */
+  --color-texto-secundario: #718096;   /* alias de --color-texto-claro */
 }

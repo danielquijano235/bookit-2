@@ -1,10 +1,140 @@
-/* ====== RESPONSIVE SIDEBAR ====== */
+/* ====== BOTÓN HAMBURGUESA ====== */
+.hamburguesa-btn {
+  display: none;
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 1100;
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1a2e4a, #162540);
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+}
+
+.hamburguesa-btn:hover {
+  background: linear-gradient(135deg, #243b5c, #1d3352);
+}
+
+.hamburguesa-linea {
+  display: block;
+  width: 22px;
+  height: 2.5px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.hamburguesa-btn.activo .hamburguesa-linea:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburguesa-btn.activo .hamburguesa-linea:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburguesa-btn.activo .hamburguesa-linea:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Overlay para cerrar el menú */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  backdrop-filter: blur(2px);
+}
+
+/* ====== RESPONSIVE SIDEBAR Y DASHBOARD ====== */
 @media (max-width: 900px) {
-  .sidebar {
-    display: none;
+  .hamburguesa-btn {
+    display: flex;
   }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1060;
+  }
+
+  .sidebar.abierto {
+    transform: translateX(0);
+  }
+
   .dashboard-contenido {
     margin-left: 0;
+  }
+
+  /* Barra superior: dejar espacio para el botón hamburguesa */
+  .barra-superior {
+    padding: 14px 16px 14px 70px;
+    gap: 10px;
+  }
+
+  .barra-busqueda {
+    width: 100%;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .barra-busqueda input {
+    font-size: 0.85rem;
+    padding: 9px 14px 9px 38px;
+  }
+
+  /* Ocultar texto del botón nueva reserva, solo icono */
+  .btn-nueva-reserva {
+    padding: 10px 14px;
+  }
+  .nueva-reserva-texto {
+    display: none;
+  }
+
+  /* Panel notifications responsive */
+  .notificaciones-panel {
+    position: fixed;
+    top: 70px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-height: 70vh;
+  }
+
+  /* Cuerpo dashboard */
+  .dashboard-cuerpo {
+    padding: 20px 14px;
+  }
+
+  .dashboard-titulo {
+    font-size: 1.3rem;
+  }
+
+  /* Métricas en 2 columnas en tablet */
+  .metricas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -23,6 +153,8 @@
   display: flex;
   min-height: 100vh;
   background-color: var(--color-fondo);
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* ====== BARRA LATERAL (SIDEBAR) ====== */
@@ -203,6 +335,8 @@
   margin-left: 270px;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 /* ====== BARRA SUPERIOR ====== */
@@ -216,11 +350,15 @@
   position: sticky;
   top: 0;
   z-index: 50;
+  gap: 12px;
+  max-width: 100%;
 }
 
 .barra-busqueda {
   position: relative;
   width: 350px;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .barra-busqueda-icono {
@@ -704,6 +842,8 @@
 .dashboard-cuerpo {
   padding: 28px 32px;
   flex: 1;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .dashboard-titulo {
@@ -725,6 +865,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 28px;
+  max-width: 100%;
 }
 
 .metrica-tarjeta {
@@ -783,6 +924,8 @@
   display: grid;
   grid-template-columns: 1.4fr 1fr;
   gap: 24px;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* ====== GRÁFICA DE RESERVAS ====== */
@@ -1187,7 +1330,7 @@
   border-radius: var(--radio-grande);
   box-shadow: var(--sombra-pequena);
   border: 1px solid var(--color-borde);
-  overflow: visible;
+  overflow-x: auto;
 }
 
 .reservas-tabla {
@@ -2578,9 +2721,102 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard-cuerpo {
+    padding: 16px 12px;
+  }
+
+  .metricas-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .modal {
+    margin: 12px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .barra-superior {
+    padding: 12px 10px 12px 64px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .barra-busqueda input {
+    font-size: 0.82rem;
+    padding: 8px 12px 8px 36px;
+  }
+
+  .barra-acciones {
+    gap: 8px;
+  }
+
+  .btn-nueva-reserva {
+    padding: 8px 12px;
+  }
+
+  .dashboard-cuerpo {
+    padding: 14px 10px;
+  }
+
+  .dashboard-titulo {
+    font-size: 1.15rem;
+  }
+
+  .dashboard-fecha {
+    font-size: 0.82rem;
+    margin-bottom: 18px;
+  }
+
+  .tarjeta-metrica {
+    padding: 16px;
+  }
+
+  /* Search dropdown full width en móvil */
+  .search-dropdown {
+    position: fixed;
+    top: 65px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-height: 60vh;
+  }
+}
+
+/* Asegurar que en pantallas pequeñas el contenido no reserve espacio para el sidebar */
+@media (max-width: 900px) {
+  .dashboard-contenido {
+    margin-left: 0;
+  }
+}
+
+/* Hacer hamburguesa también funcional en tablets y asegurar interacción */
+@media (max-width: 1024px) {
+  .hamburguesa-btn {
+    display: flex;
+    z-index: 3000;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    z-index: 2800;
+    pointer-events: auto;
+  }
+
   .sidebar {
     transform: translateX(-100%);
-    transition: var(--transicion-normal);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2900;
+    pointer-events: auto;
+    /* Mostrar como panel lateral parcial para no ocultar todo el dashboard */
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: min(84%, 340px) !important;
+    max-width: 360px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
   }
 
   .sidebar.abierto {
@@ -2588,24 +2824,11 @@
   }
 
   .dashboard-contenido {
-    margin-left: 0;
+    margin-left: 0 !important;
   }
 
-  .barra-busqueda {
-    width: 200px;
-  }
-
-  .dashboard-cuerpo {
-    padding: 20px 16px;
-  }
-
-  .metricas-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .modal {
-    margin: 16px;
-    padding: 24px;
+  .barra-superior {
+    padding-left: 76px;
   }
 }
 
@@ -2616,17 +2839,19 @@
 
 .menu-header {
   background: white;
-  padding: 32px;
+  padding: 24px;
   border-radius: 12px;
   margin-bottom: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .menu-titulo h1 {
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--color-texto);
   margin: 0 0 8px 0;
@@ -2640,7 +2865,8 @@
 
 .menu-estadisticas {
   display: flex;
-  gap: 24px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .estadistica-item {
@@ -2667,19 +2893,24 @@
 
 .menu-toolbar {
   background: white;
-  padding: 24px;
+  padding: 20px 24px;
   border-radius: 12px;
   margin-bottom: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
 }
 
 .toolbar-izquierda {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
 }
 
 .busqueda-container {
@@ -2691,8 +2922,18 @@
   border: 1px solid var(--color-borde);
   border-radius: 8px;
   font-size: 0.9rem;
-  width: 250px;
+  width: 100%;
+  max-width: 260px;
+  min-width: 0;
+  box-sizing: border-box;
   background: white;
+}
+
+.busqueda-container {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  max-width: 300px;
 }
 
 .busqueda-input:focus {
@@ -2748,8 +2989,8 @@
 
 .categorias-filtro {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
   margin-bottom: 24px;
 }
 
@@ -3228,34 +3469,89 @@ body.has-modal-open .platos-grid {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .menu-header {
     flex-direction: column;
-    gap: 24px;
-    text-align: center;
+    align-items: flex-start;
+    padding: 18px;
+  }
+
+  .menu-titulo h1 {
+    font-size: 1.3rem;
   }
 
   .menu-estadisticas {
-    justify-content: center;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .estadistica-item {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px;
   }
 
   .menu-toolbar {
     flex-direction: column;
-    gap: 16px;
     align-items: stretch;
+    padding: 16px;
   }
 
   .toolbar-izquierda {
+    width: 100%;
+  }
+
+  .busqueda-container {
+    max-width: 100%;
+    flex: 1;
+  }
+
+  .busqueda-input {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .categorias-filtro {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 8px;
+  }
+
+  .categoria-btn {
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .menu-estadisticas {
+    justify-content: flex-start;
+  }
+
+  .menu-toolbar {
     flex-direction: column;
     gap: 12px;
     align-items: stretch;
   }
 
+  .toolbar-izquierda {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
   .busqueda-input {
     width: 100%;
+    max-width: 100%;
   }
 
   .categorias-filtro {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     justify-content: center;
   }
 
@@ -3375,7 +3671,21 @@ body.has-modal-open .platos-grid {
 
 @media (max-width: 768px) {
   .vista-analisis {
+    padding: 12px;
+  }
+
+  .analisis-grid {
+    gap: 14px;
+    margin: 20px 0;
+  }
+
+  .grafico-container {
     padding: 16px;
+  }
+
+  .grafico-container h3 {
+    font-size: 1rem;
+    margin-bottom: 14px;
   }
 
   .tendencias-grid {
@@ -3383,6 +3693,15 @@ body.has-modal-open .platos-grid {
   }
 
   .tendencia-card {
+    padding: 14px;
+  }
+
+  .tendencias-section {
     padding: 16px;
+    margin-top: 20px;
+  }
+
+  .tendencias-section h3 {
+    font-size: 1.1rem;
   }
 }

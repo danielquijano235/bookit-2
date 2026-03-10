@@ -330,7 +330,8 @@ const BarraSuperior = ({ onNuevaReserva, onBuscar, onSeleccionarResultado, clien
 
         {/* Botón para crear nueva reserva */}
         <Boton variante="primario" className="btn-nueva-reserva" onClick={onNuevaReserva}>
-          + Nueva Reserva
+          <span className="nueva-reserva-icono">+</span>
+          <span className="nueva-reserva-texto">Nueva Reserva</span>
         </Boton>
       </div>
     </header>
