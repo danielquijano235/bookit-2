@@ -56,7 +56,7 @@ $servidor = getenv('DB_HOST') ?: '127.0.0.1';
 $puerto = getenv('DB_PORT') ?: '5432';
 $base_datos = getenv('DB_NAME') ?: 'bookit';
 $usuario = getenv('DB_USER') ?: 'postgres';
-$contrasena = getenv('DB_PASSWORD') ?: '';
+$contrasena = getenv('DB_PASSWORD') ?: '3014751';
 
 $dsn = "pgsql:host={$servidor};port={$puerto};dbname={$base_datos}";
 
