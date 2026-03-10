@@ -56,7 +56,8 @@ const GraficaHoras = ({ datos }) => {
         data: valores,
         backgroundColor: '#4A90E2',
         borderRadius: 6,
-        barThickness: 18,
+        barThickness: 'flex',
+        maxBarThickness: 22,
       },
     ],
   };

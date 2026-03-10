@@ -938,6 +938,7 @@
   gap: 24px;
   max-width: 100%;
   min-width: 0;
+  overflow: hidden;
 }
 
 /* ====== GRÁFICA DE RESERVAS ====== */
@@ -973,6 +974,8 @@
 .grafica-contenedor {
   height: 280px;
   position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* ====== LISTA DE PRÓXIMAS RESERVAS ====== */
@@ -3696,16 +3699,44 @@ body.has-modal-open .platos-grid {
 .analisis-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 32px;
   margin: 32px 0;
 }
 
 .grafico-container {
   background: white;
   border-radius: 12px;
-  padding: 24px;
+  padding: 28px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #e5e7eb;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Las tarjetas de gráfica ya llevan su propio fondo/borde;
+   dentro de .grafico-container eliminar el estilo duplicado */
+.grafico-container .grafica-tarjeta {
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+.grafico-container .estado-reservas-card,
+.grafico-container .top-clientes-card {
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.grafico-full {
+  grid-column: 1 / -1;
+}
+
+/* Métricas en 5 columnas dentro de análisis */
+.vista-analisis .metricas-grid {
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .grafico-container h3 {
@@ -3766,15 +3797,29 @@ body.has-modal-open .platos-grid {
 }
 
 /* Responsive para análisis */
+@media (max-width: 1200px) {
+  .vista-analisis .metricas-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 1024px) {
   .analisis-grid {
     grid-template-columns: 1fr;
+  }
+
+  .vista-analisis .metricas-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .vista-analisis {
     padding: 12px;
+  }
+
+  .vista-analisis .metricas-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .analisis-grid {

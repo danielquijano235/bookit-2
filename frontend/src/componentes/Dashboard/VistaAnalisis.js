@@ -384,7 +384,7 @@ const VistaAnalisis = ({ metricas, datosGrafica }) => {
           <EstadoReservas reservas={todasReservas} />
         </div>
 
-        <div className="grafico-container">
+        <div className="grafico-container grafico-full">
           <UltimasReservas reservas={todasReservas} />
         </div>
 

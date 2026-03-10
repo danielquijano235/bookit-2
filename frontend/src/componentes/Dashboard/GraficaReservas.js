@@ -85,7 +85,8 @@ const GraficaReservas = ({ datos }) => {
           bottomRight: 0,
         },
         borderSkipped: false,
-        barThickness: 40,
+        barThickness: 'flex',
+        maxBarThickness: 40,
         hoverBackgroundColor: '#E9A020',  // Color al pasar el mouse
       },
     ],

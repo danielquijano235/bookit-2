@@ -8,6 +8,14 @@
  */
 import React from 'react';
 
+const iconos = {
+  confirmada: 'https://img.icons8.com/ios-filled/20/FFFFFF/checkmark--v1.png',
+  pendiente:  'https://img.icons8.com/ios-filled/20/FFFFFF/clock--v1.png',
+  cancelada:  'https://img.icons8.com/ios-filled/20/FFFFFF/cancel.png',
+  completada: 'https://img.icons8.com/ios-filled/20/FFFFFF/double-tick.png',
+  otra:       'https://img.icons8.com/ios-filled/20/FFFFFF/info.png',
+};
+
 const colores = {
   confirmada: '#10B981',
   pendiente: '#FDB022',
@@ -45,8 +53,8 @@ const EstadoReservas = ({ reservas }) => {
               <div style={{ fontSize: '0.9rem', color: '#374151' }}>{e.label}</div>
               <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{conteo[e.key] || 0}</div>
             </div>
-            <div style={{ width: 40, height: 40, borderRadius: 8, background: colores[e.key] || colores.otra, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-              {String(conteo[e.key] || 0)}
+            <div style={{ width: 40, height: 40, borderRadius: 8, background: colores[e.key] || colores.otra, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <img src={iconos[e.key] || iconos.otra} alt={e.label} style={{ width: 20, height: 20 }} />
             </div>
           </div>
         ))}
