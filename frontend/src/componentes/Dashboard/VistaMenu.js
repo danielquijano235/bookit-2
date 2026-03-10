@@ -361,15 +361,15 @@ const VistaMenu = () => {
 
       {/* Filtros por categoría */}
       <div className="categorias-filtro">
-          {categorias.map(categoria => (
-          <Boton
+        {categorias.map(categoria => (
+          <button
             key={categoria.id}
-            variante={categoriaActiva === categoria.id ? 'primario' : 'secundario'}
+            type="button"
             className={`categoria-btn ${categoriaActiva === categoria.id ? 'activo' : ''}`}
             onClick={() => { setCategoriaActiva(categoria.id); abrirCategoriaModal(categoria); }}
           >
             <span className="categoria-nombre">{categoria.title}</span>
-          </Boton>
+          </button>
         ))}
       </div>
 
