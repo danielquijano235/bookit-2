@@ -2876,25 +2876,29 @@
 }
 
 .menu-estadisticas {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 
 .estadistica-item {
   text-align: center;
-  padding: 16px;
+  padding: 14px 8px;
   background: var(--color-fondo);
   border-radius: 8px;
-  min-width: 100px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .estadistica-valor {
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-principal);
   margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .estadistica-etiqueta {
@@ -3496,13 +3500,16 @@ body.has-modal-open .platos-grid {
 
   .menu-estadisticas {
     width: 100%;
-    justify-content: flex-start;
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .estadistica-item {
-    flex: 1;
-    min-width: 80px;
-    padding: 10px;
+    min-width: 0;
+    padding: 10px 6px;
+  }
+
+  .estadistica-valor {
+    font-size: 0.95rem;
   }
 
   .menu-toolbar {
