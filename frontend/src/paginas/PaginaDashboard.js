@@ -88,7 +88,12 @@ const PaginaDashboard = () => {
       }
       if (resReservas.status === "fulfilled") {
         try {
-          const demoLocales = JSON.parse(localStorage.getItem("demo_reservas") || "[]");
+          const demoLocales = JSON.parse(localStorage.getItem("demo_reservas") || "[]")
+            .map((r) => ({
+              ...r,
+              cliente: r.cliente || r.cliente_nombre || '',
+              personas: r.personas ?? r.numero_personas ?? 0,
+            }));
           const reservasBackend = Array.isArray(resReservas.value) ? resReservas.value : [];
           setReservas(demoLocales.concat(reservasBackend));
         } catch (err) {

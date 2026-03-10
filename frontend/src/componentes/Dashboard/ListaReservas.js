@@ -68,14 +68,7 @@ const ListaReservas = ({ reservas, onVerTodas = () => {} }) => {
                 <div className="reserva-nombre">{reserva.cliente}</div>
                 <div className="reserva-detalle">
                   <span>{reserva.personas} personas</span>
-                  <span>
-                    <img
-                      src="https://img.icons8.com/ios-filled/18/1a1a2e/clock--v1.png"
-                      alt="hora"
-                      style={{ verticalAlign: "middle", marginRight: "4px" }}
-                    />
-                    {formatearHora(reserva.hora)}
-                  </span>
+                  <span>{formatearHora(reserva.hora)}</span>
                 </div>
               </div>
 

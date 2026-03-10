@@ -243,6 +243,18 @@ const VistaReservas = () => {
   const ejecutarEliminar = async () => {
     if (!confirmPayload) return;
     const { id, nombre } = confirmPayload;
+
+    // Si es una reserva demo (guardada en localStorage), eliminarla de ahí
+    if (String(id).startsWith('demo-')) {
+      const demo = JSON.parse(localStorage.getItem("demo_reservas") || "[]");
+      localStorage.setItem("demo_reservas", JSON.stringify(demo.filter((r) => r.id !== id)));
+      setReservas((prev) => prev.filter((r) => r.id !== id));
+      agregarNotificacion("reserva", "Reserva eliminada", `La reserva de ${nombre} ha sido eliminada del sistema`);
+      setConfirmOpen(false);
+      setConfirmPayload(null);
+      return;
+    }
+
     try {
       await eliminarReserva(id);
       agregarNotificacion(
