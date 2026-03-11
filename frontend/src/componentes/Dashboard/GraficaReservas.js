@@ -26,12 +26,14 @@ import {
   Legend,
 } from 'chart.js';
 
-// Registrar los componentes que necesita Chart.js
+// Registramos los componentes de Chart.js necesarios para la gráfica de barras
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const GraficaReservas = ({ datos }) => {
+  // Estado para guardar los datos internos de la gráfica
   const [datosInternos, setDatosInternos] = useState(datos);
 
+  // Si no recibimos datos por props, llamamos a la API para obtenerlos
   useEffect(() => {
     let mounted = true;
     const cargar = async () => {
@@ -48,14 +50,15 @@ const GraficaReservas = ({ datos }) => {
     return () => { mounted = false; };
   }, [datos]);
 
-  // Mantener datosInternos sincronizados cuando cambie la prop `datos`
+  // Si cambian los datos recibidos por props, actualizamos el estado
   useEffect(() => {
     if (datos && Object.keys(datos).length) setDatosInternos(datos);
   }, [datos]);
 
+  // Si no hay datos, usamos un mock de días de la semana
   const fuente = datosInternos || datos || { Lun: 0, Mar: 0, Mié: 0, Jue: 0, Vie: 0, Sáb: 0, Dom: 0 };
 
-  // Extraer los nombres de los días y sus valores
+  // Extraemos los nombres de los días y sus valores
   const etiquetas = Object.keys(fuente);    // ["Lun", "Mar", ...]
   const valores = Object.values(fuente);     // [45, 52, ...]
 

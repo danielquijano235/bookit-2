@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Cerrar Sesion
- * Archivo: autenticacion/cerrar-sesion.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 

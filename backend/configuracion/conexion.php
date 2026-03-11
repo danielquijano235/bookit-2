@@ -1,22 +1,13 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Configuracion de Conexion a Base de Datos
- * Archivo: configuracion/conexion.php
- * ============================================
- *
- * Conexion central del backend usando PDO para PostgreSQL.
- * Lee credenciales desde variables de entorno para despliegues en Render.
- */
+
 
 // Indicar al navegador que este endpoint siempre devuelve JSON
 header("Content-Type: application/json; charset=UTF-8");
 
-// ============================================
 // CONFIGURACION CORS
 // CORS controla qué dominios pueden hacer peticiones a este backend.
 // Sin esto, el navegador bloquea las peticiones desde el frontend.
-// ============================================
+
 
 // Leer la variable de entorno CORS_ORIGIN; en local será http://localhost:3000
 // En producción (Render) se configura con el dominio real del frontend

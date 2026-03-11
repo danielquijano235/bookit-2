@@ -8,6 +8,7 @@
  */
 import React from 'react';
 
+// Convierte fecha y hora a formato legible para mostrar en la lista
 const formatearFechaHora = (fecha, hora) => {
   try {
     const fechaIso = (fecha && fecha.indexOf('T') === -1 && hora) ? `${fecha}T${hora}` : (fecha || '');
@@ -19,15 +20,17 @@ const formatearFechaHora = (fecha, hora) => {
 };
 
 const UltimasReservas = ({ reservas }) => {
+  // Si no hay reservas, usamos lista vacía
   const lista = reservas && reservas.length ? reservas : [];
 
-  // Ordenar por fecha y hora descendente
+  // Ordena las reservas por fecha y hora descendente, muestra solo las 5 más recientes
   const ordenadas = [...lista].sort((a, b) => {
     const fa = (a.fecha || '') + ' ' + (a.hora || '');
     const fb = (b.fecha || '') + ' ' + (b.hora || '');
     return fb.localeCompare(fa);
   }).slice(0, 5);
 
+  // Renderiza la tarjeta con la lista de últimas reservas
   return (
     <div className="ultimas-reservas-card">
       <div className="grafica-header">
@@ -41,10 +44,12 @@ const UltimasReservas = ({ reservas }) => {
         {ordenadas.map((r) => (
           <li key={r.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #f1f5f9' }}>
             <div>
+              {/* Nombre del cliente y fecha/hora de la reserva */}
               <div style={{ fontWeight: 600 }}>{r.cliente_nombre || r.cliente || 'Cliente'}</div>
               <div style={{ fontSize: '0.85rem', color: '#718096' }}>{formatearFechaHora(r.fecha, r.hora)}</div>
             </div>
             <div style={{ textAlign: 'right' }}>
+              {/* Número de personas y estado de la reserva */}
               <div style={{ fontWeight: 700 }}>{r.numero_personas || ''} personas</div>
               <div style={{ fontSize: '0.85rem', color: '#718096' }}>{(r.estado || '').charAt(0).toUpperCase() + (r.estado || '').slice(1)}</div>
             </div>

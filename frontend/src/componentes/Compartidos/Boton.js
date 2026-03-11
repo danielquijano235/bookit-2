@@ -1,20 +1,6 @@
-/**
- * ============================================
- * BOOKIT - Componente Boton Reutilizable
- * Archivo: componentes/Compartidos/Boton.js
- * ============================================
- * 
- * Props:
- *   - children: Contenido del botón (texto, iconos)
- *   - variante: 'primario' (amarillo), 'secundario' (outline), 'peligro' (rojo)
- *   - onClick: Función al hacer clic
- *   - disabled: Deshabilitar el botón
- *   - tipo: Tipo HTML del botón ('button', 'submit')
- */
-
 import React from 'react';
 
-// Prefer CSS-driven classes but keep inline fallbacks for safety
+// Preferimos clases CSS, pero mantenemos estilos en línea como respaldo
 const estilosVariante = {
   primario: {
     backgroundColor: '#FDB022',
@@ -37,8 +23,8 @@ const estilosVariante = {
 };
 
 const Boton = React.forwardRef(({ children, variante = 'primario', onClick, disabled = false, tipo = 'button', className = '' }, ref) => {
-  // For the 'secundario' variant we prefer CSS classes to control
-  // colors/borders so hover effects in landing.css can take effect.
+  // Para el variante 'secundario' preferimos clases CSS para controlar
+  // colores/bordes y permitir efectos hover definidos en landing.css.
   const isAccion = String(className).includes('accion-btn');
   const estilos = {
     ...(variante === 'secundario' ? {} : estilosVariante[variante] || {}),
@@ -57,13 +43,13 @@ const Boton = React.forwardRef(({ children, variante = 'primario', onClick, disa
     boxSizing: isAccion ? 'border-box' : undefined,
   };
 
-  // prefer CSS class .btn when available for full design control
+  // Preferimos la clase CSS .btn cuando está disponible para tener control total del diseño
   const clase = `btn btn--${variante} ${className}`.trim();
 
-  // Determine if there is any children to render
+  // Determina si hay elementos hijos para renderizar
   const hasChildren = React.Children.count(children) > 0;
 
-  // Default icon for 'peligro' when no children provided: use Icons8 image (white)
+  // Ícono por defecto para 'peligro' si no hay hijos: usa imagen de Icons8 (blanco)
   const defaultPeligroIcon = (
     <img
       src="https://img.icons8.com/ios-filled/16/ffffff/trash--v1.png"

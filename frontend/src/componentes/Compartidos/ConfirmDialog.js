@@ -20,6 +20,7 @@ const ConfirmDialog = ({
   const dialogRef = useRef(null);
   const confirmRef = useRef(null);
 
+  // Maneja el enfoque y accesibilidad del diálogo cuando está abierto
   useEffect(() => {
     if (!abierto) return;
 
@@ -30,13 +31,14 @@ const ConfirmDialog = ({
     );
     if (focusable.length) focusable[0].focus();
 
+    // Permite cerrar el diálogo con Escape y mantiene el enfoque dentro del modal
     const handleKey = (e) => {
       if (e.key === "Escape") {
         e.preventDefault();
         onCancel && onCancel();
       }
       if (e.key === "Tab") {
-        // trap focus inside dialog
+        // Mantiene el enfoque dentro del diálogo
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
         if (e.shiftKey) {
@@ -61,6 +63,7 @@ const ConfirmDialog = ({
     };
   }, [abierto, onCancel]);
 
+  // Si el diálogo no está abierto, no renderiza nada
   if (!abierto) return null;
 
   return (
@@ -79,6 +82,7 @@ const ConfirmDialog = ({
         aria-describedby="confirm-dialog-desc"
         ref={dialogRef}
       >
+        {/* Ícono de advertencia en el encabezado del diálogo */}
         <div
           className="modal-header"
           style={{
@@ -99,6 +103,7 @@ const ConfirmDialog = ({
             style={{ marginBottom: 8 }}
           />
         </div>
+        {/* Título y mensaje del diálogo */}
         <div style={{ textAlign: "center", padding: "0 24px 8px" }}>
           <h2
             id="confirm-dialog-title"
@@ -124,6 +129,7 @@ const ConfirmDialog = ({
             {mensaje}
           </p>
         </div>
+        {/* Botones de acción: Cancelar y Confirmar */}
         <div
           style={{
             display: "flex",

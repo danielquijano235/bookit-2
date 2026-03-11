@@ -1,13 +1,4 @@
-/**
- * ============================================
- * BOOKIT - Componente Tarjeta Reutilizable
- * Archivo: componentes/Compartidos/Tarjeta.js
- * ============================================
- * 
- * Props:
- *   - children: Contenido de la tarjeta
- *   - className: Clase CSS adicional (opcional)
- */
+
 
 import React from 'react';
 

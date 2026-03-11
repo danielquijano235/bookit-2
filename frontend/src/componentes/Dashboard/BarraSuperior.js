@@ -1,21 +1,12 @@
 /**
- * ============================================
- * BOOKIT - Componente BarraSuperior
- * Archivo: componentes/Dashboard/BarraSuperior.js
- * ============================================
- * 
- * Propósito: Header fijo del dashboard con buscador,
- * notificaciones con panel desplegable y botón de nueva reserva.
- * 
- * Props:
- *   - onNuevaReserva: Función que se ejecuta al hacer clic en "+ Nueva Reserva"
- * 
- * Funcionalidad de notificaciones:
- *   - Muestra badge con cantidad de no leídas
- *   - Panel desplegable al hacer clic en la campana
- *   - Marcar como leída individual y todas a la vez
- *   - Eliminar notificaciones individuales
- *   - Iconos por tipo (reserva, cliente, sistema, info)
+
+ 
+  Funcionalidad de notificaciones:
+    - Muestra badge con cantidad de no leídas
+    - Panel desplegable al hacer clic en la campana
+    - Marcar como leída individual y todas a la vez
+    - Eliminar notificaciones individuales
+    - Iconos por tipo (reserva, cliente, sistema, info)
  *   - Tiempo relativo ("hace 5 min", "hace 2 horas")
  */
 

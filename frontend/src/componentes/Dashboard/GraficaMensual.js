@@ -26,13 +26,16 @@ import {
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const GraficaMensual = ({ datos }) => {
+  // Si no hay datos, usamos un fallback con meses y valores simulados
   const fallback = {
     labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
     data: [120, 150, 135, 160, 180, 175, 190, 200, 185, 170, 165, 180],
   };
 
+  // Extraemos etiquetas y valores de los datos recibidos o del fallback
   const { labels, data: valores } = datos && datos.labels && datos.data ? datos : fallback;
 
+  // Configuración de datos para la gráfica de línea
   const chartData = {
     labels,
     datasets: [
@@ -49,6 +52,7 @@ const GraficaMensual = ({ datos }) => {
     ],
   };
 
+  // Opciones de la gráfica: sin leyenda, tooltips personalizados, colores
   const opciones = {
     responsive: true,
     maintainAspectRatio: false,

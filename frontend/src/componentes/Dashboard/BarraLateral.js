@@ -1,15 +1,11 @@
 /**
- * ============================================
- * BOOKIT - Componente BarraLateral (Sidebar)
- * Archivo: componentes/Dashboard/BarraLateral.js
- * ============================================
- * 
- * Propósito: Menú lateral fijo del dashboard con navegación,
- * perfil del usuario y botón de cerrar sesión.
- * 
- * Props:
- *   - usuario: Objeto con datos del usuario logueado
- *   - onCerrarSesion: Función para cerrar la sesión
+
+ Propósito: Menú lateral fijo del dashboard con navegación,
+  perfil del usuario y botón de cerrar sesión.
+ 
+  Props:
+    - usuario: Objeto con datos del usuario logueado
+    - onCerrarSesion: Función para cerrar la sesión
  */
 
 import React, { useState, useEffect } from 'react';
@@ -34,13 +30,13 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
   const navigate = useNavigate();
   const [menuAbierto, setMenuAbierto] = useState(false);
 
-  // Cerrar menú al cambiar de sección
+  // Cuando el usuario selecciona una sección, la cambiamos y cerramos el menú (útil en móvil)
   const cambiarSeccion = (clave) => {
     if (onCambiarSeccion) onCambiarSeccion(clave);
     setMenuAbierto(false);
   };
 
-  // Cerrar menú al redimensionar a pantalla grande
+  // Si el usuario agranda la ventana, cerramos el menú lateral para evitar que quede abierto en escritorio
   useEffect(() => {
     const manejarResize = () => {
       if (window.innerWidth > 900) setMenuAbierto(false);
@@ -49,12 +45,7 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
     return () => window.removeEventListener('resize', manejarResize);
   }, []);
 
-  // NOTA: evitamos manipular `document.body.style.overflow` directamente
-  // porque puede dejar el body sin scroll si algo falla. El overlay
-  // ya impide interacción cuando está visible y el sidebar se renderiza
-  // solo mientras `menuAbierto` es true, por lo que no necesitamos bloquear
-  // el scroll del body aquí.
-
+  // Esta función toma el nombre del usuario y devuelve sus iniciales para mostrar en el avatar
   const obtenerIniciales = (nombre) => {
     if (!nombre) return 'U';
     return nombre
@@ -65,6 +56,7 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
       .substring(0, 2);
   };
 
+  // Renderiza cada ítem del menú, cambiando el estilo si está activo
   const renderItem = (item, indice) => {
     const activo = seccionActiva === item.clave;
     return (
@@ -84,7 +76,7 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
 
   return (
     <>
-      {/* Botón hamburguesa - solo visible en móvil */}
+      {/* Este botón hamburguesa aparece solo en móvil y permite abrir/cerrar el menú lateral */}
       <button
         className={`hamburguesa-btn ${menuAbierto ? 'activo' : ''}`}
         onClick={() => setMenuAbierto(!menuAbierto)}
@@ -95,18 +87,19 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
         <span className="hamburguesa-linea"></span>
       </button>
 
-      {/* Overlay oscuro al abrir menú */}
+      {/* Cuando el menú está abierto, mostramos un overlay oscuro para que el usuario pueda cerrarlo haciendo click fuera */}
       {menuAbierto && (
         <div className="sidebar-overlay" onClick={() => setMenuAbierto(false)} />
       )}
 
+      {/* Este es el menú lateral fijo, contiene el logo, los menús y el perfil */}
       <aside className={`sidebar ${menuAbierto ? 'abierto' : ''}`}>
-      {/* Logo (no navegar desde el dashboard a la landing) */}
+      {/* Logo de la aplicación, aquí no es clickeable */}
       <div className="sidebar-logo" style={{ cursor: 'default' }} title="BookIt">
         <img src="/assets/images/logo-bookit.png" alt="BookIt" className="sidebar-logo-img" />
       </div>
 
-      {/* Menú principal */}
+      {/* Menú principal y secundario, cada sección tiene su título */}
       <nav className="sidebar-menu">
         <p className="sidebar-seccion-titulo">PRINCIPAL</p>
         {menuPrincipal.map(renderItem)}
@@ -115,7 +108,7 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
         {menuSecundario.map(renderItem)}
       </nav>
 
-      {/* Perfil del usuario */}
+      {/* Aquí mostramos el perfil del usuario, con avatar de iniciales, nombre y email */}
       <div className="sidebar-perfil">
         <div className="sidebar-avatar">
           {obtenerIniciales(usuario?.nombre)}
@@ -130,7 +123,7 @@ const BarraLateral = ({ usuario, onCerrarSesion, seccionActiva = 'inicio', onCam
         </div>
       </div>
 
-      {/* Botón para cerrar sesión */}
+      {/* Botón para cerrar sesión, al hacer click cierra el menú y ejecuta la función de logout */}
       <Boton variante="ghost" className="btn btn--ghost btn-cerrar-sesion" onClick={() => { setMenuAbierto(false); onCerrarSesion(); }}>
         <img src="https://img.icons8.com/ios-filled/16/FFFFFF/exit.png" alt="salir" width="16" height="16" style={{verticalAlign: 'middle', marginRight: '8px', opacity: 0.7}} />
         Cerrar Sesión

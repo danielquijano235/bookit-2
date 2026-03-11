@@ -14,7 +14,8 @@
 import React from "react";
 import Boton from "../Compartidos/Boton";
 
-// Colores para los avatares (se asignan rotativamente)
+// Colores para los avatares
+// Se asignan rotativamente para dar variedad visual
 const coloresAvatar = [
   "#FDB022", // Amarillo
   "#10B981", // Verde
@@ -25,21 +26,18 @@ const coloresAvatar = [
 ];
 
 const ListaReservas = ({ reservas, onVerTodas = () => {} }) => {
-  /**
-   * Formatear la hora de "19:00:00" a "19:00"
-   */
+  // Formatea la hora de "19:00:00" a "19:00" para mostrar solo HH:MM
   const formatearHora = (hora) => {
     if (!hora) return "";
     return hora.substring(0, 5); // Tomar solo HH:MM
   };
 
-  /**
-   * Obtener la primera letra del nombre del cliente
-   */
+  // Obtiene la primera letra del nombre del cliente para el avatar
   const obtenerInicial = (nombre) => {
     return nombre ? nombre[0].toUpperCase() : "?";
   };
 
+  // Renderiza la lista de reservas, mostrando avatar, nombre, personas, hora y estado
   return (
     <div className="reservas-tarjeta">
       {/* Header */}
@@ -53,7 +51,7 @@ const ListaReservas = ({ reservas, onVerTodas = () => {} }) => {
           // Mostrar cada reserva
           reservas.map((reserva, indice) => (
             <div className="reserva-item" key={reserva.id || indice}>
-              {/* Avatar circular con inicial y color */}
+              {/* Avatar circular con inicial y color rotativo */}
               <div
                 className="reserva-avatar"
                 style={{

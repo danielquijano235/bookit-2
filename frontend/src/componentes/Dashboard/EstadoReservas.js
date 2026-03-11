@@ -8,6 +8,8 @@
  */
 import React from 'react';
 
+// Íconos para cada estado de reserva
+// Se usan para mostrar visualmente el tipo de estado
 const iconos = {
   confirmada: 'https://img.icons8.com/ios-filled/20/FFFFFF/checkmark--v1.png',
   pendiente:  'https://img.icons8.com/ios-filled/20/FFFFFF/clock--v1.png',
@@ -16,6 +18,8 @@ const iconos = {
   otra:       'https://img.icons8.com/ios-filled/20/FFFFFF/info.png',
 };
 
+// Colores para cada estado de reserva
+// Ayudan a diferenciar visualmente cada tarjeta
 const colores = {
   confirmada: '#10B981',
   pendiente: '#FDB022',
@@ -25,14 +29,18 @@ const colores = {
 };
 
 const EstadoReservas = ({ reservas }) => {
+  // Si no hay reservas, usamos lista vacía
   const lista = reservas || [];
 
+  // Agrupa las reservas por estado usando reduce
+  // Ejemplo: { confirmada: 5, pendiente: 2, ... }
   const conteo = lista.reduce((acc, r) => {
     const estado = (r.estado || 'otra').toLowerCase();
     acc[estado] = (acc[estado] || 0) + 1;
     return acc;
   }, {});
 
+  // Estados que se muestran en la tarjeta
   const estadosMostrar = [
     { key: 'confirmada', label: 'Confirmadas' },
     { key: 'pendiente', label: 'Pendientes' },
@@ -40,6 +48,7 @@ const EstadoReservas = ({ reservas }) => {
     { key: 'completada', label: 'Completadas' },
   ];
 
+  // Renderiza una tarjeta para cada estado, mostrando el conteo y el ícono
   return (
     <div className="estado-reservas-card">
       <div className="grafica-header">

@@ -1,10 +1,4 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Verificar Sesion
- * Archivo: autenticacion/verificar-sesion.php
- * ============================================
- */
 
 require_once '../configuracion/conexion.php';
 

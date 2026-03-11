@@ -19,16 +19,19 @@ import {
   Legend,
 } from 'chart.js';
 
+// Registramos los componentes de Chart.js necesarios para la gráfica de barras
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const GraficaHoras = ({ datos }) => {
+  // Estado para guardar los datos internos de la gráfica
   const [datosInternos, setDatosInternos] = useState(datos);
 
+  // Si cambian los datos recibidos por props, actualizamos el estado
   useEffect(() => {
     if (datos && Object.keys(datos).length) setDatosInternos(datos);
   }, [datos]);
 
-  // default: mock de horas de 10:00 a 22:00
+  // Si no hay datos, usamos un mock de horas de 10:00 a 22:00
   const fuente = datosInternos || datos || {
     '10:00': 2,
     '11:00': 5,
@@ -45,9 +48,11 @@ const GraficaHoras = ({ datos }) => {
     '22:00': 10,
   };
 
+  // Extraemos las etiquetas (horas) y valores (cantidad de reservas)
   const etiquetas = Object.keys(fuente);
   const valores = Object.values(fuente);
 
+  // Configuración de datos para la gráfica de barras
   const datosGrafica = {
     labels: etiquetas,
     datasets: [
