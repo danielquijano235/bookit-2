@@ -17,6 +17,15 @@ if (!isset($_SESSION['usuario_id'])) {
 $usuario_id = (int)$_SESSION['usuario_id'];
 
 try {
+    // Se hace un JOIN entre reservas y clientes para obtener el nombre del cliente
+    // en la misma consulta, sin tener que hacer una segunda petición por cada reserva.
+    //
+    // Filtros aplicados:
+    //   - fecha >= CURRENT_DATE: solo reservas de hoy en adelante (próximas)
+    //   - usuario_id: solo las del restaurante logueado
+    //   - estado IN ('confirmada', 'pendiente'): no mostrar las canceladas o completadas
+    //   - ORDER BY fecha, hora: las más próximas primero
+    //   - LIMIT 10: mostrar máximo 10 en el panel de inicio
     $consulta = "
         SELECT
             r.id,
@@ -38,6 +47,8 @@ try {
     $stmt = $conexion->prepare($consulta);
     $stmt->execute([$usuario_id]);
 
+    // Construir el array de reservas manualmente para controlar los nombres de campo
+    // que recibe el frontend (evitar que lleguen campos vacíos o innecesarios)
     $reservas = [];
     while ($fila = $stmt->fetch()) {
         $reservas[] = [

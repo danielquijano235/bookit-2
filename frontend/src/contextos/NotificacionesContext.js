@@ -108,20 +108,30 @@ export const NotificacionesProvider = ({ children }) => {
    * @param {string} titulo - Título corto de la notificación
    * @param {string} mensaje - Descripción detallada
    */
+  /**
+   * Agregar una nueva notificación al panel.
+   * useCallback evita que esta función se recree en cada render,
+   * lo que es importante porque se pasa como prop a otros componentes.
+   */
   const agregarNotificacion = useCallback((tipo, titulo, mensaje) => {
     const nueva = {
-      id: Date.now(),
+      id: Date.now(), // usar timestamp como ID único (suficiente para este caso)
       tipo,
       titulo,
       mensaje,
-      fecha: new Date().toISOString(),
-      leida: false,
+      fecha: new Date().toISOString(), // guardar fecha ISO para calcular tiempo relativo
+      leida: false, // toda notificación nueva empieza sin leer
     };
+    // Agregar al inicio del array para que aparezca primero en el panel
     setNotificaciones(prev => [nueva, ...prev]);
   }, []);
 
   /**
    * Marcar una notificación como leída
+   */
+  /**
+   * Marcar una sola notificación como leída por su ID.
+   * Se usa map para recorrer todas y cambiar solo la que coincide.
    */
   const marcarComoLeida = useCallback((id) => {
     setNotificaciones(prev =>
@@ -130,30 +140,31 @@ export const NotificacionesProvider = ({ children }) => {
   }, []);
 
   /**
-   * Marcar todas las notificaciones como leídas
+   * Marcar todas las notificaciones como leídas de un golpe
    */
   const marcarTodasLeidas = useCallback(() => {
     setNotificaciones(prev => prev.map(n => ({ ...n, leida: true })));
   }, []);
 
   /**
-   * Eliminar una notificación
+   * Eliminar una notificación del panel por su ID
    */
   const eliminarNotificacion = useCallback((id) => {
     setNotificaciones(prev => prev.filter(n => n.id !== id));
   }, []);
 
   /**
-   * Limpiar todas las notificaciones
+   * Borrar todas las notificaciones (botón "limpiar todo")
    */
   const limpiarTodas = useCallback(() => {
     setNotificaciones([]);
   }, []);
 
-  // Calcular cantidad de no leídas
+  // Contar las no leídas para mostrar el badge rojo en la campana
   const noLeidas = notificaciones.filter(n => !n.leida).length;
 
-  // Valor que se comparte con todos los componentes hijos
+  // Agrupar todo en un objeto para que los componentes hijos solo necesiten
+  // importar useNotificaciones() y tengan acceso a todo
   const valor = {
     notificaciones,
     noLeidas,

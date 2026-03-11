@@ -1,4 +1,13 @@
 <?php
+/**
+ * ============================================
+ * BOOKIT - Actualizar Estado de una Reserva
+ * Archivo: reservas/actualizar.php
+ * ============================================
+ *
+ * Recibe el ID de la reserva y el nuevo estado por PUT.
+ * Solo actualiza reservas que pertenezcan al usuario logueado.
+ */
 require_once '../configuracion/conexion.php';
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -14,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
 }
 
 $usuario_id = (int)$_SESSION['usuario_id'];
+
+// Leer el JSON con el ID de la reserva y el nuevo estado
 $datos = json_decode(file_get_contents("php://input"), true);
 
 $id = $datos['id'] ?? null;
@@ -25,6 +36,7 @@ if (!$id || !$estado) {
     exit();
 }
 
+// Evitar que llegue un estado inventado que no manejamos en el sistema
 $estados_validos = ['pendiente', 'confirmada', 'cancelada', 'completada'];
 if (!in_array($estado, $estados_validos, true)) {
     http_response_code(400);
@@ -33,10 +45,13 @@ if (!in_array($estado, $estados_validos, true)) {
 }
 
 try {
+    // El AND usuario_id garantiza que un usuario no pueda modificar
+    // reservas que no le pertenecen aunque conozca el ID
     $consulta = "UPDATE reservas SET estado = ? WHERE id = ? AND usuario_id = ?";
     $stmt = $conexion->prepare($consulta);
     $stmt->execute([$estado, (int)$id, $usuario_id]);
 
+    // rowCount() devuelve cuántas filas se modificaron realmente
     if ($stmt->rowCount() > 0) {
         echo json_encode(["mensaje" => "Reserva actualizada exitosamente"]);
     } else {

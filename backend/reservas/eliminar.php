@@ -21,6 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
 }
 
 $usuario_id = (int)$_SESSION['usuario_id'];
+
+// El ID llega como parámetro en la URL: DELETE /reservas/eliminar.php?id=5
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
@@ -30,6 +32,8 @@ if (!$id) {
 }
 
 try {
+    // El AND usuario_id es una medida de seguridad: solo se pueden eliminar
+    // reservas propias, nunca las de otro usuario aunque se conozca el ID
     $consulta = "DELETE FROM reservas WHERE id = ? AND usuario_id = ?";
     $stmt = $conexion->prepare($consulta);
     $stmt->execute([(int)$id, $usuario_id]);

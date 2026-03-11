@@ -209,6 +209,7 @@ const VistaReservas = () => {
       completada: "completada",
     };
     try {
+      // Intentar actualizar en el backend primero
       await actualizarReserva(id, nuevoEstado);
       agregarNotificacion(
         "reserva",
@@ -217,6 +218,8 @@ const VistaReservas = () => {
       );
       cargarReservas();
     } catch (error) {
+      // Si el backend falla, actualizamos el estado localmente en memoria
+      // para que la UI no se quede desactualizada
       setReservas((prev) =>
         prev.map((r) => (r.id === id ? { ...r, estado: nuevoEstado } : r)),
       );
@@ -307,7 +310,8 @@ const VistaReservas = () => {
     }
   };
 
-  // Filtrar reservas
+  // Filtrar reservas según el estado seleccionado en los botones de arriba
+  // y según lo que el usuario haya escrito en el buscador
   const reservasFiltradas = reservas.filter((r) => {
     const coincideEstado =
       filtroEstado === "todas" || r.estado === filtroEstado;
@@ -321,7 +325,7 @@ const VistaReservas = () => {
     return coincideEstado && coincideBusqueda;
   });
 
-  // Contar por estado
+  // Cuántas reservas hay por estado (para mostrar el número en cada botón de filtro)
   const contarEstado = (estado) => {
     if (estado === "todas") return reservas.length;
     return reservas.filter((r) => r.estado === estado).length;
@@ -345,13 +349,13 @@ const VistaReservas = () => {
   const formatearTelefono = (tel) => {
     if (!tel) return "";
     const raw = String(tel).trim();
-    if (raw.startsWith("+")) return raw; // ya tiene prefijo
-    // Extraer solo dígitos
+    if (raw.startsWith("+")) return raw; // ya tiene prefijo internacional
+    // Dejar solo los dígitos
     const digits = raw.replace(/\D/g, "");
     if (!digits) return raw;
-    // Si ya incluye código de país '57' al inicio, anteponer '+'
+    // Si ya empieza con el código de Colombia (57), solo agregar '+'
     if (digits.startsWith("57")) return `+${digits}`;
-    // Si parece número móvil local (10 dígitos que empiezan por 3) o al menos 7 dígitos, añadir +57
+    // Para números locales de al menos 7 dígitos, agregar +57 Colombia
     if (digits.length >= 7) return `+57 ${digits}`;
     return raw;
   };

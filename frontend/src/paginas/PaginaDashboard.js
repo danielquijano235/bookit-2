@@ -30,17 +30,18 @@ import "../estilos/dashboard.css";
 const PaginaDashboard = () => {
   // ============================================
   // ESTADOS DEL COMPONENTE
+  // Cada estado con useState guarda un dato que, cuando cambia, re-renderiza la pantalla
   // ============================================
-  const [usuario, setUsuario] = useState(null);
-  const [metricas, setMetricas] = useState(null);
-  const [datosGrafica, setDatosGrafica] = useState(null);
-  const [reservas, setReservas] = useState([]);
-  const [clientes, setClientes] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [cargando, setCargando] = useState(true);
-  const [tasaCancelacion, setTasaCancelacion] = useState(0);
-  const [seccionActiva, setSeccionActiva] = useState("inicio");
-  const [busquedaGlobal, setBusquedaGlobal] = useState("");
+  const [usuario, setUsuario] = useState(null);         // datos del usuario logueado
+  const [metricas, setMetricas] = useState(null);       // tarjetas de métricas del día
+  const [datosGrafica, setDatosGrafica] = useState(null); // datos de la gráfica semanal
+  const [reservas, setReservas] = useState([]);          // lista de próximas reservas
+  const [clientes, setClientes] = useState([]);          // lista de clientes
+  const [modalVisible, setModalVisible] = useState(false); // controla si el modal está abierto
+  const [cargando, setCargando] = useState(true);       // muestra spinner mientras carga
+  const [tasaCancelacion, setTasaCancelacion] = useState(0); // porcentaje de reservas canceladas
+  const [seccionActiva, setSeccionActiva] = useState("inicio"); // qué vista mostrar en el dashboard
+  const [busquedaGlobal, setBusquedaGlobal] = useState(""); // texto del buscador de la barra superior
   
 
   const navigate = useNavigate();
@@ -68,8 +69,11 @@ const PaginaDashboard = () => {
   const cargarDatos = async () => {
     setCargando(true);
     try {
-      // Hacer todas las peticiones al mismo tiempo con Promise.allSettled
-      // Así es más rápido que hacerlas una por una
+      // Promise.allSettled lanza todas las peticiones al mismo tiempo en paralelo.
+      // Es mucho más rápido que hacerlas una por una (esperar a que termine cada una).
+      // La diferencia con Promise.all es que allSettled NO falla si una petición falla:
+      // devuelve el resultado de cada una con un campo "status" que puede ser
+      // "fulfilled" (exitoso) o "rejected" (falló).
       const [resMetricas, resGrafica, resReservas, resClientes, resTodas] =
         await Promise.allSettled([
           obtenerMetricasHoy(),
@@ -79,7 +83,8 @@ const PaginaDashboard = () => {
           obtenerTodasReservas(),
         ]);
 
-      // Asignar datos si la petición fue exitosa
+      // Asignar cada resultado solo si la petición fue exitosa
+      // Así, si el backend falla en una, las demás siguen funcionando
       if (resMetricas.status === "fulfilled") {
         setMetricas(resMetricas.value);
       }
@@ -88,13 +93,19 @@ const PaginaDashboard = () => {
       }
       if (resReservas.status === "fulfilled") {
         try {
+          // Combinar reservas reales del backend con las reservas demo guardadas
+          // en localStorage (las que se crearon desde la página de demostación)
           const demoLocales = JSON.parse(localStorage.getItem("demo_reservas") || "[]")
             .map((r) => ({
               ...r,
+              // Normalizar el campo del nombre de cliente porque en demo se llama
+              // "cliente_nombre" pero en el resto del código se espera "cliente"
               cliente: r.cliente || r.cliente_nombre || '',
+              // Lo mismo con el número de personas
               personas: r.personas ?? r.numero_personas ?? 0,
             }));
           const reservasBackend = Array.isArray(resReservas.value) ? resReservas.value : [];
+          // Las demo van primero para que sean visibles inmediatamente en la lista
           setReservas(demoLocales.concat(reservasBackend));
         } catch (err) {
           console.warn("Error mezclando reservas demo del dashboard:", err);
@@ -107,18 +118,21 @@ const PaginaDashboard = () => {
       if (resTodas && resTodas.status === "fulfilled") {
         try {
           const todas = resTodas.value;
-          // Calcular tasa de cancelación para el mes actual
+          // Calcular tasa de cancelación: porcentaje de reservas canceladas en el mes actual
           const ahora = new Date();
           const yy = String(ahora.getFullYear());
-          const mm = String(ahora.getMonth() + 1).padStart(2, '0');
+          const mm = String(ahora.getMonth() + 1).padStart(2, '0'); // mes con cero adelante
+          // Filtrar solo las reservas que pertenecen al mes y año actuales
           const reservasMes = todas.filter((r) => {
             if (!r.fecha) return false;
+            // Separar solo la parte de fecha "YYYY-MM-DD" en caso de que venga con hora
             const ymd = r.fecha.split('T')[0] || r.fecha;
             const [y, m] = ymd.split('-');
             return y == yy && m == mm;
           });
           const total = reservasMes.length;
           const canceladas = reservasMes.filter((r) => (r.estado || '').toLowerCase() === 'cancelada').length;
+          // Calcular el porcentaje y redondearlo a 1 decimal; si no hay reservas, la tasa es 0
           const tasa = total > 0 ? Number(((canceladas / total) * 100).toFixed(1)) : 0;
           setTasaCancelacion(tasa);
         } catch (err) {
@@ -128,6 +142,7 @@ const PaginaDashboard = () => {
     } catch (error) {
       console.error("Error al cargar datos del dashboard:", error);
     } finally {
+      // finally se ejecuta siempre, con éxito o error; quita el spinner de carga
       setCargando(false);
     }
   };
