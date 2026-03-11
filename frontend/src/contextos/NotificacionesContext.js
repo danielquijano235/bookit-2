@@ -1,9 +1,5 @@
 /**
- * ============================================
- * BOOKIT - Contexto de Notificaciones
- * Archivo: contextos/NotificacionesContext.js
- * ============================================
- * 
+
  * Propósito: Sistema centralizado de notificaciones para todo
  * el dashboard. Usa React Context para compartir el estado
  * de las notificaciones entre todos los componentes.

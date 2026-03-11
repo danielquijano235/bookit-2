@@ -28,10 +28,10 @@ import { obtenerTodasReservas } from "../servicios/api";
 import "../estilos/dashboard.css";
 
 const PaginaDashboard = () => {
-  // ============================================
+ 
   // ESTADOS DEL COMPONENTE
   // Cada estado con useState guarda un dato que, cuando cambia, re-renderiza la pantalla
-  // ============================================
+
   const [usuario, setUsuario] = useState(null);         // datos del usuario logueado
   const [metricas, setMetricas] = useState(null);       // tarjetas de métricas del día
   const [datosGrafica, setDatosGrafica] = useState(null); // datos de la gráfica semanal

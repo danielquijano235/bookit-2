@@ -1,10 +1,4 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Proximas Reservas
- * Archivo: estadisticas/proximas-reservas.php
- * ============================================
- */
 
 require_once '../configuracion/conexion.php';
 

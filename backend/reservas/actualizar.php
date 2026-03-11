@@ -1,10 +1,6 @@
 <?php
 /**
- * ============================================
- * BOOKIT - Actualizar Estado de una Reserva
- * Archivo: reservas/actualizar.php
- * ============================================
- *
+
  * Recibe el ID de la reserva y el nuevo estado por PUT.
  * Solo actualiza reservas que pertenezcan al usuario logueado.
  */

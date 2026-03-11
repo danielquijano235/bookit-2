@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Eliminar Reserva
- * Archivo: reservas/eliminar.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 
