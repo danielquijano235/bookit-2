@@ -27,6 +27,7 @@ import {
 import { obtenerTodasReservas } from "../servicios/api";
 import "../estilos/dashboard.css";
 
+// Página principal del dashboard
 const PaginaDashboard = () => {
  
   // ESTADOS DEL COMPONENTE

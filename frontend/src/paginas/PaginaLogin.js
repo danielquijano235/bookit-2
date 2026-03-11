@@ -12,6 +12,7 @@ import React from 'react';
 import FormularioLogin from '../componentes/Login/FormularioLogin';
 import '../estilos/login.css';
 
+// Página de login, muestra el formulario
 const PaginaLogin = () => {
   return (
     <div className="login-pagina">

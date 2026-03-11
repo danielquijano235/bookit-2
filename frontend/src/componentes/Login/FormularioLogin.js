@@ -1,18 +1,14 @@
 /**
- * ============================================
- * BOOKIT - Componente FormularioLogin
- * Archivo: componentes/Login/FormularioLogin.js
- * ============================================
  *
- * Propósito: Formulario de inicio de sesión con validación.
- * Envía las credenciales al backend PHP y redirige al dashboard.
- *
- * Estados:
- *   - email: Valor del campo de email
- *   - contrasena: Valor del campo de contraseña
- *   - mostrarContrasena: Toggle para mostrar/ocultar contraseña
- *   - error: Mensaje de error si el login falla
- *   - cargando: Indica si está procesando la petición
+  Propósito: Formulario de inicio de sesión con validación.
+  Envía las credenciales al backend PHP y redirige al dashboard.
+ 
+  Estados:
+    - email: Valor del campo de email
+    - contrasena: Valor del campo de contraseña
+    - mostrarContrasena: Toggle para mostrar/ocultar contraseña
+    - error: Mensaje de error si el login falla
+    - cargando: Indica si está procesando la petición
  */
 
 import React, { useState } from "react";
@@ -84,7 +80,7 @@ const FormularioLogin = () => {
         />
       </div>
 
-      {/* Título */}
+      
       <h1 className="login-titulo">Iniciar Sesión</h1>
       <p className="login-subtitulo">Ingresa tus credenciales para acceder</p>
 
@@ -116,7 +112,7 @@ const FormularioLogin = () => {
           </div>
         </div>
 
-        {/* Campo de contraseña */}
+        
         <div className="campo-grupo">
           <label className="campo-label">Contraseña</label>
           <div className="campo-input-contenedor">

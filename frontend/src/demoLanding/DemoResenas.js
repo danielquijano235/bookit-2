@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import "./demoLanding.css";
-
 import { useEffect } from "react";
 
 const DemoResenas = ({ onNuevaResena }) => {
+  // Estados para los campos del formulario y las reseñas
   const [nombre, setNombre] = useState("");
   const [comentario, setComentario] = useState("");
   const [calificacion, setCalificacion] = useState(5);
+  // Almacena las reseñas en localStorage para persistencia
   const [resenas, setResenas] = useState(() => {
     return JSON.parse(localStorage.getItem("resenasDemo") || "[]");
   });
@@ -14,11 +15,13 @@ const DemoResenas = ({ onNuevaResena }) => {
   const [grupo, setGrupo] = useState("");
   const [titulo, setTitulo] = useState("");
 
+  // Efecto para cargar reseñas al montar el componente
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("resenasDemo") || "[]");
     setResenas(stored);
   }, []);
 
+  // Maneja el envío del formulario de reseña
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!nombre || !comentario) return;

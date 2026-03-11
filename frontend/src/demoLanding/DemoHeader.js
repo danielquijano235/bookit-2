@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Componente de encabezado para la demo
 const DemoHeader = ({ onOpenReserva }) => {
   const navigate = useNavigate();
+  // Estado para controlar el menú hamburguesa
   const [menuAbierto, setMenuAbierto] = useState(false);
 
+  // Navega a la página principal
   const irPaginaPrincipal = (e) => {
     e.preventDefault();
     navigate('/');
   };
 
+  // Hace scroll a una sección específica
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setMenuAbierto(false);
     } else {
-      // If not on demo route, navigate to demo landing with hash
+      // Si no está en la ruta demo, navega con hash
       window.location.href = `/demo-landing#${id}`;
     }
   };
 
+  // Cierra el menú si se hace click fuera
   useEffect(() => {
     const handleOutside = (e) => {
       const nav = document.querySelector('.demo-header');
@@ -40,9 +45,9 @@ const DemoHeader = ({ onOpenReserva }) => {
         <a href="/menu" onClick={(e) => { e.preventDefault(); navigate('/menu'); }}>MENÚ</a>
         <a href="#historia" onClick={(e) => { e.preventDefault(); scrollToSection('historia'); }}>HISTORIA</a>
       </nav>
-
+      {/* Logo clickable para volver a inicio */}
       <div className="logo" role="button" tabIndex={0} onClick={irPaginaPrincipal} onKeyDown={(e) => { if (e.key === 'Enter') irPaginaPrincipal(e); }} style={{cursor: 'pointer'}}>DEMO</div>
-
+      {/* Botón hamburguesa para abrir/cerrar menú */}
       <button
         className={`demo-hamburger ${menuAbierto ? 'abierto' : ''}`}
         aria-expanded={menuAbierto}
@@ -53,7 +58,6 @@ const DemoHeader = ({ onOpenReserva }) => {
         <span></span>
         <span></span>
       </button>
-
       <nav className={`demo-nav right ${menuAbierto ? 'abierto' : ''}`}>
         <a href="#eventos" onClick={(e) => { e.preventDefault(); scrollToSection('eventos'); }}>EVENTOS</a>
         <a href="#reservas" onClick={(e) => { e.preventDefault(); setMenuAbierto(false); onOpenReserva && onOpenReserva(); }}>RESERVAS</a>

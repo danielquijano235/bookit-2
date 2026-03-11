@@ -1,6 +1,7 @@
 // Helper para persistir y recuperar platos del menú en localStorage
 const STORAGE_KEY = 'bookit:menu:platos';
 
+// Obtiene todos los platos guardados en localStorage
 export const getPlatos = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -13,6 +14,7 @@ export const getPlatos = () => {
   }
 };
 
+// Guarda un array de platos en localStorage
 export const savePlatos = (platos) => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(platos));
@@ -21,8 +23,10 @@ export const savePlatos = (platos) => {
   }
 };
 
+// Agrega o actualiza un plato usando upsert
 export const addPlato = (plato) => upsertPlato(plato);
 
+// Obtiene platos filtrados por categoría (normaliza para evitar errores por tildes o mayúsculas)
 export const getPlatosByCategoria = (categoria) => {
   const all = getPlatos();
   if (!categoria) return all;
@@ -44,6 +48,7 @@ export const getPlatosByCategoria = (categoria) => {
   });
 };
 
+// Normaliza el nombre de la categoría para búsquedas y almacenamiento
 export const normalizeCategoria = (categoria) => {
   if (!categoria && categoria !== 0) return '';
   return String(categoria)
@@ -54,6 +59,7 @@ export const normalizeCategoria = (categoria) => {
     .replace(/[^a-z0-9\-]/g, '');
 };
 
+// Inserta o actualiza un plato en el array, evitando duplicados por id y categoría
 export const upsertPlato = (plato) => {
   const all = getPlatos() || [];
   const normalize = (s) => normalizeCategoria(s);
@@ -69,6 +75,7 @@ export const upsertPlato = (plato) => {
     categoria: plato && plato.categoria ? normalize(plato.categoria) : ''
   };
 
+  // Agrupa por categoría y actualiza el plato si ya existe
   const sameCat = normalizedExisting.filter(p => p.categoria === newItem.categoria);
   const other = normalizedExisting.filter(p => p.categoria !== newItem.categoria);
 
@@ -82,6 +89,7 @@ export const upsertPlato = (plato) => {
   return updated;
 };
 
+// Si no hay platos, agrega los de muestra evitando duplicados
 export const seedIfEmpty = (samplePlatos) => {
   try {
     const existing = getPlatos() || [];
@@ -91,7 +99,7 @@ export const seedIfEmpty = (samplePlatos) => {
       return String(s).toLowerCase().trim().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/\s+/g, ' ');
     };
 
-    // Build map of existing by category+name to avoid duplicates
+    // Mapa para evitar duplicados por categoría y nombre
     const map = new Map();
     existing.forEach((p) => {
       const key = `${normalizeCategoria(p.categoria)}::${normalizeName(p.nombre)}`;
@@ -130,4 +138,5 @@ export const seedIfEmpty = (samplePlatos) => {
   }
 };
 
+// Exporta todos los helpers para el menú
 export default { getPlatos, savePlatos, addPlato, getPlatosByCategoria, seedIfEmpty };

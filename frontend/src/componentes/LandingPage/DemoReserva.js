@@ -30,7 +30,7 @@ const HORARIOS_DISPONIBLES = [
   '7:00 pm', '7:30 pm', '8:00 pm', '8:30 pm', '9:00 pm', '9:30 pm'
 ];
 
-// Generar días del mes para el calendario
+// Genera los días del mes para el calendario interactivo
 const obtenerDiasMes = (anio, mes) => {
   const primerDia = new Date(anio, mes, 1).getDay();
   const totalDias = new Date(anio, mes + 1, 0).getDate();
@@ -40,11 +40,13 @@ const obtenerDiasMes = (anio, mes) => {
   return dias;
 };
 
+// Convierte año, mes y día a formato ISO para guardar la fecha
 const formatearFechaISO = (anio, mes, dia) => {
   if (!dia) return '';
   return `${anio}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
 };
 
+// Convierte hora en formato am/pm a formato 24 horas
 const convertirHoraA24 = (hora) => {
   if (!hora) return '';
   const match = String(hora).match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?/i);
@@ -61,6 +63,7 @@ const convertirHoraA24 = (hora) => {
   return `${String(horas).padStart(2, '0')}:${minutos}:${segundos}`;
 };
 
+// Guarda la reserva demo en localStorage para simular persistencia
 const guardarReservaDemoLocal = (reserva) => {
   const existentes = JSON.parse(localStorage.getItem('demo_reservas') || '[]');
   localStorage.setItem('demo_reservas', JSON.stringify([reserva, ...existentes]));
@@ -70,7 +73,7 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, sourc
   // ============================================
   // ESTADOS
   // ============================================
-  // Nota: aquí se mantienen los estados del flujo de reserva demo.
+  // Estados del flujo de reserva demo:
   // - `paso`: paso actual del wizard (1 personas, 2 fecha, 3 hora)
   // - `personas`, `diaSeleccionado`, `horaSeleccionada`: datos elegidos por el usuario
   // - `nombreDemo`, `telefonoDemo`, `emailDemo`: información de contacto del demo

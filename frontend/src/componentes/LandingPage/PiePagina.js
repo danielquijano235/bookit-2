@@ -15,6 +15,7 @@ const PiePagina = () => {
   const [blogOpen, setBlogOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
 
+  // Maneja el click en el link "Sobre nosotros"
   const handleSobreClick = (e) => {
     e.preventDefault();
     const el = document.getElementById('sobre-nosotros');
@@ -25,9 +26,10 @@ const PiePagina = () => {
     }
   };
 
+  // Maneja el click en el link "Contacto"
   const handleContactClick = (e) => {
     e && e.preventDefault();
-    // close modal first, then navigate/scroll to contact
+    // Cierra el modal primero, luego navega/scroll a contacto
     setAboutOpen(false);
     setTimeout(() => {
       const el = document.getElementById('contacto');

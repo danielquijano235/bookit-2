@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 
+// Componente de contacto para la demo landing
 const DemoContacto = () => {
+  // Imagen de fondo del restaurante demo
   const bg = (process.env.PUBLIC_URL || '') + '/assets/images/demo-restaurant.jpg';
   const style = { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' };
+  // Estados para controlar envío y mensaje de éxito
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
   return (
@@ -24,6 +27,7 @@ const DemoContacto = () => {
 
       <div className="contacto-form">
         <h3>Contacto</h3>
+        {/* Formulario de contacto, simula envío y muestra mensaje de éxito */}
         <form
           className="contacto-form-inner"
           onSubmit={(e) => {

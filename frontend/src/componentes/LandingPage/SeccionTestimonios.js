@@ -1,15 +1,4 @@
-/**
- * ============================================
- * BOOKIT - Componente SeccionTestimonios
- * Archivo: componentes/LandingPage/SeccionTestimonios.js
- * ============================================
- * 
- * Propósito: Muestra testimonios de clientes satisfechos
- * en un grid de 3 columnas x 2 filas (6 testimonios).
- * 
- * Cada testimonio tiene estrellas, texto, avatar con iniciales,
- * nombre y cargo.
- */
+
 
 import React from 'react';
 

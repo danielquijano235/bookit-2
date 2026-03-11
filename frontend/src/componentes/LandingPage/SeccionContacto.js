@@ -1,14 +1,5 @@
 /**
- * ============================================
- * BOOKIT - Componente SeccionContacto
- * Archivo: componentes/LandingPage/SeccionContacto.js
- * ============================================
- *
- * Propósito: Sección de contacto en la landing page.
- * Layout de dos columnas:
- *   - Izquierda: Información de contacto (tarjetas con icono)
- *   - Derecha: Formulario para enviar mensaje
- *
+
  * Estados:
  *   - formulario: Objeto con los campos del formulario
  *   - enviando: Indica si se está procesando el envío
@@ -18,6 +9,7 @@
 import React, { useState } from "react";
 
 // Datos de las tarjetas de información de contacto
+// Cada tarjeta tiene icono, título y dos líneas de texto
 const infoContacto = [
   {
     icono: "https://img.icons8.com/ios-filled/24/FDB022/marker.png",
@@ -50,10 +42,7 @@ const SeccionContacto = () => {
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
 
-  /**
-   * Actualizar un campo del formulario
-   * Usa el atributo name del input para saber cuál campo cambiar
-   */
+  // Actualiza un campo del formulario según el input
   const manejarCambio = (e) => {
     const { name, value } = e.target;
     setFormulario((prev) => ({ ...prev, [name]: value }));

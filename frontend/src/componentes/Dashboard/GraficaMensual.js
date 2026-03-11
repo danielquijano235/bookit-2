@@ -1,14 +1,4 @@
-/**
- * ============================================
- * BOOKIT - Componente GraficaMensual
- * Archivo: componentes/Dashboard/GraficaMensual.js
- * ============================================
- *
- * Gráfica de línea que muestra datos mensuales (12 meses).
- * Props:
- *  - datos: objeto opcional con formato { labels: [...], data: [...] }
- *    Si no se proporciona, se usa un fallback con 12 meses mock.
- */
+
 
 import React from 'react';
 import { Line } from 'react-chartjs-2';

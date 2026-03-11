@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Login de Usuario
- * Archivo: autenticacion/login.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 

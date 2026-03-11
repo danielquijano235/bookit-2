@@ -1,15 +1,3 @@
-/**
- * ============================================
- * BOOKIT - Componente SeccionHero
- * Archivo: componentes/LandingPage/SeccionHero.js
- * ============================================
- * 
- * Propósito: Sección principal de la landing page.
- * Muestra el título, subtítulo, botones CTA, estadísticas
- * y una imagen con tarjeta flotante.
- * 
- * Props: Ninguna
- */
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

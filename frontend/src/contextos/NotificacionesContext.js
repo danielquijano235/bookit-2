@@ -1,18 +1,3 @@
-/**
-
- * Propósito: Sistema centralizado de notificaciones para todo
- * el dashboard. Usa React Context para compartir el estado
- * de las notificaciones entre todos los componentes.
- * 
- * Las notificaciones se guardan en localStorage para que
- * persistan al recargar la página.
- * 
- * Tipos de notificación:
- *   - reserva: Nueva reserva creada o estado cambiado
- *   - cliente: Nuevo cliente registrado
- *   - sistema: Alertas del sistema (ocupación, etc.)
- *   - info: Información general
- */
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
@@ -82,7 +67,6 @@ const cargarNotificaciones = () => {
 };
 
 /**
- * Provider de notificaciones.
  * Envuelve el dashboard para dar acceso a las notificaciones
  * desde cualquier componente hijo.
  */

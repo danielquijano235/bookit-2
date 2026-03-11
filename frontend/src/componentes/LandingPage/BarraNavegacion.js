@@ -24,10 +24,12 @@ const BarraNavegacion = () => {
   // Hook de React Router para navegar a otras páginas
   const navigate = useNavigate();
 
+  // Navega a la sección de contacto
   const irContacto = () => {
     scrollToSection('contacto');
   };
 
+  // Hace scroll suave a la sección indicada por id
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
@@ -40,7 +42,7 @@ const BarraNavegacion = () => {
     }
   };
 
-  // Efecto que escucha el scroll de la ventana
+  // Efecto que escucha el scroll de la ventana para cambiar el estilo del navbar
   useEffect(() => {
     const manejarScroll = () => {
       // Si el scroll es mayor a 50px, activar el estilo compacto

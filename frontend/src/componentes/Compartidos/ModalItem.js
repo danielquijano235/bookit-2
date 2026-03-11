@@ -1,12 +1,10 @@
 import React from 'react';
 
-/*
-  ModalItem
-  -----------------
-  Componente modal ligero para mostrar detalles de un ítem (plato, producto).
-  - Usa estilos en línea para simplificar el uso desde distintas secciones.
-  - `onClose` cierra el modal cuando el usuario hace clic fuera o en el botón.
-*/
+
+  // Componente modal ligero para mostrar detalles de un ítem (plato, producto).
+  // - Usa estilos en línea para simplificar el uso desde distintas secciones.
+  // - `onClose` cierra el modal cuando el usuario hace clic fuera o en el botón.
+
 
 const overlay = {
   position: 'fixed',

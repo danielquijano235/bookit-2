@@ -13,13 +13,17 @@ import DemoGallery from "./DemoGallery";
 import DemoFooter from "./DemoFooter";
 import DemoResenas from "./DemoResenas";
 
+// Componente principal de la landing demo
 const DemoLanding = () => {
+  // Estado para controlar la visibilidad del modal
   const [modalVisible, setModalVisible] = useState(false);
+  // Estado para el evento seleccionado (si aplica)
   const [selectedEvent, setSelectedEvent] = useState(null);
+  // Estado para identificar la fuente del modal
   const [modalSource, setModalSource] = useState(null);
 
+  // Función para abrir el modal, puede recibir un objeto evento o un string
   const abrirModal = (arg) => {
-    // arg can be: event object (from Reservar evento), or a string identifier ('hero','reservar')
     if (arg && typeof arg === "object") {
       setSelectedEvent(arg);
       setModalSource("evento");
@@ -32,14 +36,14 @@ const DemoLanding = () => {
     }
     setModalVisible(true);
   };
+  // Función para cerrar el modal
   const cerrarModal = () => {
     setSelectedEvent(null);
     setModalSource(null);
     setModalVisible(false);
   };
 
-  // Cuando el modal está visible, además de bloquear el body,
-  // aseguramos que el contenedor `.demo-landing` también no haga scroll.
+  // Efecto para bloquear el scroll del body cuando el modal está visible
   useEffect(() => {
     const demoRoot = document.querySelector(".demo-landing");
     const originalOverflow = demoRoot ? demoRoot.style.overflow : null;
@@ -53,6 +57,7 @@ const DemoLanding = () => {
 
   // Estado para reseñas demo
   const [demoResenas, setDemoResenas] = useState([]);
+  // Maneja la adición de una nueva reseña
   const handleNuevaResena = (resena) => {
     setDemoResenas([resena, ...demoResenas]);
     // Aquí podrías enviar la reseña al backend o al dashboard

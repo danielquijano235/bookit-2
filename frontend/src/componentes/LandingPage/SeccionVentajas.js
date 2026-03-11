@@ -1,9 +1,5 @@
 /**
- * ============================================
- * BOOKIT - Componente SeccionVentajas
- * Archivo: componentes/LandingPage/SeccionVentajas.js
- * ============================================
- * 
+
  * Propósito: Muestra las 6 ventajas principales de BookIt
  * en un grid de 3 columnas x 2 filas.
  * 

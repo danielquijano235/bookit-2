@@ -3,7 +3,7 @@ import React from 'react';
 /*
   DemoGallery (grid)
   - Drop images into `public/assets/images/` and list filenames below.
-  - Grid is full-width inside the gallery section and images are wider/taller.
+  - Grid is full-width and images are wider/taller.
 */
 
 const images = [
@@ -19,7 +19,7 @@ const images = [
   'plato-10.jpg'
 ];
 
-
+// Componente para mostrar la galería de platos
 const DemoGallery = () => {
   return (
     <div className="demo-gallery" aria-label="Galería de platos">
@@ -28,6 +28,7 @@ const DemoGallery = () => {
           const src = name ? `/assets/images/${name}` : null;
           return (
             <div className={`demo-grid-item`} key={i} aria-hidden={src ? 'false' : 'true'}>
+              {/* Si hay imagen, la muestra; si no, muestra un placeholder */}
               {src ? (
                 <img src={src} alt={`Plato ${i + 1}`} className="demo-grid-img" />
               ) : (
