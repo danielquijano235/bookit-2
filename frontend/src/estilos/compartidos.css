@@ -139,7 +139,51 @@ input, select, textarea {
     padding: 0 15px;
   }
 }
+/* ====== MENU MODAL ====== */
+.menu-modal-content {
+  padding: 4px 0;
+}
 
+.menu-modal-content h2 {
+  margin: 0 0 16px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-azul-oscuro, #1a2e40);
+  border-bottom: 2px solid var(--color-amarillo, #f5a623);
+  padding-bottom: 10px;
+}
+
+.menu-modal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-modal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 4px;
+  border-bottom: 1px solid #fde68a;
+  font-size: 0.97rem;
+  color: #374151;
+  gap: 12px;
+}
+
+.menu-modal-item:last-child {
+  border-bottom: none;
+}
+
+.menu-modal-item span:first-child {
+  flex: 1;
+}
+
+.menu-modal-item span:last-child {
+  font-weight: 600;
+  color: var(--color-azul-oscuro, #1a2e40);
+  white-space: nowrap;
+}
 /* Mostrar demo footer en vistas de menú donde no exista el contenedor .demo-landing */
 .vista-menu .demo-footer,
 .menu-landing .demo-footer {
