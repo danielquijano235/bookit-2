@@ -1,13 +1,19 @@
 /**
-
- 
-  Funcionalidad de notificaciones:
-    - Muestra badge con cantidad de no leídas
-    - Panel desplegable al hacer clic en la campana
-    - Marcar como leída individual y todas a la vez
-    - Eliminar notificaciones individuales
-    - Iconos por tipo (reserva, cliente, sistema, info)
- *   - Tiempo relativo ("hace 5 min", "hace 2 horas")
+ * BarraSuperior.js
+ * Componente de barra superior del dashboard.
+ *
+ * Funcionalidad:
+ * - Búsqueda de clientes y reservas con dropdown interactivo
+ * - Panel de notificaciones con acciones (leer, eliminar, limpiar)
+ * - Botón para crear nueva reserva
+ *
+ * Notificaciones:
+ * - Muestra badge con cantidad de no leídas
+ * - Panel desplegable al hacer clic en la campana
+ * - Marcar como leída individual y todas a la vez
+ * - Eliminar notificaciones individuales
+ * - Iconos por tipo (reserva, cliente, sistema, info)
+ * - Tiempo relativo ("hace 5 min", "hace 2 horas")
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -19,6 +25,7 @@ import Boton from '../Compartidos/Boton';
  * Ej: "hace 5 min", "hace 2 horas", "hace 1 día"
  */
 const tiempoRelativo = (fechaISO) => {
+  // Calcula la diferencia entre la fecha actual y la fecha de la notificación
   const ahora = new Date();
   const fecha = new Date(fechaISO);
   const diffMs = ahora - fecha;
@@ -60,14 +67,26 @@ const obtenerColorFondo = (tipo) => {
   return colores[tipo] || colores.info;
 };
 
+/**
+ * BarraSuperior
+ * Props:
+ * - onNuevaReserva: función para crear nueva reserva
+ * - onBuscar: función para buscar clientes/reservas
+ * - onSeleccionarResultado: función para seleccionar resultado del dropdown
+ * - clientes: array de clientes
+ * - reservas: array de reservas
+ */
 const BarraSuperior = ({ onNuevaReserva, onBuscar, onSeleccionarResultado, clientes = [], reservas = [] }) => {
+  // Estado para panel de notificaciones
   const [panelAbierto, setPanelAbierto] = useState(false);
   const panelRef = useRef(null);
   const botonRef = useRef(null);
+  // Estado y refs para búsqueda
   const [query, setQuery] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  // Contexto de notificaciones
   const {
     notificaciones,
     noLeidas,
@@ -77,7 +96,7 @@ const BarraSuperior = ({ onNuevaReserva, onBuscar, onSeleccionarResultado, clien
     limpiarTodas,
   } = useNotificaciones();
 
-  // Cerrar el panel o dropdown al hacer clic fuera
+  // Cerrar panel/dropdown al hacer clic fuera
   useEffect(() => {
     const manejarClickFuera = (e) => {
       if (
@@ -90,14 +109,13 @@ const BarraSuperior = ({ onNuevaReserva, onBuscar, onSeleccionarResultado, clien
         setDropdownOpen(false);
       }
     };
-
     if (panelAbierto || dropdownOpen) {
       document.addEventListener('mousedown', manejarClickFuera);
     }
     return () => document.removeEventListener('mousedown', manejarClickFuera);
   }, [panelAbierto, dropdownOpen]);
 
-  // Cerrar panel de notificaciones al hacer scroll
+  // Cierra panel de notificaciones al hacer scroll
   useEffect(() => {
     if (!panelAbierto) return;
     const manejarScroll = () => setPanelAbierto(false);
@@ -105,13 +123,13 @@ const BarraSuperior = ({ onNuevaReserva, onBuscar, onSeleccionarResultado, clien
     return () => window.removeEventListener('scroll', manejarScroll);
   }, [panelAbierto]);
 
-  // Abrir/cerrar dropdown según query
+  // Abre/cierra dropdown según query
   useEffect(() => {
     setDropdownOpen(Boolean(query && query.trim().length > 0));
   }, [query]);
 
-  // Helper para resaltar coincidencias
-  const escapeRegExp = (s) => String(s).replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
+  // Helper para resaltar coincidencias en búsqueda
+  const escapeRegExp = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const highlight = (text = '', q = '') => {
     if (!q) return text;
     const qTrim = q.trim();
@@ -139,7 +157,7 @@ const BarraSuperior = ({ onNuevaReserva, onBuscar, onSeleccionarResultado, clien
           onChange={(e) => {
             const v = e.target.value;
             setQuery(v);
-            // Nota: no llamamos a onBuscar en cada pulsación para evitar
+            //  no llamamos a onBuscar en cada pulsación para evitar
             // que la vista de Clientes/Reservas se actualice en vivo.
             // onBuscar se llama al presionar Enter o al seleccionar un resultado.
           }}
@@ -188,20 +206,37 @@ const BarraSuperior = ({ onNuevaReserva, onBuscar, onSeleccionarResultado, clien
                 <>
                   {reservas
                     .filter(r => {
+                      // Filtra reservas según el texto de búsqueda
+                      // Busca por nombre, teléfono o fecha
                       if (!query) return false;
                       const q = query.toLowerCase();
-                      return (r.cliente_nombre || r.cliente || '').toLowerCase().includes(q) || (r.cliente_telefono || '').includes(q) || (r.fecha || '').includes(q);
+                      return (
+                        (r.cliente_nombre || r.cliente || '').toLowerCase().includes(q) || // Coincidencia por nombre
+                        (r.cliente_telefono || '').includes(q) || // Coincidencia por teléfono
+                        (r.fecha || '').includes(q) // Coincidencia por fecha
+                      );
                     })
-                    .slice(0,6)
+                    .slice(0,6) // Limita a máximo 6 resultados
                     .map((r) => (
-                      <button key={r.id || (r.cliente_nombre + r.fecha)} className="search-item" onClick={() => {
-                        setQuery(r.cliente_nombre || r.cliente || '');
-                        if (typeof onBuscar === 'function') onBuscar(r.cliente_nombre || r.cliente || '');
-                        if (typeof onSeleccionarResultado === 'function') onSeleccionarResultado('reserva', r);
-                        setDropdownOpen(false);
-                      }}>
-                        <div className="search-item-main">{highlight(r.cliente_nombre || r.cliente, query)}</div>
-                        <div className="search-item-sub">{r.fecha} • {r.hora ? r.hora.substring(0,5) : ''}</div>
+                      // Cada resultado es un botón que permite seleccionar la reserva
+                      <button
+                        key={r.id || (r.cliente_nombre + r.fecha)}
+                        className="search-item"
+                        onClick={() => {
+                          setQuery(r.cliente_nombre || r.cliente || ''); // Rellena el input con el nombre
+                          if (typeof onBuscar === 'function') onBuscar(r.cliente_nombre || r.cliente || ''); // Ejecuta búsqueda
+                          if (typeof onSeleccionarResultado === 'function') onSeleccionarResultado('reserva', r); // Notifica selección
+                          setDropdownOpen(false); // Cierra el dropdown
+                        }}
+                      >
+                        <div className="search-item-main">
+                          {/* Resalta coincidencias en el nombre */}
+                          {highlight(r.cliente_nombre || r.cliente, query)}
+                        </div>
+                        <div className="search-item-sub">
+                          {/* Muestra fecha y hora de la reserva */}
+                          {r.fecha} • {r.hora ? r.hora.substring(0,5) : ''}
+                        </div>
                       </button>
                     ))}
                 </>
