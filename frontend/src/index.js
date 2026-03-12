@@ -1,7 +1,5 @@
 /**
- * ============================================
- * BOOKIT - Punto de Entrada de React
- * Archivo: index.js
+
  * ============================================
  * Este es el archivo principal que React ejecuta primero.
  * Renderiza el componente App dentro del div con id="root".

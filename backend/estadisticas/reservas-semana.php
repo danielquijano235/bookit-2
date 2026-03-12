@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Reservas de la Semana
- * Archivo: estadisticas/reservas-semana.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 

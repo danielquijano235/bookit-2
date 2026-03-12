@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Actualizar Cliente
- * Archivo: clientes/actualizar.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 

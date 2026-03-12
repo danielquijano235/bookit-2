@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Metricas de Hoy
- * Archivo: estadisticas/metricas-hoy.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 

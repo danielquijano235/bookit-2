@@ -1,8 +1,5 @@
 /**
- * ============================================
- * BOOKIT - Componente Principal (App.js)
- * Archivo: App.js
- * ============================================
+
  * 
  * Este es el componente raíz de toda la aplicación React.
  * Configura el sistema de rutas (React Router) y define

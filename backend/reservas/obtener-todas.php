@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Obtener Todas las Reservas
- * Archivo: reservas/obtener-todas.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 

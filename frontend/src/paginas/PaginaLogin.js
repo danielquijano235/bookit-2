@@ -1,9 +1,5 @@
 /**
- * ============================================
- * BOOKIT - Página de Login
- * Archivo: paginas/PaginaLogin.js
- * ============================================
- * 
+
  * Propósito: Página de inicio de sesión.
  * Contiene el formulario de login centrado en pantalla.
  */

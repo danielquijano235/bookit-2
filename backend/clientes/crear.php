@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Crear Nuevo Cliente
- * Archivo: clientes/crear.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 

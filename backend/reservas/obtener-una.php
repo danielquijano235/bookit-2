@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Obtener Una Reserva
- * Archivo: reservas/obtener-una.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 

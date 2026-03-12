@@ -1,10 +1,5 @@
 <?php
-/**
- * ============================================
- * BOOKIT - Obtener Todos los Clientes
- * Archivo: clientes/obtener-todos.php
- * ============================================
- */
+
 
 require_once '../configuracion/conexion.php';
 
