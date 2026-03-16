@@ -200,3 +200,32 @@ export const crearReservaPublica = async (datos) => {
     body: JSON.stringify(datos),
   });
 };
+
+// ============================================
+// FUNCIONES DE MESAS
+// ============================================
+
+export const obtenerTodasMesas = async () => {
+  return peticion('/mesas/obtener-todas.php');
+};
+
+export const crearMesa = async (datos) => {
+  return peticion('/mesas/crear.php', {
+    method: 'POST',
+    body: JSON.stringify(datos),
+  });
+};
+
+export const actualizarMesa = async (datos) => {
+  return peticion('/mesas/actualizar.php', {
+    method: 'PUT',
+    body: JSON.stringify(datos),
+  });
+};
+
+export const eliminarMesa = async (id) => {
+  return peticion('/mesas/eliminar.php', {
+    method: 'DELETE',
+    body: JSON.stringify({ id }),
+  });
+};

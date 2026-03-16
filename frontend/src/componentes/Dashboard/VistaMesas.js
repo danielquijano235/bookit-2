@@ -19,10 +19,11 @@
  *   - formulario: Datos del formulario de nueva mesa
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNotificaciones } from "../../contextos/NotificacionesContext";
 import Boton from "../Compartidos/Boton";
 import ConfirmDialog from "../Compartidos/ConfirmDialog";
+import { obtenerTodasMesas, crearMesa, actualizarMesa, eliminarMesa } from "../../servicios/api";
 
 // Datos de ejemplo
 const mesasIniciales = [
@@ -115,7 +116,8 @@ const iconoUbicacion = {
 };
 
 const VistaMesas = () => {
-  const [mesas, setMesas] = useState(mesasIniciales);
+  const [mesas, setMesas] = useState([]);
+  const [cargando, setCargando] = useState(true);
   const [filtroEstado, setFiltroEstado] = useState("todas");
   const [busqueda, setBusqueda] = useState("");
   const [modalAgregar, setModalAgregar] = useState(false);
@@ -130,6 +132,27 @@ const VistaMesas = () => {
   const { agregarNotificacion } = useNotificaciones();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmPayload, setConfirmPayload] = useState(null);
+
+  // Cargar mesas del backend al montar
+  useEffect(() => {
+    const cargar = async () => {
+      try {
+        const data = await obtenerTodasMesas();
+        setMesas(Array.isArray(data) ? data.map(m => ({
+          ...m,
+          id: Number(m.id),
+          numero: Number(m.numero),
+          capacidad: Number(m.capacidad),
+          ubicacion: m.ubicacion.charAt(0).toUpperCase() + m.ubicacion.slice(1),
+        })) : []);
+      } catch (e) {
+        console.error('Error cargando mesas:', e);
+      } finally {
+        setCargando(false);
+      }
+    };
+    cargar();
+  }, []);
 
   // Filtrar mesas
   const mesasFiltradas = mesas.filter((m) => {
@@ -150,7 +173,7 @@ const VistaMesas = () => {
   const totalReservadas = mesas.filter((m) => m.estado === "reservada").length;
 
   // Agregar nueva mesa
-  const manejarAgregarMesa = (e) => {
+  const manejarAgregarMesa = async (e) => {
     e.preventDefault();
     if (!formulario.numero) {
       agregarNotificacion(
@@ -160,7 +183,6 @@ const VistaMesas = () => {
       );
       return;
     }
-    // Verificar que no exista una mesa con ese número
     if (mesas.some((m) => m.numero === parseInt(formulario.numero))) {
       agregarNotificacion(
         "info",
@@ -169,38 +191,52 @@ const VistaMesas = () => {
       );
       return;
     }
-    const nuevaMesa = {
-      id: Date.now(),
-      numero: parseInt(formulario.numero),
-      capacidad: parseInt(formulario.capacidad),
-      ubicacion: formulario.ubicacion,
-      estado: "disponible",
-    };
-    setMesas((prev) =>
-      [...prev, nuevaMesa].sort((a, b) => a.numero - b.numero),
-    );
-    agregarNotificacion(
-      "sistema",
-      "Nueva mesa agregada",
-      `Mesa #${nuevaMesa.numero} (${nuevaMesa.capacidad} personas) en ${nuevaMesa.ubicacion}`,
-    );
-    setFormulario({ numero: "", capacidad: "2", ubicacion: "Interior" });
-    setModalAgregar(false);
+    try {
+      const resp = await crearMesa({
+        numero: parseInt(formulario.numero),
+        capacidad: parseInt(formulario.capacidad),
+        ubicacion: formulario.ubicacion.toLowerCase(),
+      });
+      const nuevaMesa = {
+        id: resp.mesa.id,
+        numero: resp.mesa.numero,
+        capacidad: resp.mesa.capacidad,
+        ubicacion: resp.mesa.ubicacion.charAt(0).toUpperCase() + resp.mesa.ubicacion.slice(1),
+        estado: resp.mesa.estado,
+      };
+      setMesas((prev) =>
+        [...prev, nuevaMesa].sort((a, b) => a.numero - b.numero),
+      );
+      agregarNotificacion(
+        "sistema",
+        "Nueva mesa agregada",
+        `Mesa #${nuevaMesa.numero} (${nuevaMesa.capacidad} personas) en ${nuevaMesa.ubicacion}`,
+      );
+      setFormulario({ numero: "", capacidad: "2", ubicacion: "Interior" });
+      setModalAgregar(false);
+    } catch (err) {
+      agregarNotificacion("error", "Error", err.message || "No se pudo crear la mesa");
+    }
   };
 
   // Cambiar estado de una mesa
-  const manejarCambiarEstado = (nuevoEstado) => {
+  const manejarCambiarEstado = async (nuevoEstado) => {
     if (!mesaSeleccionada) return;
-    setMesas((prev) =>
-      prev.map((m) =>
-        m.id === mesaSeleccionada.id ? { ...m, estado: nuevoEstado } : m,
-      ),
-    );
-    agregarNotificacion(
-      "sistema",
-      `Mesa #${mesaSeleccionada.numero} actualizada`,
-      `Estado cambiado a ${configEstado[nuevoEstado].texto.toLowerCase()}`,
-    );
+    try {
+      await actualizarMesa({ id: mesaSeleccionada.id, estado: nuevoEstado });
+      setMesas((prev) =>
+        prev.map((m) =>
+          m.id === mesaSeleccionada.id ? { ...m, estado: nuevoEstado } : m,
+        ),
+      );
+      agregarNotificacion(
+        "sistema",
+        `Mesa #${mesaSeleccionada.numero} actualizada`,
+        `Estado cambiado a ${configEstado[nuevoEstado].texto.toLowerCase()}`,
+      );
+    } catch (err) {
+      agregarNotificacion("error", "Error", err.message || "No se pudo actualizar la mesa");
+    }
     setModalEstado(false);
     setMesaSeleccionada(null);
   };
@@ -212,17 +248,22 @@ const VistaMesas = () => {
     setConfirmOpen(true);
   };
 
-  const ejecutarEliminar = () => {
+  const ejecutarEliminar = async () => {
     if (!confirmPayload) return;
     const { tipo, id } = confirmPayload;
     if (tipo === "mesa") {
       const mesa = mesas.find((m) => m.id === id);
-      setMesas((prev) => prev.filter((m) => m.id !== id));
-      agregarNotificacion(
-        "sistema",
-        "Mesa eliminada",
-        `Mesa ${mesa ? `#${mesa.numero}` : id} ha sido eliminada del sistema`,
-      );
+      try {
+        await eliminarMesa(id);
+        setMesas((prev) => prev.filter((m) => m.id !== id));
+        agregarNotificacion(
+          "sistema",
+          "Mesa eliminada",
+          `Mesa ${mesa ? `#${mesa.numero}` : id} ha sido eliminada del sistema`,
+        );
+      } catch (err) {
+        agregarNotificacion("error", "Error", err.message || "No se pudo eliminar la mesa");
+      }
     }
     setConfirmOpen(false);
     setConfirmPayload(null);
