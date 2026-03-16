@@ -14,7 +14,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Boton from '../Compartidos/Boton';
-import { verificarSesion, crearCliente, crearReserva, crearReservaPublica } from '../../servicios/api';
+import { crearReservaPublica } from '../../servicios/api';
 
 // ============================================
 // DATOS DE CONFIGURACIÓN
@@ -61,12 +61,6 @@ const convertirHoraA24 = (hora) => {
   if (ampm === 'am' && horas === 12) horas = 0;
 
   return `${String(horas).padStart(2, '0')}:${minutos}:${segundos}`;
-};
-
-// Guarda la reserva demo en localStorage para simular persistencia
-const guardarReservaDemoLocal = (reserva) => {
-  const existentes = JSON.parse(localStorage.getItem('demo_reservas') || '[]');
-  localStorage.setItem('demo_reservas', JSON.stringify([reserva, ...existentes]));
 };
 
 const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, source = null }) => {
@@ -183,7 +177,6 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, sourc
   // - Si `demoOnly` es true (hero demo) se guarda en `localStorage` y no se llama al backend.
   // - Si no, intenta verificar sesión y crear la reserva en backend; si no hay sesión, no falla la UX.
   const confirmarReserva = () => {
-    // Enviar reserva: si hay sesión, crear en backend; si no, guardar localmente (demo)
     const enviar = async () => {
       setAnimando(true);
       try {
@@ -191,68 +184,24 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, sourc
         const fechaISO = formatearFechaISO(anioActual, mesActual, diaSeleccionado);
         const hora24 = convertirHoraA24(horaSeleccionada);
 
-        // Si este modal es solo demo (hero), simulamos la reserva pero NO la almacenamos
+        // Si este modal es solo demo (hero de la landing principal), no almacenar
         if (demoOnly) {
-          const demo = {
-            id: `demo-${Date.now()}`,
-            cliente_nombre: nombreDemo || 'Cliente Demo',
-            cliente_telefono: telefonoDemo || '',
-            cliente_email: emailDemo || '',
-            numero_personas: personas,
-            fecha: fechaISO,
-            hora: hora24,
-            estado: 'pendiente',
-            mesa_numero: null,
-            notas_especiales: notaEvento
-          };
-          // Intencionalmente NO se persiste `demo` en localStorage ni se envía al backend.
+          // No se persiste, solo se muestra la animación de confirmación
         } else {
-          // Intentar verificar sesión en backend. Si existe sesión autenticada,
-          // creamos el cliente (si se proporcionó nombre) y luego la reserva.
-          // Si NO hay sesión, usamos el endpoint público para que siempre llegue al dashboard.
-          const sesion = await verificarSesion().catch(() => null);
-          if (sesion && sesion.autenticado) {
-            // Crear cliente si se dio nombre (incluye teléfono y email opcional)
-            let cliente_id = null;
-            if (nombreDemo && nombreDemo.trim()) {
-              try {
-                const respCliente = await crearCliente({ nombre: nombreDemo.trim(), telefono: telefonoDemo.trim(), email: (emailDemo || '').trim() });
-                // `crearCliente` puede devolver { cliente: { id } } o { id }
-                cliente_id = respCliente?.cliente?.id || respCliente?.id || null;
-              } catch (e) {
-                console.warn('No se pudo crear cliente demo:', e);
-              }
-            }
+          // Siempre usar el endpoint público que crea cliente + reserva
+          // Esto funciona tanto con sesión como sin sesión
+          const fechaFinal = diaSeleccionado ? `${anioActual}-${String(mesActual+1).padStart(2,'0')}-${String(diaSeleccionado).padStart(2,'0')}` : '';
+          const horaFinal = hora24 && hora24.includes(':') ? (hora24.length === 8 ? hora24 : hora24 + ':00') : '';
 
-            const fechaISO = diaSeleccionado ? `${anioActual}-${String(mesActual+1).padStart(2,'0')}-${String(diaSeleccionado).padStart(2,'0')}` : '';
-            const hora24 = horaSeleccionada && horaSeleccionada.includes(':') ? (horaSeleccionada.length === 8 ? horaSeleccionada : horaSeleccionada + ':00') : '';
-
-            const datosReserva = {
-              cliente_id: cliente_id,
-              cliente_email: emailDemo || '',
-              numero_personas: personas,
-              fecha: fechaISO,
-              hora: hora24,
-              mesa_id: null,
-              notas_especiales: notaEvento
-            };
-
-            await crearReserva(datosReserva);
-          } else {
-            // Sin sesión: usar endpoint público que crea cliente + reserva
-            const fechaISO = diaSeleccionado ? `${anioActual}-${String(mesActual+1).padStart(2,'0')}-${String(diaSeleccionado).padStart(2,'0')}` : '';
-            const hora24 = horaSeleccionada && horaSeleccionada.includes(':') ? (horaSeleccionada.length === 8 ? horaSeleccionada : horaSeleccionada + ':00') : '';
-
-            await crearReservaPublica({
-              nombre: nombreDemo || 'Cliente Web',
-              telefono: telefonoDemo || '',
-              email: emailDemo || '',
-              numero_personas: personas,
-              fecha: fechaISO,
-              hora: hora24,
-              notas_especiales: notaEvento
-            });
-          }
+          await crearReservaPublica({
+            nombre: nombreDemo || 'Cliente Web',
+            telefono: telefonoDemo || '',
+            email: emailDemo || '',
+            numero_personas: personas,
+            fecha: fechaFinal,
+            hora: horaFinal,
+            notas_especiales: notaEvento
+          });
         }
 
         // Mostrar confirmación
