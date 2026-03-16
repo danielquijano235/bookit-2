@@ -1,6 +1,6 @@
 <?php
 
-require_once '../configuracion/conexion.php';
+require_once '../configuracion/conexion.php'; // necesario para CORS y sesión
 
 // Solo aceptar peticiones POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
