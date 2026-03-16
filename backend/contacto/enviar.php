@@ -85,5 +85,8 @@ try {
 
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(["error" => "No se pudo enviar el mensaje. Intenta de nuevo mas tarde."]);
+    echo json_encode([
+        "error" => "No se pudo enviar el mensaje. Intenta de nuevo mas tarde.",
+        "debug" => $mail->ErrorInfo
+    ]);
 }
