@@ -7,6 +7,7 @@
  */
 
 import React, { useState } from "react";
+import { enviarContacto } from "../../servicios/api";
 
 // Datos de las tarjetas de información de contacto
 // Cada tarjeta tiene icono, título y dos líneas de texto
@@ -41,6 +42,7 @@ const SeccionContacto = () => {
   });
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [error, setError] = useState("");
 
   // Actualiza un campo del formulario según el input
   const manejarCambio = (e) => {
@@ -48,24 +50,22 @@ const SeccionContacto = () => {
     setFormulario((prev) => ({ ...prev, [name]: value }));
   };
 
-  /**
-   * Manejar el envío del formulario
-   * Simula un envío con un timeout (no hay backend para contacto)
-   */
-  const manejarEnvio = (e) => {
+  // Enviar el formulario al backend real
+  const manejarEnvio = async (e) => {
     e.preventDefault();
     setEnviando(true);
+    setError("");
 
-    // Simular envío (2 segundos)
-    setTimeout(() => {
-      setEnviando(false);
+    try {
+      await enviarContacto(formulario);
       setEnviado(true);
-      // Limpiar formulario
       setFormulario({ nombre: "", email: "", asunto: "", mensaje: "" });
-
-      // Ocultar mensaje de éxito después de 4 segundos
       setTimeout(() => setEnviado(false), 4000);
-    }, 2000);
+    } catch (err) {
+      setError(err.message || "No se pudo enviar el mensaje. Intenta de nuevo.");
+    } finally {
+      setEnviando(false);
+    }
   };
 
   return (
@@ -147,6 +147,13 @@ const SeccionContacto = () => {
 
         {/* ====== COLUMNA DERECHA: Formulario ====== */}
         <div className="contacto-formulario-contenedor">
+          {/* Mensaje de error */}
+          {error && (
+            <div className="contacto-error">
+              <span>{error}</span>
+            </div>
+          )}
+
           {/* Mensaje de éxito */}
           {enviado && (
             <div className="contacto-exito">

@@ -1056,6 +1056,18 @@
   animation: contactoFadeIn 0.4s ease;
 }
 
+.contacto-error {
+  padding: 14px 18px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  font-size: 0.88rem;
+  color: #dc2626;
+  font-weight: 500;
+  animation: contactoFadeIn 0.4s ease;
+}
+
 @keyframes contactoFadeIn {
   from {
     opacity: 0;

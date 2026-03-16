@@ -176,3 +176,15 @@ export const crearCliente = async (datosCliente) => {
     body: JSON.stringify(datosCliente),
   });
 };
+
+/**
+ * Enviar el formulario de contacto
+ * @param {Object} datos - { nombre, email, asunto, mensaje }
+ * @returns {Object} - { mensaje }
+ */
+export const enviarContacto = async (datos) => {
+  return peticion('/contacto/enviar.php', {
+    method: 'POST',
+    body: JSON.stringify(datos),
+  });
+};
