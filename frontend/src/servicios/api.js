@@ -188,3 +188,15 @@ export const enviarContacto = async (datos) => {
     body: JSON.stringify(datos),
   });
 };
+
+/**
+ * Crear una reserva pública desde la demo landing (sin sesión)
+ * @param {Object} datos - { nombre, telefono, email, numero_personas, fecha, hora, notas_especiales }
+ * @returns {Object} - { mensaje, id }
+ */
+export const crearReservaPublica = async (datos) => {
+  return peticion('/reservas/reserva-publica.php', {
+    method: 'POST',
+    body: JSON.stringify(datos),
+  });
+};

@@ -14,7 +14,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Boton from '../Compartidos/Boton';
-import { verificarSesion, crearCliente, crearReserva } from '../../servicios/api';
+import { verificarSesion, crearCliente, crearReserva, crearReservaPublica } from '../../servicios/api';
 
 // ============================================
 // DATOS DE CONFIGURACIÓN
@@ -209,6 +209,7 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, sourc
         } else {
           // Intentar verificar sesión en backend. Si existe sesión autenticada,
           // creamos el cliente (si se proporcionó nombre) y luego la reserva.
+          // Si NO hay sesión, usamos el endpoint público para que siempre llegue al dashboard.
           const sesion = await verificarSesion().catch(() => null);
           if (sesion && sesion.autenticado) {
             // Crear cliente si se dio nombre (incluye teléfono y email opcional)
@@ -236,20 +237,20 @@ const DemoReserva = ({ visible, onCerrar, selectedEvent, demoOnly = false, sourc
               notas_especiales: notaEvento
             };
 
-            const res = await crearReserva(datosReserva);
+            await crearReserva(datosReserva);
           } else {
-            guardarReservaDemoLocal({
-              id: `demo-${Date.now()}`,
-              cliente_nombre: nombreDemo || 'Cliente Demo',
-              cliente_telefono: telefonoDemo || '',
-              cliente_email: emailDemo || '',
+            // Sin sesión: usar endpoint público que crea cliente + reserva
+            const fechaISO = diaSeleccionado ? `${anioActual}-${String(mesActual+1).padStart(2,'0')}-${String(diaSeleccionado).padStart(2,'0')}` : '';
+            const hora24 = horaSeleccionada && horaSeleccionada.includes(':') ? (horaSeleccionada.length === 8 ? horaSeleccionada : horaSeleccionada + ':00') : '';
+
+            await crearReservaPublica({
+              nombre: nombreDemo || 'Cliente Web',
+              telefono: telefonoDemo || '',
+              email: emailDemo || '',
               numero_personas: personas,
               fecha: fechaISO,
               hora: hora24,
-              estado: 'pendiente',
-              mesa_numero: null,
-              notas_especiales: notaEvento,
-              origen: source || 'demo-landing'
+              notas_especiales: notaEvento
             });
           }
         }

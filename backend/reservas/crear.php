@@ -46,6 +46,30 @@ if ($numero_personas < 1) {
 }
 
 try {
+    // Si no se envió mesa, asignar automáticamente una mesa disponible
+    if (!$mesa_id) {
+        $buscarMesa = $conexion->prepare("
+            SELECT m.id FROM mesas m
+            WHERE m.usuario_id = ?
+              AND m.capacidad >= ?
+              AND m.estado != 'mantenimiento'
+              AND m.id NOT IN (
+                  SELECT r.mesa_id FROM reservas r
+                  WHERE r.mesa_id IS NOT NULL
+                    AND r.fecha = ?
+                    AND r.estado IN ('pendiente', 'confirmada')
+                    AND ABS(EXTRACT(EPOCH FROM (r.hora - ?::time))) < 5400
+              )
+            ORDER BY m.capacidad ASC
+            LIMIT 1
+        ");
+        $buscarMesa->execute([$usuario_id, $numero_personas, $fecha, $hora]);
+        $mesaEncontrada = $buscarMesa->fetch();
+        if ($mesaEncontrada) {
+            $mesa_id = (int)$mesaEncontrada['id'];
+        }
+    }
+
     // Las reservas siempre se crean en estado 'pendiente'.
     // RETURNING id devuelve el ID generado sin necesidad de hacer un SELECT aparte.
     $consulta = "
@@ -67,4 +91,3 @@ try {
     http_response_code(500);
     echo json_encode(["error" => "Error al crear la reserva"]);
 }
-?>
